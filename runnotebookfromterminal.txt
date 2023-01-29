@@ -1,1 +1,0 @@
-jupyter nbconvert --to notebook --inplace --ExecutePreprocessor.timeout=-1 --stdout --execute test.ipynb
