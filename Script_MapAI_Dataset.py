@@ -3,6 +3,7 @@ import os
 from datasets import load_dataset
 from PIL import Image
 import numpy as np
+from tqdm import tqdm
 
 dataset = load_dataset("sjyhne/mapai_dataset")
 print(dataset)
@@ -20,7 +21,7 @@ if not os.path.exists(dataset_path):
     os.makedirs(dataset_path)
     
 # Iterate through MapAI_dataset
-for set_name in dataset.keys():
+for set_name in tqdm(dataset.keys()):
     # Create subfolder if it doesnt exist
     subfolder_path = os.path.normpath("dataset\\MapAI\\" + set_name)
     if not os.path.exists(subfolder_path):
