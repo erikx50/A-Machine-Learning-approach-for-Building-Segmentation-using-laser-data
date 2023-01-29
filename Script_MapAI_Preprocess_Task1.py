@@ -13,21 +13,21 @@ datasets = ['train', 'validation', 'task1_test']
 subsets = ['image', 'mask']
 
 for dataset in tqdm(datasets):
-    dataset_path = os.path.normpath('dataset\\MapAI\\512x512_' + dataset)
+    dataset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset)
     if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
     for subset in tqdm(subsets):
-        subset_path = os.path.normpath('dataset\\MapAI\\512x512_' + dataset + '\\' + subset)
+        subset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset + '/' + subset)
         if not os.path.exists(subset_path):
             os.makedirs(subset_path)
-        original_filepath = os.path.normpath('dataset\\MapAI\\' + dataset + '\\' + subset)
+        original_filepath = os.path.normpath('dataset/MapAI/' + dataset + '/' + subset)
         with os.scandir(original_filepath) as entries:
             for entry in entries:
-                img = cv.imread(os.path.normpath(original_filepath + '\\' + entry.name))
+                img = cv.imread(os.path.normpath(original_filepath + '/' + entry.name))
                 img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
                 resize_img = cv.resize(img, (512, 512), interpolation = cv.INTER_LINEAR)
                 resize_img = cv.cvtColor(resize_img, cv.COLOR_BGR2RGB)
-                cv.imwrite(subset_path + '\\' + entry.name, resize_img)  
+                cv.imwrite(os.path.normpath(subset_path + '/' + entry.name), resize_img)
 
 
 

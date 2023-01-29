@@ -97,10 +97,10 @@ model.summary()
 
 
 # Finding the number of images in each dataset
-train_path = os.path.normpath('dataset\\MapAI\\512x512_train\\image')
+train_path = os.path.normpath('dataset/MapAI/512x512_train/image')
 no_train_images = len([name for name in os.listdir(train_path) if os.path.isfile(os.path.join(train_path, name))])
 
-validation_path = os.path.normpath('dataset\\MapAI\\512x512_validation\\image')
+validation_path = os.path.normpath('dataset/MapAI/512x512_validation/image')
 no_val_images = len([name for name in os.listdir(validation_path) if os.path.isfile(os.path.join(validation_path, name))])
 
 # Defining size of images
@@ -120,12 +120,12 @@ subsets = ['image', 'mask']
 
 # Adding images to NumPy arrays
 for dataset in tqdm(datasets):
-    dataset_path = os.path.normpath('dataset\\MapAI\\512x512_' + dataset)
+    dataset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset)
     for subset in tqdm(subsets):
-        subset_path = os.path.normpath('dataset\\MapAI\\512x512_' + dataset + '\\' + subset)
+        subset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset + '/' + subset)
         with os.scandir(subset_path) as entries:
             for n, entry in enumerate(entries):
-                img = cv.imread(os.path.normpath(subset_path + '\\' + entry.name))
+                img = cv.imread(os.path.normpath(subset_path + '/' + entry.name))
                 if subset == 'image':
                     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
                     if dataset == 'train':
@@ -153,7 +153,7 @@ print('Y_validation size: ' + str(len(Y_val)))
 # ModelCheckpoint -> Creates checkpoints after each epoch
 # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
 callback_list = [
-    callbacks.ModelCheckpoint(os.path.normpath('models\\MapAI_UNet_Task1_Checkpoint.h5'), verbose = 1, save_best_only=True),
+    callbacks.ModelCheckpoint(os.path.normpath('models/MapAI_UNet_Task1_Checkpoint.h5'), verbose = 1, save_best_only=True),
     callbacks.EarlyStopping(monitor = 'val_loss', patience = 3)
 ]
 
@@ -162,5 +162,5 @@ callback_list = [
 results = model.fit(X_train, Y_train, batch_size = 16, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val))
 
 # Save model
-model.save('models/unet1')
+model.save(os.path.normpath('models/unet1'))
 
