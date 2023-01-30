@@ -87,7 +87,7 @@ def unet(input_size=(512, 512, 3)):
     
     # Compiling model
     model = models.Model([inputs], [outputs])
-    model.compile(optimizer = 'adam', loss = losses.BinaryCrossentropy(from_logits=True), metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
     
     return model
 
@@ -158,8 +158,8 @@ callback_list = [
 ]
 
 
-# Train the model
-results = model.fit(X_train, Y_train, batch_size = 4, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val))
+# Train the model - validation_data = (X_val, Y_val)
+results = model.fit(X_train, Y_train, batch_size = 4, epochs = 25, callbacks = callback_list, validation_split = 0.2)
 
 # Save model
 model.save(os.path.normpath('models/unet1'))
