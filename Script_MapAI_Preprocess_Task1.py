@@ -23,19 +23,13 @@ for dataset in tqdm(datasets):
         original_filepath = os.path.normpath('dataset/MapAI/' + dataset + '/' + subset)
         with os.scandir(original_filepath) as entries:
             for entry in entries:
-                img = cv.imread(os.path.normpath(original_filepath + '/' + entry.name))
-                img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-                resize_img = cv.resize(img, (512, 512), interpolation = cv.INTER_LINEAR)
-                resize_img = cv.cvtColor(resize_img, cv.COLOR_BGR2RGB)
+                if subset == 'mask':
+                    img = cv.imread(os.path.normpath(original_filepath + '/' + entry.name), cv.IMREAD_GRAYSCALE)
+                    img[img == 255] = 1
+                    resize_img = cv.resize(img, (512, 512), interpolation = cv.INTER_AREA)
+                else:
+                    img = cv.imread(os.path.normpath(original_filepath + '/' + entry.name), cv.IMREAD_COLOR)
+                    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+                    resize_img = cv.resize(img, (512, 512), interpolation = cv.INTER_AREA)
+                    resize_img = cv.cvtColor(resize_img, cv.COLOR_BGR2RGB)
                 cv.imwrite(os.path.normpath(subset_path + '/' + entry.name), resize_img)
-
-
-
-
-
-
-
-
-
-
-
