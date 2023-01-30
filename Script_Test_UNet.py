@@ -10,6 +10,15 @@ import numpy as np
 from eval_functions import calculate_score
 
 
+# Change GPU setting
+# Limit number of GPUs
+os.environ['CUDA_VISIBLE_DEVICES'] = '4'
+
+# Limit GPU memory
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config = config)
+
 # Preparing test data
 # Finding the number of images in each dataset
 test_path = os.path.normpath('dataset/MapAI/512x512_task1_test/image')
