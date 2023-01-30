@@ -159,7 +159,7 @@ callback_list = [
 
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size = 16, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val))
+results = model.fit(X_train, Y_train, batch_size = 8, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val))
 
 # Save model
 model.save(os.path.normpath('models/unet1'))
