@@ -10,7 +10,7 @@ import numpy as np
 
 # Change GPU setting
 # Limit number of GPUs
-os.environ['CUDA_VISIBLE_DEVICES'] = '4'
+os.environ['CUDA_VISIBLE_DEVICES'] = '4, 5'
 
 # Limit GPU memory
 config = tf.compat.v1.ConfigProto()
