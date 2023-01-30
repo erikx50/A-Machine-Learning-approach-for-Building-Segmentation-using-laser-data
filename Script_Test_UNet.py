@@ -58,8 +58,7 @@ print('Y_train size: ' + str(len(Y_test)))
 # Load model
 model = models.load_model(os.path.normpath('models/unet1'))
 Y_pred = model.predict(X_test)
-print(Y_pred)
 
 # Evaluating model
-score = calculate_score(np.argmax(Y_pred, -1).astype(np.uint8), Y_test)
+score = calculate_score(Y_pred[0].astype(np.uint8), Y_test)
 print(score)
