@@ -87,7 +87,7 @@ def unet(input_size=(512, 512, 3)):
     
     # Compiling model
     model = models.Model([inputs], [outputs])
-    model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = losses.BinaryCrossentropy(from_logits=True), metrics = ['accuracy'])
     
     return model
 
