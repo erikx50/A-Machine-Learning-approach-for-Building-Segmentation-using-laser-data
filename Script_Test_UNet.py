@@ -60,5 +60,5 @@ model = models.load_model(os.path.normpath('models/unet1'))
 Y_pred = model.predict(X_test)
 
 # Evaluating model
-score = calculate_score(Y_pred, Y_test)
+score = calculate_score(np.argmax(Y_pred, -1), Y_test)
 print(score)
