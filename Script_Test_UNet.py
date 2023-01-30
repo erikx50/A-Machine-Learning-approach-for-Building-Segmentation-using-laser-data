@@ -47,7 +47,7 @@ print('Y_train size: ' + str(len(Y_test)))
 
 # Testing model
 # Load model
-model = keras.models.load_model(os.path.normpath('models/unet1'))
+model = models.load_model(os.path.normpath('models/unet1'))
 Y_pred = model.predict(X_test)
 
 # Evaluating model
