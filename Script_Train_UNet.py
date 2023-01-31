@@ -87,10 +87,10 @@ callback_list = [
 ]
 
 # Set class weights
-class_weight = {0: 1., 1: 10.}
+class_weight = [0.1, 1]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size = 4, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val), sample_weight=class_weight)
+results = model.fit(X_train, Y_train, batch_size = 4, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val), class_weight = class_weight)
 
 # Save model
 model.save(os.path.normpath('models/recentUNet'))
