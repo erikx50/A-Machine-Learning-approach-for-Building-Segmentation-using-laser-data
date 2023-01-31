@@ -130,6 +130,6 @@ def unet_dropout(input_size=(512, 512, 3)):
 
     # Compiling model
     model = models.Model([inputs], [outputs])
-    model.compile(optimizer = 'adam', loss = losses.BinaryFocalCrossentropy(gamma = 2.0), metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = losses.BinaryFocalCrossentropy(gamma = 3.0), metrics = ['accuracy'])
     return model
 
