@@ -59,7 +59,7 @@ def basic_unet(input_size=(512, 512, 3)):
 
     # Compiling model
     model = models.Model([inputs], [outputs])
-    model.compile(optimizer = 'adam', loss = losses.BinaryCrossentropy(from_logits=True), metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = losses.BinaryCrossentropy(from_logits=False), metrics = ['accuracy'])
     return model
 
 
@@ -130,6 +130,7 @@ def unet_dropout(input_size=(512, 512, 3)):
 
     # Compiling model
     model = models.Model([inputs], [outputs])
-    model.compile(optimizer = 'adam', loss = losses.BinaryFocalCrossentropy(gamma = 5.0), metrics = ['accuracy'])
+    #model.compile(optimizer = 'adam', loss = losses.BinaryFocalCrossentropy(gamma = 5.0), metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = losses.BinaryCrossentropy(from_logits=False), metrics = ['accuracy'], shuffle = true)
     return model
 
