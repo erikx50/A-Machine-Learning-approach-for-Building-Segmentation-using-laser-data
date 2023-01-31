@@ -62,3 +62,6 @@ Y_pred = model.predict(X_test)
 # Evaluating model
 score = calculate_score(np.argmax(Y_pred, -1).astype(np.uint8), Y_test)
 print(score)
+
+print(Y_pred[0])
+print(Y_test[0])
