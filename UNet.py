@@ -126,7 +126,7 @@ def unet_dropout(input_size=(512, 512, 3)):
     c9 = layers.Dropout(0.1)(c9)
     c9 = layers.Conv2D(64, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c9)
 
-    outputs = layers.Conv2D(1, (1,1), activation = 'sigmoid')(c9)
+    outputs = layers.Conv2D(1, (1,1), activation = 'sigmoid', padding = "same")(c9)
 
     # Compiling model
     model = models.Model([inputs], [outputs])
