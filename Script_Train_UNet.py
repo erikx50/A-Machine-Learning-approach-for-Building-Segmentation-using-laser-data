@@ -12,7 +12,7 @@ import UNet
 
 # Change GPU setting
 # Limit number of GPUs
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 
 # Limit GPU memory
 config = tf.compat.v1.ConfigProto()
