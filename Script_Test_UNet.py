@@ -60,6 +60,6 @@ model = models.load_model(os.path.normpath('models/recentUNet'))
 Y_pred = model.predict(X_test)
 
 # Evaluating model
-score = calculate_score(np.argmax(Y_pred, -1).astype(np.uint8), Y_test)
+score = calculate_score(np.squeeze((Y_pred > 0.5), -1).astype(np.uint8), Y_test)
 print(score)
 

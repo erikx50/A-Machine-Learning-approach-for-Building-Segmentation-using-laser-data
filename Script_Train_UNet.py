@@ -90,7 +90,7 @@ callback_list = [
 #class_weight = [0.1, 1]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size = 4, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val), shuffle=True)
+results = model.fit(X_train, Y_train, batch_size = 4, epochs = 25, callbacks = callback_list, validation_data = (X_val, Y_val))
 
 # Save model
 model.save(os.path.normpath('models/recentUNet'))

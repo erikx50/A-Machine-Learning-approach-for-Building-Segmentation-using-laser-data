@@ -1,4 +1,4 @@
-from tensorflow.keras import models, layers, optimizers, callbacks, losses
+from tensorflow.keras import models, layers, optimizers, callbacks, losses, metrics
 
 
 def basic_unet(input_size=(512, 512, 3)):
@@ -130,7 +130,6 @@ def unet_dropout(input_size=(512, 512, 3)):
 
     # Compiling model
     model = models.Model([inputs], [outputs])
-    #model.compile(optimizer = 'adam', loss = losses.BinaryFocalCrossentropy(gamma = 5.0), metrics = ['accuracy'])
-    model.compile(optimizer = 'adam', loss = losses.BinaryCrossentropy(from_logits=False), metrics = ['accuracy'])
+    model.compile(optimizer = optimizers.Adam(learning_rate=0.0001), loss = losses.BinaryCrossentropy(from_logits=False), metrics = [metrics.BinaryIoU()])
     return model
 
