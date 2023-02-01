@@ -1,9 +1,11 @@
 from tensorflow.keras import models, layers, optimizers, callbacks, losses, metrics, backend
+import tensorflow as tf
 
 
 # Defining loss function
 def jaccard_coef(y_true, y_pred):
     y_true_f = backend.flatten(y_true)
+    y_true_f = tf.cast(y_true_f, tf.float32) # Convert the true labels to float32
     y_pred_f = backend.flatten(y_pred)
     intersection = backend.sum(y_true_f * y_pred_f)
     return (intersection + 1.0) / (backend.sum(y_true_f) + backend.sum(y_pred_f) - intersection + 1.0)
