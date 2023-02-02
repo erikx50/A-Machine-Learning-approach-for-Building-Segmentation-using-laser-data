@@ -8,7 +8,7 @@ from tqdm import tqdm
 import numpy as np
 
 from eval_functions import calculate_score
-
+from UNet import jaccard_coef
 
 # Change GPU setting
 # Limit number of GPUs
@@ -56,7 +56,7 @@ print('Y_train size: ' + str(len(Y_test)))
 
 # Testing model
 # Load model
-model = models.load_model(os.path.normpath('models/recentUNet'))
+model = models.load_model(os.path.normpath('models/recentUNet'), custom_objects={'jaccard_coef': jaccard_coef})
 Y_pred = model.predict(X_test)
 
 # Evaluating model
