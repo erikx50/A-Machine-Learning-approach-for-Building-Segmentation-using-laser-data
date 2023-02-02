@@ -7,7 +7,7 @@ from tensorflow.keras import callbacks
 from tqdm import tqdm
 import numpy as np
 
-from scripts import UNet
+import UNet
 
 # Change GPU setting
 # Limit number of GPUs
@@ -25,10 +25,10 @@ model.summary()
 
 
 # Finding the number of images in each dataset
-train_path = os.path.normpath('dataset/MapAI/512x512_train/image')
+train_path = os.path.normpath('../dataset/MapAI/512x512_train/image')
 no_train_images = len([name for name in os.listdir(train_path) if os.path.isfile(os.path.join(train_path, name))])
 
-validation_path = os.path.normpath('dataset/MapAI/512x512_validation/image')
+validation_path = os.path.normpath('../dataset/MapAI/512x512_validation/image')
 no_val_images = len([name for name in os.listdir(validation_path) if os.path.isfile(os.path.join(validation_path, name))])
 
 # Defining size of images
@@ -48,9 +48,9 @@ subsets = ['image', 'mask']
 
 # Adding images to NumPy arrays
 for dataset in tqdm(datasets):
-    dataset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset)
+    dataset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset)
     for subset in tqdm(subsets):
-        subset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset + '/' + subset)
+        subset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/' + subset)
         with os.scandir(subset_path) as entries:
             for n, entry in enumerate(entries):
                 img = cv.imread(os.path.normpath(subset_path + '/' + entry.name))
@@ -76,21 +76,23 @@ print('Y_validation size: ' + str(len(Y_val)))
 
 
 # Train Model
-# Create callback for model. 
+# Create models directory if it doesnt exist
+dataset_path = os.path.normpath("../models")
+if not os.path.exists(dataset_path):
+    os.makedirs(dataset_path)
 
+# Create callback for model.
 # ModelCheckpoint -> Creates checkpoints after each epoch
 # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
 callback_list = [
-    callbacks.ModelCheckpoint(os.path.normpath('models/MapAI_UNet_Task1_Checkpoint.h5'), verbose = 1, save_best_only=True),
+    callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose = 1, save_best_only=True),
     callbacks.EarlyStopping(monitor = 'val_loss', patience = 10)
 ]
-
-# Set class weights
-#class_weight = [0.1, 1]
 
 # Train the model
 results = model.fit(X_train, Y_train, batch_size = 8, epochs = 50, callbacks = callback_list, validation_data = (X_val, Y_val))
 
 # Save model
-model.save(os.path.normpath('models/recentUNet'))
+
+model.save(os.path.normpath('../models/recentUNet'))
 
