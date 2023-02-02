@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import numpy as np
 
-from code.eval_functions import calculate_score
-from code.UNet import jaccard_coef, jaccard_coef_loss
+from eval_functions import calculate_score
+from UNet import jaccard_coef, jaccard_coef_loss
 
 
 # Change GPU setting
