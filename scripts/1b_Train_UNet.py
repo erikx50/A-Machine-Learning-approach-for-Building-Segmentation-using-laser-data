@@ -3,12 +3,11 @@ import os
 
 import cv2 as cv
 import tensorflow as tf
-from tensorflow.keras import models, layers, optimizers, callbacks, losses
+from tensorflow.keras import callbacks
 from tqdm import tqdm
 import numpy as np
 
-import UNet
-
+from scripts import UNet
 
 # Change GPU setting
 # Limit number of GPUs

@@ -2,8 +2,7 @@ import os
 
 import cv2 as cv
 import tensorflow as tf
-from tensorflow.keras import models, layers, optimizers, callbacks, losses
-import matplotlib.pyplot as plt
+from tensorflow.keras import models
 from tqdm import tqdm
 import numpy as np
 
