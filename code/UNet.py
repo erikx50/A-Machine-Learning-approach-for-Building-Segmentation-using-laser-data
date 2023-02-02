@@ -146,5 +146,5 @@ def unet_test1(input_size=(512, 512, 3)):
 
     model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=[jaccard_coef, 'accuracy'])
-    model.summary()
+    return model
 
