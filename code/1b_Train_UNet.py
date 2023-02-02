@@ -89,8 +89,11 @@ callback_list = [
     callbacks.EarlyStopping(monitor = 'val_loss', patience = 3)
 ]
 
+# Class weights
+class_weight = {0: 1, 1: 10}
+
 # Train the model
-results = model.fit(X_train, Y_train, batch_size = 8, epochs = 50, callbacks = callback_list, validation_data = (X_val, Y_val))
+results = model.fit(X_train, Y_train, batch_size = 8, epochs = 50, callbacks = callback_list, validation_data = (X_val, Y_val), class_weight=class_weight)
 
 # Save model
 
