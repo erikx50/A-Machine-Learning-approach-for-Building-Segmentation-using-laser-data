@@ -84,6 +84,6 @@ def unet_dropout(input_size=(512, 512, 3)):
 
     # Compiling model
     model = models.Model([inputs], [outputs])
-    model.compile(optimizer = optimizers.Adam(learning_rate=0.01), loss = [jaccard_coef_loss], metrics = [jaccard_coef, 'accuracy'])
+    model.compile(optimizer = optimizers.Adam(), loss = [jaccard_coef_loss], metrics = [jaccard_coef, 'accuracy'])
     return model
 

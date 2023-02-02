@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import numpy as np
 
-from eval_functions import calculate_score
-from UNet import jaccard_coef, jaccard_coef_loss
+from code.eval_functions import calculate_score
+from code.UNet import jaccard_coef, jaccard_coef_loss
+
 
 # Change GPU setting
 # Limit number of GPUs
@@ -21,7 +22,7 @@ session = tf.compat.v1.Session(config = config)
 
 # Preparing test data
 # Finding the number of images in each dataset
-test_path = os.path.normpath('dataset/MapAI/512x512_task1_test/image')
+test_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/image')
 no_test_images = len([name for name in os.listdir(test_path) if os.path.isfile(os.path.join(test_path, name))])
 
 # Defining size of images
@@ -37,7 +38,7 @@ subsets = ['image', 'mask']
 
 # Adding images to NumPy arrays
 for subset in tqdm(subsets):
-    subset_path = os.path.normpath('dataset/MapAI/512x512_task1_test/' + subset)
+    subset_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/' + subset)
     with os.scandir(subset_path) as entries:
         for n, entry in enumerate(entries):
             img = cv.imread(os.path.normpath(subset_path + '/' + entry.name))
@@ -56,7 +57,7 @@ print('Y_train size: ' + str(len(Y_test)))
 
 # Testing model
 # Load model
-model = models.load_model(os.path.normpath('models/recentUNet'), custom_objects={'jaccard_coef': jaccard_coef, 'jaccard_coef_loss': jaccard_coef_loss})
+model = models.load_model(os.path.normpath('../models/recentUNet'), custom_objects={'jaccard_coef': jaccard_coef, 'jaccard_coef_loss': jaccard_coef_loss})
 Y_pred = model.predict(X_test)
 
 # Evaluating model
