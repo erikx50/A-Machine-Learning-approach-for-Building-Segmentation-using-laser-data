@@ -86,7 +86,7 @@ if not os.path.exists(dataset_path):
 # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
 callback_list = [
     callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose = 1, save_best_only=True),
-    callbacks.EarlyStopping(monitor = 'val_loss', patience = 4)
+    callbacks.EarlyStopping(monitor = 'val_loss', patience = 3)
 ]
 
 # Train the model

@@ -12,7 +12,7 @@ def jaccard_coef(y_true, y_pred):
 
 
 def jaccard_coef_loss(y_true, y_pred):
-    return -jaccard_coef(y_true, y_pred)  # -1 ultiplied as we want to minimize this value as loss function
+    return -jaccard_coef(y_true, y_pred)  # -1 multiplied as we want to minimize this value as loss function
 
 ################################################################
 
@@ -80,10 +80,10 @@ def unet_dropout(input_size=(512, 512, 3)):
     c9 = layers.Dropout(0.1)(c9)
     c9 = layers.Conv2D(64, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c9)
 
-    outputs = layers.Conv2D(1, (1,1), activation = 'sigmoid', padding = "same")(c9)
+    outputs = layers.Conv2D(1, (1,1), activation = 'sigmoid')(c9)
 
     # Compiling model
     model = models.Model([inputs], [outputs])
-    model.compile(optimizer = optimizers.Adam(), loss = [jaccard_coef_loss], metrics = [jaccard_coef, 'accuracy'])
+    model.compile(optimizer = optimizers.Adam(), loss = losses.BinaryCrossentropy(), metrics = [jaccard_coef, 'accuracy'])
     return model
 
