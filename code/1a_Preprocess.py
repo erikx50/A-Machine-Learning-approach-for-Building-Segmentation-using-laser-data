@@ -20,15 +20,15 @@ new_size = 512
 
 for dataset in tqdm(datasets):
     # Make directory for preprocessed dataset
-    dataset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset)
+    dataset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset)
     if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
 
     # Make directory for preprocessed subsets
-    mask_path = os.path.normpath('dataset/MapAI/512x512_' + dataset + '/mask')
-    image_path = os.path.normpath('dataset/MapAI/512x512_' + dataset + '/image')
-    original_mask_path = os.path.normpath('dataset/MapAI/' + dataset + '/mask')
-    original_image_path = os.path.normpath('dataset/MapAI/' + dataset + '/image')
+    mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask')
+    image_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/image')
+    original_mask_path = os.path.normpath('../dataset/MapAI/' + dataset + '/mask')
+    original_image_path = os.path.normpath('../dataset/MapAI/' + dataset + '/image')
 
     if not os.path.exists(mask_path):
         os.makedirs(mask_path)

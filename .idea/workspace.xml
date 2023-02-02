@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca19b946-72c6-4527-af5a-6cb4e330ad3b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/1a_Preprocessing_Dataset.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/1a_Preprocessing_Dataset.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/0a_MapAI_Dataset.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/1a_Preprocess.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/1b_Train_UNet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/1c_Test_UNet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/UNet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/eval_functions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/1a_Preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1a_Preprocess.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/1a_Preprocess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="37" column="55" lean-forward="true" selection-start-line="37" selection-start-column="55" selection-end-line="37" selection-end-column="55" />
+            <state relative-caret-position="526">
+              <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -222,9 +216,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/0a_MapAI_Dataset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -282,10 +273,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="27" column="31" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/1a_Preprocess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="37" column="55" lean-forward="true" selection-start-line="37" selection-start-column="55" selection-end-line="37" selection-end-column="55" />
+        <state relative-caret-position="526">
+          <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
         </state>
       </provider>
     </entry>
