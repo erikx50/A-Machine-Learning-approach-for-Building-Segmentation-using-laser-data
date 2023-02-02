@@ -141,6 +141,7 @@ def unet_test1(input_size=(512, 512, 3)):
     c9 = tf.keras.layers.Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(u9)
     c9 = tf.keras.layers.Dropout(0.1)(c9)
     c9 = tf.keras.layers.Conv2D(16, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(c9)
+    c9 = tf.keras.layers.Conv2D(2, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(c9)
 
     outputs = tf.keras.layers.Conv2D(1, (1, 1), activation='sigmoid')(c9)
 
