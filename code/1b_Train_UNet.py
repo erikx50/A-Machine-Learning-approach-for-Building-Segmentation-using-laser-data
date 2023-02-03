@@ -20,7 +20,7 @@ session = tf.compat.v1.Session(config = config)
 
 
 # Compile model
-model = UNet.unet_small()
+model = UNet.unet_large()
 model.summary()
 
 
