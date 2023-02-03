@@ -87,9 +87,9 @@ def unet_dropout(input_size=(512, 512, 3)):
     model.compile(optimizer = optimizers.Adam(), loss = losses.BinaryCrossentropy(), metrics = [jaccard_coef, 'accuracy'])
     return model
 
-loss = losses.BinaryFocalCrossentropy(
-    gamma=2, from_logits=True, apply_class_balancing=True,
-    reduction=tf.keras.losses.Reduction.NONE)
+
+loss = losses.BinaryFocalCrossentropy(gamma=2, apply_class_balancing=True)
+
 
 def unet_test1(input_size=(512, 512, 3)):
     inputs = layers.Input(input_size)
