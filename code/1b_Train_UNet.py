@@ -51,9 +51,11 @@ for dataset in tqdm(datasets):
     dataset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset)
     for subset in tqdm(subsets):
         subset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/' + subset)
+        img_names = []
         with os.scandir(subset_path) as entries:
             for n, entry in enumerate(entries):
                 img = cv.imread(os.path.normpath(subset_path + '/' + entry.name))
+                img_names.append(entry.name)
                 if subset == 'image':
                     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
                     if dataset == 'train':
@@ -66,7 +68,7 @@ for dataset in tqdm(datasets):
                         Y_train[n] = img
                     if dataset == 'validation':
                         Y_val[n] = img
-
+        print(img_names[0:100])
 
 # Print the size of the different sets
 print('X_train size: ' + str(len(X_train)))
