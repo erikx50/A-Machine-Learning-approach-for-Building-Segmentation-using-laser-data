@@ -87,6 +87,9 @@ def unet_dropout(input_size=(512, 512, 3)):
     model.compile(optimizer = optimizers.Adam(), loss = losses.BinaryCrossentropy(), metrics = [jaccard_coef, 'accuracy'])
     return model
 
+loss = tf.keras.losses.BinaryFocalCrossentropy(
+    apply_class_balancing=True, gamma=2, from_logits=True,
+    reduction=tf.keras.losses.Reduction.NONE)
 
 def unet_test1(input_size=(512, 512, 3)):
     inputs = tf.keras.layers.Input(input_size)
@@ -149,6 +152,6 @@ def unet_test1(input_size=(512, 512, 3)):
     outputs = tf.keras.layers.Conv2D(1, (1, 1), activation='sigmoid')(c9)
 
     model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.00001), loss=tf.keras.losses.BinaryFocalCrossentropy(apply_class_balancing=True, gamma=2.0), metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.00001), loss=loss, metrics=[jaccard_coef, 'accuracy'])
     return model
 
