@@ -37,19 +37,19 @@ for dataset in tqdm(datasets):
         os.makedirs(image_path)
 
     # Upscale images to 512x512 -> Ignore images from training set with less than a specific threshold of building pixels
-    THRESHOLD = 0.05
+    #THRESHOLD = 0.05
     with os.scandir(original_mask_path) as entries:
         for entry in entries:
             mask_img = cv.imread(os.path.normpath(original_mask_path + '/' + entry.name), cv.IMREAD_GRAYSCALE)
             mask_img[mask_img == 255] = 1
-            mask_pixels = np.unique(mask_img, return_counts=True)[1] # [Class 0(Background), Class 1 (Buildings)]
+            #mask_pixels = np.unique(mask_img, return_counts=True)[1] # [Class 0(Background), Class 1 (Buildings)]
 
             # Filter out training images
-            if dataset == 'train':
-                if len(mask_pixels) == 1: # Mask only contains one class
-                    continue
-                if mask_pixels[1]/mask_pixels[0] < THRESHOLD:
-                    continue
+            #if dataset == 'train':
+                #if len(mask_pixels) == 1: # Mask only contains one class
+                    #continue
+                #if mask_pixels[1]/mask_pixels[0] < THRESHOLD:
+                    #continue
 
             # Resize images
             # Mask
