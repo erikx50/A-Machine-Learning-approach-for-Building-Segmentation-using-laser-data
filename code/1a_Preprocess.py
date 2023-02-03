@@ -37,7 +37,7 @@ for dataset in tqdm(datasets):
         os.makedirs(image_path)
 
     # Upscale images to 512x512 -> Ignore images from training set with less than a specific threshold of building pixels
-    THRESHOLD = 0.15
+    THRESHOLD = 0.05
     with os.scandir(original_mask_path) as entries:
         for entry in entries:
             mask_img = cv.imread(os.path.normpath(original_mask_path + '/' + entry.name), cv.IMREAD_GRAYSCALE)
