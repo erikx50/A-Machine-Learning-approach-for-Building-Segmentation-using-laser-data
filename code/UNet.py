@@ -88,7 +88,7 @@ def unet_dropout(input_size=(512, 512, 3)):
     return model
 
 
-loss = losses.BinaryFocalCrossentropy(gamma=2, alpha=0.75, apply_class_balancing=True, from_logits=True)
+loss = losses.BinaryFocalCrossentropy(gamma=2, alpha=0.05, apply_class_balancing=True, from_logits=True)
 
 
 def unet_test1(input_size=(512, 512, 3)):
