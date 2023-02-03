@@ -44,31 +44,24 @@ Y_val = np.zeros((no_val_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
 
 # Defining sets
 datasets = ['train', 'validation']
-subsets = ['image', 'mask']
 
 # Adding images to NumPy arrays
 for dataset in tqdm(datasets):
-    dataset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset)
-    for subset in tqdm(subsets):
-        subset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/' + subset)
-        img_names = []
-        with os.scandir(subset_path) as entries:
-            for n, entry in enumerate(entries):
-                img = cv.imread(os.path.normpath(subset_path + '/' + entry.name))
-                img_names.append(entry.name)
-                if subset == 'image':
-                    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-                    if dataset == 'train':
-                        X_train[n] = img
-                    if dataset == 'validation':
-                        X_val[n] = img
-                if subset == 'mask':
-                    img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-                    if dataset == 'train':
-                        Y_train[n] = img
-                    if dataset == 'validation':
-                        Y_val[n] = img
-        print(img_names[0:100])
+    img_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/image')
+    mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask')
+    with os.scandir(img_path) as entries:
+        for n, entry in enumerate(entries):
+            img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
+            img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+            mask = cv.imread(os.path.normpath(mask_path + '/' + entry.name))
+            mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
+            if dataset == 'train':
+                X_train[n] = img
+                Y_train[n] = mask
+            elif dataset == 'validation':
+                X_val[n] = img
+                Y_val[n] = mask
+
 
 # Print the size of the different sets
 print('X_train size: ' + str(len(X_train)))
