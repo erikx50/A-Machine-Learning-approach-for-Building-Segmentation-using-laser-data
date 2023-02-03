@@ -32,21 +32,18 @@ IMG_WIDTH = 512
 X_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
 Y_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
 
-# Defining sets
-subsets = ['image', 'mask']
 
 # Adding images to NumPy arrays
-for subset in tqdm(subsets):
-    subset_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/' + subset)
-    with os.scandir(subset_path) as entries:
-        for n, entry in enumerate(entries):
-            img = cv.imread(os.path.normpath(subset_path + '/' + entry.name))
-            if subset == 'image':
-                img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-                X_test[n] = img
-            if subset == 'mask':
-                img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-                Y_test[n] = img
+img_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/image')
+mask_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/mask')
+with os.scandir(img_path) as entries:
+    for n, entry in enumerate(entries):
+        img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
+        img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+        X_test[n] = img
+        mask = cv.imread(os.path.normpath(mask_path + '/' + entry.name))
+        mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
+        Y_test[n] = mask
 
 # Print the size of the different sets
 print('X_train size: ' + str(len(X_test)))
