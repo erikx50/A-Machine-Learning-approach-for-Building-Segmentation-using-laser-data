@@ -85,7 +85,7 @@ callback_list = [
 ]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size = 8, epochs = 15, callbacks = callback_list, validation_data = (X_val, Y_val))
+results = model.fit(X_train, Y_train, batch_size = 8, epochs = 50, callbacks = callback_list, validation_data = (X_val, Y_val))
 
 # Save model
 
