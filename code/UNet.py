@@ -149,6 +149,6 @@ def unet_test1(input_size=(512, 512, 3)):
     outputs = tf.keras.layers.Conv2D(1, (1, 1), activation='sigmoid')(c9)
 
     model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.00001), loss=losses.BinaryFocalCrossentropy(gamma=2.0), metrics=[jaccard_coef, 'accuracy'], loss_weights=[1, 10])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.00001), loss=losses.BinaryFocalCrossentropy(apply_class_balancing=True, gamma=2.0), metrics=[jaccard_coef, 'accuracy'], loss_weights=[1, 10])
     return model
 
