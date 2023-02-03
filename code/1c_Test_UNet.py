@@ -56,7 +56,7 @@ print('Y_train size: ' + str(len(Y_test)))
 
 # Testing model
 # Load model
-model = models.load_model(os.path.normpath('../models/recentUNet'), custom_objects={'jaccard_coef': jaccard_coef, 'jaccard_coef_loss': jaccard_coef_loss})
+model = models.load_model(os.path.normpath('../models/recentUNet'), custom_objects={'jaccard_coef': jaccard_coef})
 Y_pred = model.predict(X_test)
 
 # Evaluating model
