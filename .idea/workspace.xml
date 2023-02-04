@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca19b946-72c6-4527-af5a-6cb4e330ad3b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/code/1b_Train_UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1b_Train_UNet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/UNet.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="139" column="44" lean-forward="true" selection-start-line="139" selection-start-column="44" selection-end-line="139" selection-end-column="44" />
+            <state relative-caret-position="170">
+              <caret line="114" lean-forward="true" selection-start-line="114" selection-end-line="114" />
               <folding>
                 <element signature="e#0#92#0" expanded="true" />
               </folding>
@@ -52,7 +51,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
+            <state relative-caret-position="-680">
               <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
             </state>
           </provider>
@@ -325,6 +324,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-680">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -335,17 +341,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="139" column="44" lean-forward="true" selection-start-line="139" selection-start-column="44" selection-end-line="139" selection-end-column="44" />
+        <state relative-caret-position="170">
+          <caret line="114" lean-forward="true" selection-start-line="114" selection-end-line="114" />
           <folding>
             <element signature="e#0#92#0" expanded="true" />
           </folding>
