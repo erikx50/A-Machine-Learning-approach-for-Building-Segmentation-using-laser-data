@@ -35,19 +35,19 @@ def unet(input_size=(512, 512, 3)):
 
     # Layer 3
     c3 = layers.Conv2D(256, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(p2)
-    c3 = layers.Dropout(0.1)(c3)
+    c3 = layers.Dropout(0.2)(c3)
     c3 = layers.Conv2D(256, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c3)
     p3 = layers.MaxPooling2D((2,2))(c3)
 
     # Layer 4
     c4 = layers.Conv2D(512, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(p3)
-    c4 = layers.Dropout(0.1)(c4)
+    c4 = layers.Dropout(0.2)(c4)
     c4 = layers.Conv2D(512, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c4)
     p4 = layers.MaxPooling2D((2,2))(c4)
 
     # Layer 5
     c5 = layers.Conv2D(1024, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(p4)
-    c5 = layers.Dropout(0.1)(c5)
+    c5 = layers.Dropout(0.3)(c5)
     c5 = layers.Conv2D(1024, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c5)
 
 
@@ -57,7 +57,7 @@ def unet(input_size=(512, 512, 3)):
     #u6 = layers.UpSampling2D(size = (2,2))(c5)
     u6 = layers.concatenate([u6, c4])
     c6 = layers.Conv2D(512, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(u6)
-    c6 = layers.Dropout(0.1)(c6)
+    c6 = layers.Dropout(0.2)(c6)
     c6 = layers.Conv2D(512, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c6)
 
     # Layer 7
@@ -65,7 +65,7 @@ def unet(input_size=(512, 512, 3)):
     #u7 = layers.UpSampling2D(size = (2,2))(c6)
     u7 = layers.concatenate([u7, c3])
     c7 = layers.Conv2D(256, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(u7)
-    c7 = layers.Dropout(0.1)(c7)
+    c7 = layers.Dropout(0.2)(c7)
     c7 = layers.Conv2D(256, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c7)
 
     # Layer 8
