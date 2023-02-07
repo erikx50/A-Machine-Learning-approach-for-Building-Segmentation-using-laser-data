@@ -84,7 +84,7 @@ def unet(input_size=(512, 512, 3)):
 
     # Compiling model
     model = Model(inputs=[inputs], outputs=[outputs])
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000008), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     return model
 
 
