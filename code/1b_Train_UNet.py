@@ -113,13 +113,13 @@ if not os.path.exists(dataset_path):
 # ModelCheckpoint -> Creates checkpoints after each epoch
 # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
 callback_list = [
-    callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose = 1, save_best_only=True),
-    callbacks.EarlyStopping(monitor = 'val_loss', patience = 3),
-    callbacks.ReduceLROnPlateau(monitor="val_loss", factor = 0.1, patience = 2)
+    callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose=1, save_best_only=True),
+    callbacks.EarlyStopping(monitor='val_loss', patience=5),
+    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=3, verbose=1)
 ]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size = 4, epochs = 100, callbacks = callback_list, validation_data = (X_val, Y_val))
+results = model.fit(X_train, Y_train, batch_size=4, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
 
 # Save model
 print("Saving model")
