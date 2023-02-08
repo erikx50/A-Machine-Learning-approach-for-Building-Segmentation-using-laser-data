@@ -11,7 +11,7 @@ import UNet
 
 # Change GPU setting
 # Limit number of GPUs
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+#os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 
 # Limit GPU memory
 config = tf.compat.v1.ConfigProto()
@@ -119,7 +119,9 @@ callback_list = [
 ]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size=4, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
+strategy = tf.distribute.MirroredStrategy(["GPU:6", "GPU:7"])  # Pick which GPUs to use
+with strategy.scope():
+    results = model.fit(X_train, Y_train, batch_size=4, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
 
 # Save model
 print("Saving model")
