@@ -7,7 +7,7 @@ from tqdm import tqdm
 import numpy as np
 
 from eval_functions import calculate_score
-from UNet import jaccard_coef, jaccard_coef_loss
+from UNet import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 
 
 # Change GPU setting
