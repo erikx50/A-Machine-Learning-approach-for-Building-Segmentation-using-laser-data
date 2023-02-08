@@ -12,7 +12,7 @@ def jaccard_coef(y_true, y_pred):
 
 
 def jaccard_coef_loss(y_true, y_pred):
-    return -jaccard_coef(y_true, y_pred)  # -1 multiplied as we want to minimize this value as loss function
+    return 1 - jaccard_coef(y_true, y_pred)
 
 
 def dice_coef(y_true, y_pred, smooth=1):
@@ -114,7 +114,7 @@ def unet(input_size=(512, 512, 3)):
 
     # Compiling model
     model = Model(inputs=[inputs], outputs=[outputs])
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     return model
 
 

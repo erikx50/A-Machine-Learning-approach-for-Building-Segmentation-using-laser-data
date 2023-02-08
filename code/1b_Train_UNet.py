@@ -115,7 +115,7 @@ if not os.path.exists(dataset_path):
 callback_list = [
     callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose=1, save_best_only=True),
     callbacks.EarlyStopping(monitor='val_loss', patience=5),
-    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.2, patience=3, verbose=1)
+    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=3, verbose=1)
 ]
 
 # Train the model
