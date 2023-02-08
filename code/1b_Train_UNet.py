@@ -96,8 +96,8 @@ X_train_augmented = np.concatenate([image_generator.next().astype(np.uint8) for 
 Y_train_augmented = np.concatenate([mask_generator.next() for i in range(mask_generator.__len__())])
 
 # Add augmented images to training set
-X_train = np.concatenate((X_train, X_train_augmented[0:5000]))
-Y_train = np.concatenate((Y_train, np.squeeze(Y_train_augmented[0:5000])))
+X_train = np.concatenate((X_train, X_train_augmented))
+Y_train = np.concatenate((Y_train, np.squeeze(Y_train_augmented)))
 
 print('X_train size after data augmentation: ' + str(len(X_train)))
 print('Y_train size after data augmentation: ' + str(len(Y_train)))
@@ -120,7 +120,7 @@ callback_list = [
 ]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size=4, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
+results = model.fit(X_train, Y_train, batch_size=3, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
 
 # Save model
 print("Saving model")
