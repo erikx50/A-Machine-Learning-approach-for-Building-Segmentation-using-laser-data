@@ -14,6 +14,19 @@ def jaccard_coef(y_true, y_pred):
 def jaccard_coef_loss(y_true, y_pred):
     return -jaccard_coef(y_true, y_pred)  # -1 multiplied as we want to minimize this value as loss function
 
+
+def dice_coef(y_true, y_pred, smooth=1):
+    y_true_f = backend.flatten(y_true)
+    y_true_f = tf.cast(y_true_f, tf.float32) # Convert the true labels to float32
+    y_pred_f = backend.flatten(y_pred)
+    intersection = backend.sum(y_true_f * y_pred_f)
+    dice = (2. * intersection + smooth) / (backend.sum(y_true_f) + backend.sum(y_pred_f) + smooth)
+    return dice
+
+
+def dice_coef_loss(y_true, y_pred):
+    return 1 - dice_coef(y_true, y_pred)
+
 ################################################################
 
 
@@ -84,7 +97,7 @@ def unet(input_size=(512, 512, 3)):
 
     # Compiling model
     model = Model(inputs=[inputs], outputs=[outputs])
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     return model
 
 
