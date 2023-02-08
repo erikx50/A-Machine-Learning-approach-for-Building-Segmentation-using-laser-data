@@ -11,7 +11,7 @@ import UNet
 
 # Change GPU setting
 # Limit number of GPUs
-#os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 strategy = tf.distribute.MirroredStrategy(["GPU:6", "GPU:7"])  # Pick which GPUs to use
 with strategy.scope():
 
