@@ -1,6 +1,6 @@
-from keras import layers, optimizers, backend, Model
-from keras.applications import EfficientNetB4
 import tensorflow as tf
+from tensorflow.keras import layers, optimizers, backend, Model
+from tensorflow.keras.applications import EfficientNetB4
 
 
 layers.BatchNormalization()
