@@ -128,7 +128,7 @@ def conv_block(input, num_filters):
 
 def decoder_block(input, skip_features, num_filters):
     x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
-    x = layers.Concatenate([x, skip_features])
+    x = layers.concatenate([x, skip_features])
     x = conv_block(x, num_filters)
     return x
 
