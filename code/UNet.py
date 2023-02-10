@@ -67,7 +67,6 @@ def unet(input_size=(512, 512, 3)):
     # Layer 5
     c5 = layers.Conv2D(1024, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(p4)
     c5 = layers.BatchNormalization()(c5)
-    #c5 = layers.Dropout(0.3)(c5)
     c5 = layers.Conv2D(1024, (3,3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same')(c5)
     c5 = layers.BatchNormalization()(c5)
 

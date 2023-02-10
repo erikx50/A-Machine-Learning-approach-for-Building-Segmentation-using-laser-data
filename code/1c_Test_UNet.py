@@ -52,11 +52,30 @@ print('Y_train size: ' + str(len(Y_test)))
 
 
 # Testing model
+tta = True
 # Load model
 print('Test model')
 model_name = input("Name of model: ")
 model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'jaccard_coef_loss': jaccard_coef_loss, 'jaccard_coef': jaccard_coef})
-Y_pred = model.predict(X_test)
+
+if tta:
+    Y_pred = []
+    for image in X_test:
+        prediction_original = model.predict(np.expand_dims(image, axis=0), verbose=0)[0]
+
+        prediction_lr = model.predict(np.expand_dims(np.fliplr(image), axis=0), verbose=0)[0]
+        prediction_lr = np.fliplr(prediction_lr)
+
+        prediction_ud = model.predict(np.expand_dims(np.flipud(image), axis=0), verbose=0)[0]
+        prediction_ud = np.flipud(prediction_ud)
+
+        prediction_lr_ud = model.predict(np.expand_dims(np.fliplr(np.flipud(image)), axis=0), verbose=0)[0]
+        prediction_lr_ud = np.fliplr(np.flipud(prediction_lr_ud))
+
+        predicition = (prediction_original + prediction_lr + prediction_ud + prediction_lr_ud) / 4
+        Y_pred.append(predicition)
+else:
+    Y_pred = model.predict(X_test)
 
 # Evaluating model
 score = calculate_score(np.squeeze((Y_pred > 0.5), -1).astype(np.uint8), Y_test)
