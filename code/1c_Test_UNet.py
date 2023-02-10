@@ -52,7 +52,7 @@ print('Y_train size: ' + str(len(Y_test)))
 
 
 # Testing model
-tta = True
+tta = False
 # Load model
 print('Test model')
 model_name = input("Name of model: ")
@@ -60,7 +60,7 @@ model = models.load_model(os.path.normpath('../models/' + model_name), custom_ob
 
 if tta:
     Y_pred = []
-    for image in X_test:
+    for image in tqdm(X_test):
         prediction_original = model.predict(np.expand_dims(image, axis=0), verbose=0)[0]
 
         prediction_lr = model.predict(np.expand_dims(np.fliplr(image), axis=0), verbose=0)[0]
