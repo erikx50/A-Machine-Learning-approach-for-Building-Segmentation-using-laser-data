@@ -158,5 +158,5 @@ def EfficientNetB4_unet(input_shape=(512, 512, 3)):
     outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(d4)
 
     model = Model(inputs, outputs, name="EfficientNetB4_U-Net")
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     return model
