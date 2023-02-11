@@ -58,7 +58,7 @@ print('Test model')
 model_name = input("Name of model: ")
 model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'jaccard_coef_loss': jaccard_coef_loss, 'jaccard_coef': jaccard_coef})
 
-if tta:
+if tta:     # Test time augmentation
     Y_pred = []
     for image in tqdm(X_test):
         prediction_original = model.predict(np.expand_dims(image, axis=0), verbose=0)[0]
