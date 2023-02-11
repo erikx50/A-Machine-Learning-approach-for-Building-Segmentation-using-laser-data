@@ -52,6 +52,7 @@ for dataset in tqdm(datasets):
 
             # Edge mask
             edge_mask = cv.Canny(resize_mask_img, 0, 1)
+            edge_mask[edge_mask == 255] = 1
             cv.imwrite(os.path.normpath(edge_mask_path + '/' + entry.name), edge_mask)
 
             # Image
