@@ -21,13 +21,14 @@ new_size = 512
 
 for dataset in tqdm(datasets):
     # Make directory for preprocessed dataset
-    dataset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset)
+    dataset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset)
     if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
 
     # Make directory for preprocessed subsets
     mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask')
     image_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/image')
+    edge_mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/edge_mask')
     original_mask_path = os.path.normpath('../dataset/MapAI/' + dataset + '/mask')
     original_image_path = os.path.normpath('../dataset/MapAI/' + dataset + '/image')
 
@@ -35,6 +36,8 @@ for dataset in tqdm(datasets):
         os.makedirs(mask_path)
     if not os.path.exists(image_path):
         os.makedirs(image_path)
+    if not os.path.exists(edge_mask_path):
+        os.makedirs(edge_mask_path)
 
     # Upscale images to 512x512
     with os.scandir(original_mask_path) as entries:
@@ -46,6 +49,10 @@ for dataset in tqdm(datasets):
             # Mask
             resize_mask_img = cv.resize(mask_img, (new_size, new_size), interpolation = cv.INTER_AREA)
             cv.imwrite(os.path.normpath(mask_path + '/' + entry.name), resize_mask_img)
+
+            # Edge mask
+            edge_mask = cv.Canny(resize_mask_img, 0, 1)
+            cv.imwrite(os.path.normpath(edge_mask_path + '/' + entry.name), edge_mask)
 
             # Image
             img = cv.imread(os.path.normpath(original_image_path + '/' + entry.name), cv.IMREAD_COLOR)
