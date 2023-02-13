@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca19b946-72c6-4527-af5a-6cb4e330ad3b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/code/UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/UNet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1c_Test_U-Net.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/1c_Test_U-Net.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/1b_Train_UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1b_Train_UNet.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="560">
-              <caret line="160" column="92" selection-start-line="160" selection-start-column="92" selection-end-line="160" selection-end-column="92" />
+            <state relative-caret-position="476">
+              <caret line="28" column="18" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="18" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -27,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="54" column="11" selection-start-line="54" selection-start-column="11" selection-end-line="54" selection-end-column="11" />
+            <state relative-caret-position="221">
+              <caret line="58" selection-start-line="58" selection-end-line="58" selection-end-column="157" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -48,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-814">
-              <caret line="49" selection-start-line="49" selection-end-line="49" />
+            <state relative-caret-position="254">
+              <caret line="111" column="36" lean-forward="true" selection-start-line="111" selection-start-column="36" selection-end-line="111" selection-end-column="36" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -86,6 +87,7 @@
       <find>tf.keras</find>
       <find>model</find>
       <find>models</find>
+      <find>if weights</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -103,9 +105,10 @@
         <option value="$PROJECT_DIR$/scripts/0a_MapAI_Dataset.py" />
         <option value="$PROJECT_DIR$/scripts/1b_Train_UNet.py" />
         <option value="$PROJECT_DIR$/code/1c_Test_UNet.py" />
-        <option value="$PROJECT_DIR$/code/1b_Train_UNet.py" />
         <option value="$PROJECT_DIR$/code/1a_Preprocess.py" />
         <option value="$PROJECT_DIR$/code/UNet.py" />
+        <option value="$USER_HOME$/anaconda3/envs/tf/Lib/site-packages/keras/applications/efficientnet.py" />
+        <option value="$PROJECT_DIR$/code/1b_Train_UNet.py" />
       </list>
     </option>
   </component>
@@ -322,16 +325,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="54" column="11" selection-start-line="54" selection-start-column="11" selection-end-line="54" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/0a_MapAI_Dataset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
@@ -352,22 +345,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
+    <entry file="file://$PROJECT_DIR$/code/UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-814">
-          <caret line="49" selection-start-line="49" selection-end-line="49" />
+        <state relative-caret-position="476">
+          <caret line="28" column="18" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="18" />
           <folding>
-            <element signature="e#10#19#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/UNet.py">
+    <entry file="file://$USER_HOME$/anaconda3/envs/tf/Lib/site-packages/keras/applications/efficientnet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="160" column="92" selection-start-line="160" selection-start-column="92" selection-end-line="160" selection-end-column="92" />
+        <state relative-caret-position="17">
+          <caret line="208" lean-forward="true" selection-start-line="208" selection-end-line="208" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="58" selection-start-line="58" selection-end-line="58" selection-end-column="157" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="111" column="36" lean-forward="true" selection-start-line="111" selection-start-column="36" selection-end-line="111" selection-end-column="36" />
+          <folding>
+            <element signature="e#10#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -80,26 +80,26 @@ print("Augmenting data to get a larger dataset")
 
 seed = 420
 
-#img_data_gen_args = dict(horizontal_flip=True, vertical_flip=True)
+img_data_gen_args = dict(horizontal_flip=True, vertical_flip=True)
 
-#mask_data_gen_args = dict(horizontal_flip=True, vertical_flip=True, preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype))
+mask_data_gen_args = dict(horizontal_flip=True, vertical_flip=True, preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype))
 
 # Create data generator
-#image_data_generator = preprocessing.image.ImageDataGenerator(**img_data_gen_args)
-#image_data_generator.fit(X_train, augment=True, seed=seed)
-#image_generator = image_data_generator.flow(X_train, seed=seed, batch_size=1, shuffle=False)
+image_data_generator = preprocessing.image.ImageDataGenerator(**img_data_gen_args)
+image_data_generator.fit(X_train, augment=True, seed=seed)
+image_generator = image_data_generator.flow(X_train, seed=seed, batch_size=1, shuffle=False)
 
-#mask_data_generator = preprocessing.image.ImageDataGenerator(**mask_data_gen_args)
-#mask_data_generator.fit(np.expand_dims(Y_train, axis = -1), augment=True, seed=seed)
-#mask_generator = mask_data_generator.flow(np.expand_dims(Y_train, axis = -1), seed=seed, batch_size=1, shuffle=False)
+mask_data_generator = preprocessing.image.ImageDataGenerator(**mask_data_gen_args)
+mask_data_generator.fit(np.expand_dims(Y_train, axis = -1), augment=True, seed=seed)
+mask_generator = mask_data_generator.flow(np.expand_dims(Y_train, axis = -1), seed=seed, batch_size=1, shuffle=False)
 
 # From image generator to numpy array
-#X_train_augmented = np.concatenate([image_generator.next().astype(np.uint8) for i in range(image_generator.__len__())])
-#Y_train_augmented = np.concatenate([mask_generator.next() for i in range(mask_generator.__len__())])
+X_train_augmented = np.concatenate([image_generator.next().astype(np.uint8) for i in range(image_generator.__len__())])
+Y_train_augmented = np.concatenate([mask_generator.next() for i in range(mask_generator.__len__())])
 
 # Add augmented images to training set
-#X_train = np.concatenate((X_train, X_train_augmented))
-#Y_train = np.concatenate((Y_train, np.squeeze(Y_train_augmented)))
+X_train = np.concatenate((X_train, X_train_augmented))
+Y_train = np.concatenate((Y_train, np.squeeze(Y_train_augmented)))
 
 print('X_train size after data augmentation: ' + str(len(X_train)))
 print('Y_train size after data augmentation: ' + str(len(Y_train)))
@@ -122,7 +122,7 @@ callback_list = [
 ]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size=4, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
+results = model.fit(X_train, Y_train, batch_size=2, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
 
 # Save model
 print("Saving model")
