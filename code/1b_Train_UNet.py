@@ -52,8 +52,8 @@ datasets = ['train', 'validation']
 # Adding images to NumPy arrays
 for dataset in tqdm(datasets):
     img_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/image')
-    #mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask')
-    mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/edge_mask')
+    mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask')
+    #mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/edge_mask')
     with os.scandir(img_path) as entries:
         for n, entry in enumerate(entries):
             img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
