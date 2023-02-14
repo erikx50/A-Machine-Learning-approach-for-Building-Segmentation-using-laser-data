@@ -23,7 +23,7 @@ session = tf.compat.v1.Session(config = config)
 
 # Compile model
 #model = UNet.EfficientNetB4_unet()
-model = CTUNet.EfficientNetB4_CTUnet
+model = CTUNet.EfficientNetB4_CTUnet()
 model.summary()
 
 
