@@ -8,6 +8,7 @@ from tqdm import tqdm
 import numpy as np
 
 import UNet
+import CTUNet
 
 # Change GPU setting
 # Limit number of GPUs
@@ -21,8 +22,8 @@ session = tf.compat.v1.Session(config = config)
 
 
 # Compile model
-#model = UNet.unet()
-model = UNet.EfficientNetB4_unet()
+#model = UNet.EfficientNetB4_unet()
+model = CTUNet.EfficientNetB4_CTUnet
 model.summary()
 
 
@@ -76,33 +77,36 @@ print('Y_validation size: ' + str(len(Y_val)))
 
 # Augmenting data
 # Define seed and arguments for data generator
-print("Augmenting data to get a larger dataset")
+aug = False
 
-seed = 420
+if aug:
+    print("Augmenting data to get a larger dataset")
 
-img_data_gen_args = dict(horizontal_flip=True, vertical_flip=True)
+    seed = 420
 
-mask_data_gen_args = dict(horizontal_flip=True, vertical_flip=True, preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype))
+    img_data_gen_args = dict(horizontal_flip=True, vertical_flip=True)
 
-# Create data generator
-image_data_generator = preprocessing.image.ImageDataGenerator(**img_data_gen_args)
-image_data_generator.fit(X_train, augment=True, seed=seed)
-image_generator = image_data_generator.flow(X_train, seed=seed, batch_size=1, shuffle=False)
+    mask_data_gen_args = dict(horizontal_flip=True, vertical_flip=True, preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype))
 
-mask_data_generator = preprocessing.image.ImageDataGenerator(**mask_data_gen_args)
-mask_data_generator.fit(np.expand_dims(Y_train, axis = -1), augment=True, seed=seed)
-mask_generator = mask_data_generator.flow(np.expand_dims(Y_train, axis = -1), seed=seed, batch_size=1, shuffle=False)
+    # Create data generator
+    image_data_generator = preprocessing.image.ImageDataGenerator(**img_data_gen_args)
+    image_data_generator.fit(X_train, augment=True, seed=seed)
+    image_generator = image_data_generator.flow(X_train, seed=seed, batch_size=1, shuffle=False)
 
-# From image generator to numpy array
-X_train_augmented = np.concatenate([image_generator.next().astype(np.uint8) for i in range(image_generator.__len__())])
-Y_train_augmented = np.concatenate([mask_generator.next() for i in range(mask_generator.__len__())])
+    mask_data_generator = preprocessing.image.ImageDataGenerator(**mask_data_gen_args)
+    mask_data_generator.fit(np.expand_dims(Y_train, axis = -1), augment=True, seed=seed)
+    mask_generator = mask_data_generator.flow(np.expand_dims(Y_train, axis = -1), seed=seed, batch_size=1, shuffle=False)
 
-# Add augmented images to training set
-X_train = np.concatenate((X_train, X_train_augmented))
-Y_train = np.concatenate((Y_train, np.squeeze(Y_train_augmented)))
+    # From image generator to numpy array
+    X_train_augmented = np.concatenate([image_generator.next().astype(np.uint8) for i in range(image_generator.__len__())])
+    Y_train_augmented = np.concatenate([mask_generator.next() for i in range(mask_generator.__len__())])
 
-print('X_train size after data augmentation: ' + str(len(X_train)))
-print('Y_train size after data augmentation: ' + str(len(Y_train)))
+    # Add augmented images to training set
+    X_train = np.concatenate((X_train, X_train_augmented))
+    Y_train = np.concatenate((Y_train, np.squeeze(Y_train_augmented)))
+
+    print('X_train size after data augmentation: ' + str(len(X_train)))
+    print('Y_train size after data augmentation: ' + str(len(Y_train)))
 
 
 # Train Model
