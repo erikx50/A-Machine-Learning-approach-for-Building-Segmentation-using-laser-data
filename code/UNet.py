@@ -1,37 +1,9 @@
-import tensorflow as tf
+# Imports
 from tensorflow.keras import layers, optimizers, backend, Model
 from tensorflow.keras.applications import EfficientNetB4
 
 
-layers.BatchNormalization()
-# Defining loss function
-def jaccard_coef(y_true, y_pred):
-    y_true_f = backend.flatten(y_true)
-    y_true_f = tf.cast(y_true_f, tf.float32) # Convert the true labels to float32
-    y_pred_f = backend.flatten(y_pred)
-    intersection = backend.sum(y_true_f * y_pred_f)
-    return (intersection + 1.0) / (backend.sum(y_true_f) + backend.sum(y_pred_f) - intersection + 1.0)
-
-
-def jaccard_coef_loss(y_true, y_pred):
-    return 1 - jaccard_coef(y_true, y_pred)
-
-
-def dice_coef(y_true, y_pred, smooth=1):
-    y_true_f = backend.flatten(y_true)
-    y_true_f = tf.cast(y_true_f, tf.float32) # Convert the true labels to float32
-    y_pred_f = backend.flatten(y_pred)
-    intersection = backend.sum(y_true_f * y_pred_f)
-    dice = (2. * intersection + smooth) / (backend.sum(y_true_f) + backend.sum(y_pred_f) + smooth)
-    return dice
-
-
-def dice_coef_loss(y_true, y_pred):
-    return 1 - dice_coef(y_true, y_pred)
-
-################################################################
-
-
+# U-Net
 def unet(input_size=(512, 512, 3)):
     # Encoder Part
     # Layer 1
@@ -107,12 +79,12 @@ def unet(input_size=(512, 512, 3)):
     outputs = layers.Conv2D(1, (1,1), activation = 'sigmoid')(c9)
 
     # Compiling model
-    model = Model(inputs=[inputs], outputs=[outputs])
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model = Model(inputs=[inputs], outputs=[outputs], name="UNet")
     return model
 
 
 ################################################################
+# U-Net using EfficientNetB4 as backbone
 def conv_block(input, num_filters):
     x = layers.Conv2D(num_filters, 3, padding="same")(input)
     x = layers.BatchNormalization()(x)
@@ -158,5 +130,4 @@ def EfficientNetB4_unet(input_shape=(512, 512, 3)):
     outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(d4)
 
     model = Model(inputs, outputs, name="EfficientNetB4_U-Net")
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     return model

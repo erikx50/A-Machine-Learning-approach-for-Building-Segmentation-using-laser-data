@@ -1,15 +1,14 @@
 # Imports
 import os
-
-import cv2 as cv
 import tensorflow as tf
-from tensorflow.keras import callbacks, preprocessing
+from tensorflow.keras import callbacks, preprocessing, optimizers
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tqdm import tqdm
 import numpy as np
 
 import UNet
 import CTUNet
+from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
+
 
 # Change GPU setting
 # Limit number of GPUs
@@ -23,9 +22,22 @@ session = tf.compat.v1.Session(config = config)
 
 
 # Compile model
-#model = UNet.EfficientNetB4_unet()
-model = CTUNet.EfficientNetB4_CTUnet()
+print('Pick type of model to train')
+models = ['U-Net', 'EfficientNetB4 U-Net', 'EfficientNetB4 CT-UNet']
+for i in range(len(models)):
+    print(str(i + 1) + ': ' + models[i])
+model_selector = input('Which model do you want to train?: ')
+
+model = None
+if model_selector == '1':
+    model = UNet.unet()
+elif model_selector == '2':
+    model = UNet.EfficientNetB4_unet()
+elif model_selector == '3':
+    model = CTUNet.EfficientNetB4_CTUnet()
+
 model.summary()
+model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
 
 
 # Creating data generators for training data
@@ -120,4 +132,3 @@ results = model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epoc
 print("Saving model")
 model_name = input("Save model as: ")
 model.save(os.path.normpath('../models/' + model_name))
-

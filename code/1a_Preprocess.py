@@ -1,7 +1,7 @@
+# Imports
 import os
 import cv2 as cv
 from tqdm import tqdm
-import numpy as np
 
 
 # Preprocess Dataset

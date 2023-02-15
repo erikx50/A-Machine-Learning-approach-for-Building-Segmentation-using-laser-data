@@ -1,3 +1,4 @@
+# Imports
 import os
 
 import cv2 as cv
@@ -7,7 +8,7 @@ from tqdm import tqdm
 import numpy as np
 
 from eval_functions import calculate_score
-from UNet import jaccard_coef, jaccard_coef_loss, dice_coef_loss
+from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 
 
 # Change GPU setting
@@ -80,4 +81,3 @@ else:
 # Evaluating model
 score = calculate_score(np.squeeze((Y_pred > 0.5), -1).astype(np.uint8), Y_test)
 print(score)
-

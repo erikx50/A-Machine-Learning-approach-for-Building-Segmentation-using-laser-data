@@ -1,8 +1,12 @@
+# Imports
 import numpy as np
 import cv2
 
+
+# Code taken from: https://github.com/Sjyhne/MapAI-Competition/blob/master/competition_toolkit/competition_toolkit/eval_functions.py
 def class_wise(arr: np.array, c: int) -> np.array:
     return arr == c
+
 
 def iou(prediction: np.array, target: np.array) -> float:
     miou = []
@@ -22,6 +26,7 @@ def iou(prediction: np.array, target: np.array) -> float:
         if c in target:
             miou.append(iou)
     return np.asarray(miou).mean()
+
 
 # General util function to get the boundary of a binary mask.
 def _mask_to_boundary(mask, dilation_ratio=0.02):

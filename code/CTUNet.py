@@ -1,9 +1,9 @@
-import tensorflow as tf
+# Imports
 from tensorflow.keras import layers, optimizers, backend, Model
 from tensorflow.keras.applications import EfficientNetB4
-from UNet import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 
 
+# Functions for block types of CT-Unet
 def DB_block(input1, num_filters):
     x = layers.BatchNormalization()(input1)
     x = layers.Activation("relu")(x)
@@ -109,6 +109,7 @@ def bottleneck(input):
     return x
 
 
+# EfficientNetB4 CT-UNet
 def EfficientNetB4_CTUnet(input_shape=(512, 512, 3)):
     # Input
     inputs = layers.Input(input_shape)
@@ -147,6 +148,4 @@ def EfficientNetB4_CTUnet(input_shape=(512, 512, 3)):
     outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
 
     model = Model(inputs, outputs, name="EfficientNetB4_CTU-Net")
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     return model
-

@@ -55,10 +55,3 @@ for set_name in tqdm(dataset.keys()):
         # Save floating point LiDAR data in lidar folder as a numpy file
         lidar_array = np.asarray(lidar_files[x])
         np.save(os.path.normpath("../dataset/MapAI/" + set_name + "/lidar/" + filename), lidar_array)
-
-
-
-
-
-
-
