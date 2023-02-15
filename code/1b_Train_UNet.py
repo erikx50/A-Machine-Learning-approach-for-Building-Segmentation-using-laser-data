@@ -90,7 +90,7 @@ train_generator = zip(image_generator, mask_generator)
 val_generator = zip(valid_img_generator, valid_mask_generator)
 
 num_train_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_train/image/train')))
-num_val_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_validation/image/train')))
+num_val_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_validation/image/val')))
 train_steps_per_epoch = num_train_imgs // batch_size
 val_steps_per_epoch = num_val_imgs // batch_size
 
