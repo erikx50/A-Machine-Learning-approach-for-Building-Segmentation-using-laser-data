@@ -72,14 +72,14 @@ mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../da
                                                          color_mode = 'grayscale',   #Read masks in grayscale
                                                          class_mode=None)
 
-
-valid_img_generator = image_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/image'),
+val_data_generator = ImageDataGenerator()
+valid_img_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/image'),
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                                seed=seed,
                                                                batch_size=batch_size,
                                                                class_mode=None)
 
-valid_mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/mask'),
+valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/mask'),
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                                seed=seed,
                                                                batch_size=batch_size,
