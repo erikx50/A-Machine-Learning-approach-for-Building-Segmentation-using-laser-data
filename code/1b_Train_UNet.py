@@ -90,7 +90,12 @@ train_generator = zip(image_generator, mask_generator)
 val_generator = zip(valid_img_generator, valid_mask_generator)
 
 num_train_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_train/image/train')))
-steps_per_epoch = num_train_imgs // batch_size
+num_val_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_validation/image/train')))
+train_steps_per_epoch = num_train_imgs // batch_size
+val_steps_per_epoch = num_val_imgs // batch_size
+
+print("Number of train images: " + str(num_train_imgs))
+print("Number of validation images: " + str(num_val_imgs))
 
 # Train Model
 # Create models directory if it doesnt exist
@@ -109,7 +114,7 @@ callback_list = [
 ]
 
 # Train the model
-results = model.fit(train_generator, steps_per_epoch=steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator)
+results = model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch)
 
 # Save model
 print("Saving model")
