@@ -4,6 +4,7 @@ import os
 import cv2 as cv
 import tensorflow as tf
 from tensorflow.keras import callbacks, preprocessing
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tqdm import tqdm
 import numpy as np
 
@@ -27,87 +28,69 @@ model = CTUNet.EfficientNetB4_CTUnet()
 model.summary()
 
 
-# Finding the number of images in each dataset
-train_path = os.path.normpath('../dataset/MapAI/512x512_train/image')
-no_train_images = len([name for name in os.listdir(train_path) if os.path.isfile(os.path.join(train_path, name))])
-
-validation_path = os.path.normpath('../dataset/MapAI/512x512_validation/image')
-no_val_images = len([name for name in os.listdir(validation_path) if os.path.isfile(os.path.join(validation_path, name))])
-
+# Creating data generators for training data
 # Defining size of images
 IMG_HEIGHT = 512
 IMG_WIDTH = 512
 
-# Creating NumPy arrays for the different subsets
-print("Importing data from training and validation set")
-X_train = np.zeros((no_train_images, IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
-Y_train = np.zeros((no_train_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
+seed = 24
+batch_size = 8
 
-X_val = np.zeros((no_val_images, IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
-Y_val = np.zeros((no_val_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
+img_data_gen_args = dict(rotation_range=90,
+                      width_shift_range=0.3,
+                      height_shift_range=0.3,
+                      shear_range=0.5,
+                      zoom_range=0.3,
+                      horizontal_flip=True,
+                      vertical_flip=True,
+                      fill_mode='reflect')
 
-# Defining sets
-datasets = ['train', 'validation']
-
-# Adding images to NumPy arrays
-for dataset in tqdm(datasets):
-    img_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/image')
-    mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask')
-    #mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/edge_mask')
-    with os.scandir(img_path) as entries:
-        for n, entry in enumerate(entries):
-            img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
-            img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-            mask = cv.imread(os.path.normpath(mask_path + '/' + entry.name))
-            mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
-            if dataset == 'train':
-                X_train[n] = img
-                Y_train[n] = mask
-            elif dataset == 'validation':
-                X_val[n] = img
-                Y_val[n] = mask
+mask_data_gen_args = dict(rotation_range=90,
+                      width_shift_range=0.3,
+                      height_shift_range=0.3,
+                      shear_range=0.5,
+                      zoom_range=0.3,
+                      horizontal_flip=True,
+                      vertical_flip=True,
+                      fill_mode='reflect',
+                      preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype)) #Binarize the output again.
 
 
-# Print the size of the different sets
-print('X_train size: ' + str(len(X_train)))
-print('Y_train size: ' + str(len(Y_train)))
-print('X_validation size: ' + str(len(X_val)))
-print('Y_validation size: ' + str(len(Y_val)))
+image_data_generator = ImageDataGenerator(**img_data_gen_args)
+image_generator = image_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/image'),
+                                                           target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                           seed=seed,
+                                                           batch_size=batch_size,
+                                                           class_mode=None)  #Very important to set this otherwise it returns multiple numpy arrays
+                                                                            #thinking class mode is binary.
+
+mask_data_generator = ImageDataGenerator(**mask_data_gen_args)
+mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/mask'),
+                                                         target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                         seed=seed,
+                                                         batch_size=batch_size,
+                                                         color_mode = 'grayscale',   #Read masks in grayscale
+                                                         class_mode=None)
 
 
-# Augmenting data
-# Define seed and arguments for data generator
-aug = False
+valid_img_generator = image_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/image'),
+                                                               target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                               seed=seed,
+                                                               batch_size=batch_size,
+                                                               class_mode=None)
 
-if aug:
-    print("Augmenting data to get a larger dataset")
+valid_mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/mask'),
+                                                               target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                               seed=seed,
+                                                               batch_size=batch_size,
+                                                               color_mode = 'grayscale',   #Read masks in grayscale
+                                                               class_mode=None)
 
-    seed = 420
+train_generator = zip(image_generator, mask_generator)
+val_generator = zip(valid_img_generator, valid_mask_generator)
 
-    img_data_gen_args = dict(horizontal_flip=True, vertical_flip=True)
-
-    mask_data_gen_args = dict(horizontal_flip=True, vertical_flip=True, preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype))
-
-    # Create data generator
-    image_data_generator = preprocessing.image.ImageDataGenerator(**img_data_gen_args)
-    image_data_generator.fit(X_train, augment=True, seed=seed)
-    image_generator = image_data_generator.flow(X_train, seed=seed, batch_size=1, shuffle=False)
-
-    mask_data_generator = preprocessing.image.ImageDataGenerator(**mask_data_gen_args)
-    mask_data_generator.fit(np.expand_dims(Y_train, axis = -1), augment=True, seed=seed)
-    mask_generator = mask_data_generator.flow(np.expand_dims(Y_train, axis = -1), seed=seed, batch_size=1, shuffle=False)
-
-    # From image generator to numpy array
-    X_train_augmented = np.concatenate([image_generator.next().astype(np.uint8) for i in range(image_generator.__len__())])
-    Y_train_augmented = np.concatenate([mask_generator.next() for i in range(mask_generator.__len__())])
-
-    # Add augmented images to training set
-    X_train = np.concatenate((X_train, X_train_augmented))
-    Y_train = np.concatenate((Y_train, np.squeeze(Y_train_augmented)))
-
-    print('X_train size after data augmentation: ' + str(len(X_train)))
-    print('Y_train size after data augmentation: ' + str(len(Y_train)))
-
+num_train_imgs = len(os.listdir(os.path.normpath('dataset/MapAI/512x512_train/image/train')))
+steps_per_epoch = num_train_imgs // batch_size
 
 # Train Model
 # Create models directory if it doesnt exist
@@ -126,7 +109,7 @@ callback_list = [
 ]
 
 # Train the model
-results = model.fit(X_train, Y_train, batch_size=2, epochs=100, callbacks=callback_list, validation_data=(X_val, Y_val))
+results = model.fit(train_generator, steps_per_epoch=steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator)
 
 # Save model
 print("Saving model")
