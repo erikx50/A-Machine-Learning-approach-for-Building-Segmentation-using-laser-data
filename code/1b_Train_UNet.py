@@ -34,7 +34,7 @@ IMG_HEIGHT = 512
 IMG_WIDTH = 512
 
 seed = 24
-batch_size = 8
+batch_size = 6
 
 img_data_gen_args = dict(rotation_range=90,
                       width_shift_range=0.3,
