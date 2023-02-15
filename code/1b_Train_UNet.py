@@ -41,7 +41,17 @@ model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef
 
 
 # Creating data generators for training data
-# Defining size of images
+# Selecting mask set
+print('Select mask set')
+print('1: Building Masks')
+print('2: Edge Masks')
+mask_selector = input('Which mask set do you want to use?: ')
+mask = None
+if mask_selector == '1':
+    mask = 'mask'
+elif mask_selector == '2':
+    mask = 'edge_mask'
+
 IMG_HEIGHT = 512
 IMG_WIDTH = 512
 
@@ -77,7 +87,7 @@ image_generator = image_data_generator.flow_from_directory(os.path.normpath('../
                                                                             #thinking class mode is binary.
 
 mask_data_generator = ImageDataGenerator(**mask_data_gen_args)
-mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/mask'),
+mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/' + mask),
                                                          target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                          seed=seed,
                                                          batch_size=batch_size,
@@ -91,7 +101,7 @@ valid_img_generator = val_data_generator.flow_from_directory(os.path.normpath('.
                                                                batch_size=batch_size,
                                                                class_mode=None)
 
-valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/mask'),
+valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/' + mask),
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                                seed=seed,
                                                                batch_size=batch_size,
