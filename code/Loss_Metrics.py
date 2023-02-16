@@ -1,6 +1,7 @@
 # Imports
 import tensorflow as tf
-from tensorflow.keras import backend
+from tensorflow.keras import backend, losses
+import numpy as np
 
 
 # Defining metric functions
@@ -28,3 +29,9 @@ def jaccard_coef_loss(y_true, y_pred):
 
 def dice_coef_loss(y_true, y_pred):
     return 1 - dice_coef(y_true, y_pred)
+
+
+def binary_cross_iou(y_true, y_pred):
+    weight = 0.3
+    bce = losses.BinaryCrossentropy()
+    return ((1 - weight) * bce(y_true, y_pred).numpy()) - (weight * np.log(jaccard_coef(y_true, y_pred)))

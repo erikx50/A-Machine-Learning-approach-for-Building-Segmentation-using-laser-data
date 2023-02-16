@@ -7,7 +7,7 @@ import numpy as np
 
 import UNet
 import CTUNet
-from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
+from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss, binary_cross_iou
 
 
 # Change GPU setting
@@ -37,7 +37,7 @@ elif model_selector == '3':
     model = CTUNet.EfficientNetB4_CTUnet()
 
 model.summary()
-model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[binary_cross_iou], metrics=[jaccard_coef, 'accuracy'])
 
 
 # Creating data generators for training data
@@ -131,8 +131,8 @@ if not os.path.exists(dataset_path):
 # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
 callback_list = [
     callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose=1, save_best_only=True),
-    callbacks.EarlyStopping(monitor='val_loss', patience=5),
-    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=3, verbose=1)
+    callbacks.EarlyStopping(monitor='val_loss', patience=4),
+    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=2, verbose=1)
 ]
 
 # Train the model
