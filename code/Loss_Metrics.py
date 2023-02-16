@@ -30,8 +30,13 @@ def jaccard_coef_loss(y_true, y_pred):
 def dice_coef_loss(y_true, y_pred):
     return 1 - dice_coef(y_true, y_pred)
 
+def BinaryCrossEntropy(y_true, y_pred):
+    y_pred = backend.clip(y_pred, backend.epsilon(), 1 - backend.epsilon())
+    term_0 = (1 - y_true) * backend.log(1 - y_pred + backend.epsilon())
+    term_1 = y_true * backend.log(y_pred + backend.epsilon())
+    return -backend.mean(term_0 + term_1, axis=0)
 
 def binary_cross_iou(y_true, y_pred):
     weight = 0.3
     bce = losses.BinaryCrossentropy()
-    return ((1 - weight) * bce(y_true, y_pred).eval()) - (weight * np.log(jaccard_coef(y_true, y_pred)))
+    return ((1 - weight) * bce(y_true, y_pred).eval()) - (weight * backend.log(jaccard_coef(y_true, y_pred)))
