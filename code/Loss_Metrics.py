@@ -34,4 +34,4 @@ def dice_coef_loss(y_true, y_pred):
 def binary_cross_iou(y_true, y_pred):
     weight = 0.3
     bce = losses.BinaryCrossentropy()
-    return ((1 - weight) * bce(y_true, y_pred)) - (weight * np.log(jaccard_coef(y_true, y_pred)))
+    return ((1 - weight) * bce(y_true, y_pred).eval()) - (weight * np.log(jaccard_coef(y_true, y_pred)))
