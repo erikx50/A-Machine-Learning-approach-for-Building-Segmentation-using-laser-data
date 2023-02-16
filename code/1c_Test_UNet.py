@@ -8,7 +8,7 @@ from tqdm import tqdm
 import numpy as np
 
 from eval_functions import calculate_score
-from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
+from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss, binary_cross_iou
 
 
 # Change GPU setting
@@ -57,7 +57,7 @@ tta = False
 # Load model
 print('Test model')
 model_name = input("Name of model: ")
-model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'binary_cross_iou': binary_cross_iou, 'jaccard_coef': jaccard_coef})
 
 if tta:     # Test time augmentation
     Y_pred = []
