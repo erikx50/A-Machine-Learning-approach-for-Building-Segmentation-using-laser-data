@@ -136,7 +136,7 @@ callback_list = [
 ]
 
 # Train the model
-results = model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch)
+results = model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose = 2)
 
 # Save model
 print("Saving model")
