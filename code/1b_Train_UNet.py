@@ -37,7 +37,7 @@ elif model_selector == '3':
     model = CTUNet.EfficientNetB4_CTUnet()
 
 model.summary()
-model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[binary_cross_iou], metrics=[jaccard_coef, 'accuracy'])
+model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
 
 
 # Creating data generators for training data
