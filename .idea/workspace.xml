@@ -33,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="560">
-              <caret line="138" column="193" selection-start-line="138" selection-start-column="193" selection-end-line="138" selection-end-column="193" />
+            <state relative-caret-position="492">
+              <caret line="134" column="74" selection-start-line="134" selection-start-column="74" selection-end-line="134" selection-end-column="74" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -308,8 +308,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="138" column="193" selection-start-line="138" selection-start-column="193" selection-end-line="138" selection-end-column="193" />
+        <state relative-caret-position="492">
+          <caret line="134" column="74" selection-start-line="134" selection-start-column="74" selection-end-line="134" selection-end-column="74" />
           <folding>
             <element signature="e#10#19#0" expanded="true" />
           </folding>
