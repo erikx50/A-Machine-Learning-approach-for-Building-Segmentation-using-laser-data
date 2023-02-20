@@ -72,7 +72,7 @@ iter_range = list(np.linspace(0, 1, 11))
 max_score = {'score': 0, 'iou': 0, 'biou': 0}
 best_w = []
 
-for w1 in tqdm(iter_range):
+for w1 in iter_range:
     for w2 in iter_range:
         if w1 + w2 != 1:
             continue
