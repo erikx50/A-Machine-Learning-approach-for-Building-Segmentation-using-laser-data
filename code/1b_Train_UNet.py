@@ -23,7 +23,7 @@ session = tf.compat.v1.Session(config = config)
 
 # Compile model
 print('Pick type of model to train')
-models = ['U-Net', 'EfficientNetB4 U-Net', 'EfficientNetB4 CT-UNet']
+models = ['U-Net', 'EfficientNetB4 U-Net', 'EfficientNetB4 CT-UNet', 'EfficientNetV2S CT-UNet']
 for i in range(len(models)):
     print(str(i + 1) + ': ' + models[i])
 model_selector = input('Which model do you want to train?: ')
@@ -35,6 +35,8 @@ elif model_selector == '2':
     model = UNet.EfficientNetB4_unet()
 elif model_selector == '3':
     model = CTUNet.EfficientNetB4_CTUnet()
+elif model_selector == '4':
+    model = CTUNet.EfficientNetV2S_CTUnet()
 
 model.summary()
 model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
