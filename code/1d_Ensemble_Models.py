@@ -67,6 +67,7 @@ model = [model1, model2]
 # Predict
 tta = True
 if tta:
+    threshold = 0.3
     preds = []
     for m in model:
         Y_pred = []
@@ -87,6 +88,7 @@ if tta:
         preds.append(Y_pred)
     preds = np.array(preds)
 else:
+    threshold = 0.5
     pred1 = model1.predict(X_test)
     pred2 = model2.predict(X_test)
     #pred3 = model3.predict(X_test)
@@ -104,7 +106,7 @@ for w1 in iter_range:
             continue
         weights = [w1, w2]
         weighted_preds = np.tensordot(preds, weights, axes=((0),(0)))
-        score = calculate_score(np.squeeze((weighted_preds > 0.5), -1).astype(np.uint8), Y_test)
+        score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
         print("Now predciting for weights :", w1, w2, " : Score = ", score)
         if score['score'] > max_score['score']:
             max_score = score
