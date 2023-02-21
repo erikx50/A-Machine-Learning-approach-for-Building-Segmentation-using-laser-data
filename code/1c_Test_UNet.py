@@ -53,13 +53,18 @@ print('Y_train size: ' + str(len(Y_test)))
 
 
 # Testing model
-tta = False
 # Load model
 print('Test model')
 model_name = input("Name of model: ")
 model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
 
-if tta:     # Test time augmentation
+print("Enable TTA? ")
+print("1: Yes ")
+print("Otherwise: No ")
+tta_input = input("TTA: ")
+
+if tta_input == '1':     # Test time augmentation
+    threshold = 0.3
     Y_pred = []
     for image in tqdm(X_test):
         prediction_original = model.predict(np.expand_dims(image, axis=0), verbose=0)[0]
@@ -76,8 +81,9 @@ if tta:     # Test time augmentation
         predicition = (prediction_original + prediction_lr + prediction_ud + prediction_lr_ud) / 4
         Y_pred.append(predicition)
 else:
+    threshold = 0.5
     Y_pred = model.predict(X_test)
 
 # Evaluating model
-score = calculate_score(np.squeeze((Y_pred > 0.5), -1).astype(np.uint8), Y_test)
+score = calculate_score(np.squeeze((Y_pred > threshold), -1).astype(np.uint8), Y_test)
 print(score)

@@ -8,7 +8,7 @@ from tqdm import tqdm
 import numpy as np
 
 from eval_functions import calculate_score
-from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss, binary_cross_iou
+from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 
 # Change GPU setting
 # Limit number of GPUs
@@ -59,11 +59,18 @@ model1 = models.load_model(os.path.normpath('../models/' + model1_name), custom_
 model2_name = input("Name of model 2: ")
 model2 = models.load_model(os.path.normpath('../models/' + model2_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
 
-model = [model1, model2]
+model3_name = input("Name of model 2: ")
+model3 = models.load_model(os.path.normpath('../models/' + model3_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+
+model = [model1, model2, model3]
 
 # Predict
-tta = True
-if tta:
+print("Enable TTA? ")
+print("1: Yes ")
+print("Otherwise: No ")
+tta_input = input("TTA: ")
+
+if tta_input == '1':
     threshold = 0.3
     preds = []
     for m in model:
@@ -88,7 +95,8 @@ else:
     threshold = 0.5
     pred1 = model1.predict(X_test)
     pred2 = model2.predict(X_test)
-    preds = np.array([pred1, pred2])
+    pred3 = model3.predict(X_test)
+    preds = np.array([pred1, pred2, pred3])
 
 
 iter_range = list(np.linspace(0, 1, 11))
@@ -97,14 +105,15 @@ best_w = []
 
 for w1 in iter_range:
     for w2 in iter_range:
-        if w1 + w2 != 1:
-            continue
-        weights = [w1, w2]
-        weighted_preds = np.tensordot(preds, weights, axes=((0),(0)))
-        score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
-        print("Now predciting for weights :", w1, w2, " : Score = ", score)
-        if score['score'] > max_score['score']:
-            max_score = score
-            best_w = weights
+        for w3 in iter_range:
+            if w1 + w2 + w3 != 1:
+                continue
+            weights = [w1, w2, w3]
+            weighted_preds = np.tensordot(preds, weights, axes=((0),(0)))
+            score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
+            print("Now predciting for weights :", w1, w2, w3, " : Score = ", score)
+            if score['score'] > max_score['score']:
+                max_score = score
+                best_w = weights
 
 print('Best score achieved with weights: ', best_w, ' Score: ', max_score)
