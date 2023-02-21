@@ -79,7 +79,7 @@ for w1 in iter_range:
         for w3 in iter_range:
             if w1 + w2 + w3 != 1:
                 continue
-            weights = [w1, w2]
+            weights = [w1, w2, w3]
             weighted_preds = np.tensordot(preds, weights, axes=((0),(0)))
             score = calculate_score(np.squeeze((weighted_preds > 0.5), -1).astype(np.uint8), Y_test)
             print("Now predciting for weights :", w1, w2, w3, " : Score = ", score)
