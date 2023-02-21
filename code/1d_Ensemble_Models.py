@@ -61,9 +61,6 @@ model2 = models.load_model(os.path.normpath('../models/' + model2_name), custom_
 
 model = [model1, model2]
 
-#model3_name = input("Name of model 3: ")
-#model3 = models.load_model(os.path.normpath('../models/' + model3_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
-
 # Predict
 tta = True
 if tta:
@@ -91,9 +88,7 @@ else:
     threshold = 0.5
     pred1 = model1.predict(X_test)
     pred2 = model2.predict(X_test)
-    #pred3 = model3.predict(X_test)
     preds = np.array([pred1, pred2])
-    #preds = np.array([pred1, pred2, pred3])
 
 
 iter_range = list(np.linspace(0, 1, 11))
