@@ -67,9 +67,9 @@ model = [model1, model2]
 # Predict
 tta = True
 if tta:
-    Y_pred = []
     preds = []
     for m in model:
+        Y_pred = []
         for image in tqdm(X_test):
             prediction_original = m.predict(np.expand_dims(image, axis=0), verbose=0)[0]
 
