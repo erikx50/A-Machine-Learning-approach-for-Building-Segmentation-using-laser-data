@@ -1,6 +1,6 @@
 # Imports
 from tensorflow.keras import layers, optimizers, backend, Model
-from tensorflow.keras.applications import EfficientNetB4, EfficientNetV2S, ResNet50V2
+from tensorflow.keras.applications import EfficientNetB4, EfficientNetV2S, ResNet50V2, DenseNet201
 
 
 # Functions for block types of CT-Unet
@@ -233,4 +233,46 @@ def ResNet50V2_CTUnet(input_shape=(512, 512, 3)):
     outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
 
     model = Model(inputs, outputs, name="ResNet50V2_CTU-Net")
+    return model
+
+
+# DenseNet201 CT-UNet
+def DenseNet201_CTUnet(input_shape=(512, 512, 3)):
+    # Input
+    inputs = layers.Input(input_shape)
+
+    # Loading pre trained model
+    DenseNet = DenseNet201(include_top=False, weights="imagenet", input_tensor=inputs)
+
+    # Encoder
+    res0 = DenseNet.get_layer('input_1').output  # 512 x 512
+    res1 = DenseNet.get_layer('conv1/relu').output  # 256 x 256
+    res2 = DenseNet.get_layer('pool2_conv').output  # 128 x 128
+    res3 = DenseNet.get_layer('pool3_conv').output  # 64 x 64
+    res4 = DenseNet.get_layer('pool4_conv').output  # 32 x 32
+
+    # Skip connection blocks
+    skip0 = DB_block(res0, 32)
+    skip1 = DBB_block(res1, skip0, 64)
+    skip2 = DBB_block(res2, skip1, 128)
+    skip3 = DBB_block(res3, skip2, 256)
+    skip4 = DBB_block(res4, skip3, 512)
+
+    # Bottleneck
+    b1 = bottleneck(res4)  # 16 x 16
+
+    # Decoder
+    d1 = decoder_block(b1, skip4, 512)  # 32 x 32
+    d2 = decoder_block(d1, skip3, 256)    # 64 x 64
+    d3 = decoder_block(d2, skip2, 128)   # 128 x 128
+    d4 = decoder_block(d3, skip1, 64)   # 256 x 256
+    d5 = decoder_block(d4, skip0, 32, True)   # 512 x 512
+
+    # Output
+    outputs = conv_block(d5, 16)
+    outputs = deconv_block(outputs, 16)
+    outputs = conv_block(outputs, 16)
+    outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
+
+    model = Model(inputs, outputs, name="DenseNet201_CTU-Net")
     return model

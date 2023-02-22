@@ -59,7 +59,7 @@ model1 = models.load_model(os.path.normpath('../models/' + model1_name), custom_
 model2_name = input("Name of model 2: ")
 model2 = models.load_model(os.path.normpath('../models/' + model2_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
 
-model3_name = input("Name of model 2: ")
+model3_name = input("Name of model 3: ")
 model3 = models.load_model(os.path.normpath('../models/' + model3_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
 
 model = [model1, model2, model3]
