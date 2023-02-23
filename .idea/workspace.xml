@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca19b946-72c6-4527-af5a-6cb4e330ad3b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/code/1d_Ensemble_Models.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1d_Ensemble_Models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CT_U-Net.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/CT_U-Net.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/CTUNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/CTUNet.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="253" column="28" selection-start-line="253" selection-start-column="28" selection-end-line="253" selection-end-column="28" />
+            <state relative-caret-position="287">
+              <caret line="34" column="4" lean-forward="true" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="4" />
               <folding>
                 <element signature="e#10#73#0" expanded="true" />
               </folding>
@@ -69,10 +70,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/1d_Ensemble_Models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
+            <state relative-caret-position="444">
               <caret line="105" column="21" lean-forward="true" selection-start-line="105" selection-start-column="21" selection-end-line="105" selection-end-column="21" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -122,9 +123,9 @@
         <option value="$PROJECT_DIR$/code/UNet.py" />
         <option value="$PROJECT_DIR$/code/Loss_Metrics.py" />
         <option value="$PROJECT_DIR$/code/1c_Test_UNet.py" />
-        <option value="$PROJECT_DIR$/code/CTUNet.py" />
         <option value="$PROJECT_DIR$/code/1b_Train_UNet.py" />
         <option value="$PROJECT_DIR$/code/1d_Ensemble_Models.py" />
+        <option value="$PROJECT_DIR$/code/CTUNet.py" />
       </list>
     </option>
   </component>
@@ -316,22 +317,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
+    <entry file="file://$PROJECT_DIR$/code/1d_Ensemble_Models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="253" column="28" selection-start-line="253" selection-start-column="28" selection-end-line="253" selection-end-column="28" />
+        <state relative-caret-position="444">
+          <caret line="105" column="21" lean-forward="true" selection-start-line="105" selection-start-column="21" selection-end-line="105" selection-end-column="21" />
           <folding>
-            <element signature="e#10#73#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/1d_Ensemble_Models.py">
+    <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="105" column="21" lean-forward="true" selection-start-line="105" selection-start-column="21" selection-end-line="105" selection-end-column="21" />
+        <state relative-caret-position="287">
+          <caret line="34" column="4" lean-forward="true" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="4" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#10#73#0" expanded="true" />
           </folding>
         </state>
       </provider>
