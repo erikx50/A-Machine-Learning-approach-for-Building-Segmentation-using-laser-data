@@ -115,5 +115,6 @@ for w1 in iter_range:
             if score['score'] > max_score['score']:
                 max_score = score
                 best_w = weights
+            break
 
 print('Best score achieved with weights: ', best_w, ' Score: ', max_score)
