@@ -2,6 +2,7 @@
 import os
 import cv2 as cv
 from tqdm import tqdm
+from eval_functions import _mask_to_boundary
 
 
 # Preprocess Dataset
@@ -51,7 +52,7 @@ for dataset in tqdm(datasets):
             cv.imwrite(os.path.normpath(mask_path + '/' + entry.name), resize_mask_img)
 
             # Edge mask
-            edge_mask = cv.Canny(resize_mask_img, 0, 1)
+            edge_mask = _mask_to_boundary(resize_mask_img)
             edge_mask[edge_mask == 255] = 1
             cv.imwrite(os.path.normpath(edge_mask_path + '/' + entry.name), edge_mask)
 

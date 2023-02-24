@@ -32,7 +32,7 @@ def DBB_block(input1, input2, num_filters):
 
     x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
     x = layers.Activation("relu")(x)
-    
+
     x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(x)
     x = layers.Activation("relu")(x)
     x = layers.BatchNormalization()(x)
