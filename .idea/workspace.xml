@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca19b946-72c6-4527-af5a-6cb4e330ad3b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/1a_Preprocessing_Dataset.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/1a_Preprocessing_Dataset.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Edge Test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Edge Test.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/CTUNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/CTUNet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/1c_Test_UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1c_Test_UNet.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,32 +12,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="202">
-              <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+              <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
               <folding>
                 <element signature="e#10#73#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/UNet.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2244">
-              <caret line="133" selection-start-line="133" selection-end-line="133" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/eval_functions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="31" column="21" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -59,8 +39,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
-              <caret line="95" column="113" selection-start-line="95" selection-start-column="113" selection-end-line="95" selection-end-column="113" />
+            <state relative-caret-position="289">
+              <caret line="50" selection-start-line="50" selection-end-line="58" selection-end-column="22" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -80,11 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="223">
+              <caret line="43" column="26" lean-forward="true" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -143,11 +123,11 @@
         <option value="$PROJECT_DIR$/code/0a_MapAI_Dataset.py" />
         <option value="$PROJECT_DIR$/code/UNet.py" />
         <option value="$PROJECT_DIR$/code/Loss_Metrics.py" />
-        <option value="$PROJECT_DIR$/code/1c_Test_UNet.py" />
         <option value="$PROJECT_DIR$/code/1b_Train_UNet.py" />
         <option value="$PROJECT_DIR$/code/1d_Ensemble_Models.py" />
         <option value="$PROJECT_DIR$/code/1a_Preprocess.py" />
         <option value="$PROJECT_DIR$/code/CTUNet.py" />
+        <option value="$PROJECT_DIR$/code/1c_Test_UNet.py" />
       </list>
     </option>
   </component>
@@ -298,26 +278,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="64" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="e#10#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/1d_Ensemble_Models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="105" column="21" selection-start-line="105" selection-start-column="21" selection-end-line="105" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/UNet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2244">
@@ -342,22 +302,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+          <folding>
+            <element signature="e#10#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/1d_Ensemble_Models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="105" column="21" selection-start-line="105" selection-start-column="21" selection-end-line="105" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="95" column="113" selection-start-line="95" selection-start-column="113" selection-end-line="95" selection-end-column="113" />
+        <state relative-caret-position="289">
+          <caret line="50" selection-start-line="50" selection-end-line="58" selection-end-column="22" />
           <folding>
             <element signature="e#10#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
+    <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="41" column="30" lean-forward="true" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+        <state relative-caret-position="223">
+          <caret line="43" column="26" lean-forward="true" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
           <folding>
-            <element signature="e#10#73#0" expanded="true" />
+            <element signature="e#10#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

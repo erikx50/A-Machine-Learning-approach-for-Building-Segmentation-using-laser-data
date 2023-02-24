@@ -33,10 +33,21 @@ IMG_WIDTH = 512
 X_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
 Y_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
 
+# Let user choose to test edge mask or building mask
+print('Select mask set')
+print('1: Building Masks')
+print('2: Edge Masks')
+mask_selector = input('Which mask set do you want to use?: ')
+mask = None
+if mask_selector == '1':
+    mask = 'mask'
+elif mask_selector == '2':
+    mask = 'edge_mask'
+
 
 # Adding images to NumPy arrays
 img_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/image')
-mask_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/mask')
+mask_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/' + mask)
 with os.scandir(img_path) as entries:
     for n, entry in enumerate(entries):
         img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
