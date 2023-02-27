@@ -27,9 +27,11 @@ print('2: RGBLiDAR')
 train_selector = input('Which set do you want to use?: ')
 train_set = None
 input_shape = None
+weight = None
 if train_selector == '1':
     train_set = 'image'
     input_shape = (512, 512, 3)
+    weight = 'imagenet'
 elif train_selector == '2':
     train_set = 'rgbLiDAR'
     input_shape = (512, 512, 4)
@@ -45,15 +47,15 @@ model = None
 if model_selector == '1':
     model = UNet.unet(input_shape)
 elif model_selector == '2':
-    model = UNet.EfficientNetB4_unet(input_shape)
+    model = UNet.EfficientNetB4_unet(input_shape, weight)
 elif model_selector == '3':
-    model = CTUNet.EfficientNetB4_CTUnet(input_shape)
+    model = CTUNet.EfficientNetB4_CTUnet(input_shape, weight)
 elif model_selector == '4':
-    model = CTUNet.EfficientNetV2S_CTUnet(input_shape)
+    model = CTUNet.EfficientNetV2S_CTUnet(input_shape, weight)
 elif model_selector == '5':
-    model = CTUNet.ResNet50V2_CTUnet(input_shape)
+    model = CTUNet.ResNet50V2_CTUnet(input_shape, weight)
 elif model_selector == '6':
-    model = CTUNet.DenseNet201_CTUnet(input_shape)
+    model = CTUNet.DenseNet201_CTUnet(input_shape, weight)
 
 model.summary()
 model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])

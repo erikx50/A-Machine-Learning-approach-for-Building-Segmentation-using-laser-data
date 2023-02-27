@@ -110,12 +110,12 @@ def bottleneck(input):
 
 
 # EfficientNetB4 CT-UNet
-def EfficientNetB4_CTUnet(input_shape=(512, 512, 3)):
+def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     # Input
     inputs = layers.Input(input_shape)
 
     # Loading pre trained model
-    EffNetB4 = EfficientNetB4(include_top=False, weights=None, input_tensor=inputs)
+    EffNetB4 = EfficientNetB4(include_top=False, weights=weight, input_tensor=inputs)
 
     # Encoder
     res0 = EffNetB4.get_layer('rescaling').output  # 512 x 512
@@ -152,12 +152,12 @@ def EfficientNetB4_CTUnet(input_shape=(512, 512, 3)):
 
 
 # EfficientNetV2S CT-UNet
-def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3)):
+def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     # Input
     inputs = layers.Input(input_shape)
 
     # Loading pre trained model
-    EffNetV2S = EfficientNetV2S(include_top=False, weights="imagenet", input_tensor=inputs)
+    EffNetV2S = EfficientNetV2S(include_top=False, weights=weight, input_tensor=inputs)
 
     # Encoder
     res0 = EffNetV2S.get_layer('rescaling').output  # 512 x 512
@@ -195,12 +195,12 @@ def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3)):
 
 
 # ResNet50V2 CT-UNet
-def ResNet50V2_CTUnet(input_shape=(512, 512, 3)):
+def ResNet50V2_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     # Input
     inputs = layers.Input(input_shape)
 
     # Loading pre trained model
-    ResNet50 = ResNet50V2(include_top=False, weights="imagenet", input_tensor=inputs)
+    ResNet50 = ResNet50V2(include_top=False, weights=weight, input_tensor=inputs)
 
     # Encoder
     res0 = ResNet50.get_layer('input_1').output  # 512 x 512
@@ -237,12 +237,12 @@ def ResNet50V2_CTUnet(input_shape=(512, 512, 3)):
 
 
 # DenseNet201 CT-UNet
-def DenseNet201_CTUnet(input_shape=(512, 512, 3)):
+def DenseNet201_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     # Input
     inputs = layers.Input(input_shape)
 
     # Loading pre trained model
-    DenseNet = DenseNet201(include_top=False, weights="imagenet", input_tensor=inputs)
+    DenseNet = DenseNet201(include_top=False, weights=weight, input_tensor=inputs)
 
     # Encoder
     res0 = DenseNet.get_layer('input_1').output  # 512 x 512

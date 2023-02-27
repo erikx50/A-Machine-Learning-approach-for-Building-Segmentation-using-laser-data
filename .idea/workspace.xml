@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca19b946-72c6-4527-af5a-6cb4e330ad3b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/2a_Preprocessing_Dataset.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/2a_Preprocessing_Dataset.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/1a_Preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1a_Preprocess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/1b_Train_UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1b_Train_UNet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/CTUNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/CTUNet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/UNet.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="121" column="66" lean-forward="true" selection-start-line="121" selection-start-column="66" selection-end-line="121" selection-end-column="66" />
+            <state relative-caret-position="186">
+              <caret line="107" column="43" selection-start-line="107" selection-start-column="43" selection-end-line="107" selection-end-column="43" />
               <folding>
                 <element signature="e#10#73#0" expanded="true" />
               </folding>
@@ -24,11 +28,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/1a_Preprocess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="23" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="288">
+              <caret line="72" column="39" lean-forward="true" selection-start-line="72" selection-start-column="39" selection-end-line="72" selection-end-column="39" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -37,10 +41,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/UNet.py">
+        <entry file="file://$PROJECT_DIR$/code/0a_MapAI_Dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2244">
-              <caret line="133" selection-start-line="133" selection-end-line="133" />
+            <state relative-caret-position="747">
+              <caret line="57" selection-start-line="57" selection-end-line="57" />
+              <folding>
+                <element signature="e#10#19#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -48,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="98" column="41" selection-start-line="98" selection-start-column="23" selection-end-line="98" selection-end-column="41" />
+            <state relative-caret-position="-324">
+              <caret line="49" column="57" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -60,7 +67,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
+            <state relative-caret-position="662">
               <caret line="39" column="61" selection-start-line="39" selection-start-column="61" selection-end-line="39" selection-end-column="61" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
@@ -106,13 +113,13 @@
         <option value="$USER_HOME$/anaconda3/envs/tf/Lib/site-packages/tensorflow/python/framework/type_spec.py" />
         <option value="$PROJECT_DIR$/code/eval_functions.py" />
         <option value="$PROJECT_DIR$/code/0a_MapAI_Dataset.py" />
-        <option value="$PROJECT_DIR$/code/UNet.py" />
         <option value="$PROJECT_DIR$/code/Loss_Metrics.py" />
         <option value="$PROJECT_DIR$/code/1d_Ensemble_Models.py" />
         <option value="$PROJECT_DIR$/code/1c_Test_UNet.py" />
-        <option value="$PROJECT_DIR$/code/1b_Train_UNet.py" />
-        <option value="$PROJECT_DIR$/code/1a_Preprocess.py" />
         <option value="$PROJECT_DIR$/code/CTUNet.py" />
+        <option value="$PROJECT_DIR$/code/1b_Train_UNet.py" />
+        <option value="$PROJECT_DIR$/code/UNet.py" />
+        <option value="$PROJECT_DIR$/code/1a_Preprocess.py" />
       </list>
     </option>
   </component>
@@ -243,16 +250,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/0a_MapAI_Dataset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
-          <folding>
-            <element signature="e#10#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/1d_Ensemble_Models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="444">
@@ -282,18 +279,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/1c_Test_UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
+        <state relative-caret-position="662">
           <caret line="39" column="61" selection-start-line="39" selection-start-column="61" selection-end-line="39" selection-end-column="61" />
-          <folding>
-            <element signature="e#10#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/1a_Preprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
           <folding>
             <element signature="e#10#19#0" expanded="true" />
           </folding>
@@ -302,15 +289,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2244">
-          <caret line="133" selection-start-line="133" selection-end-line="133" />
+        <state relative-caret-position="187">
+          <caret line="105" lean-forward="true" selection-start-line="105" selection-end-line="105" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
+    <entry file="file://$PROJECT_DIR$/code/0a_MapAI_Dataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="98" column="41" selection-start-line="98" selection-start-column="23" selection-end-line="98" selection-end-column="41" />
+        <state relative-caret-position="747">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
           <folding>
             <element signature="e#10#19#0" expanded="true" />
           </folding>
@@ -319,10 +306,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="121" column="66" lean-forward="true" selection-start-line="121" selection-start-column="66" selection-end-line="121" selection-end-column="66" />
+        <state relative-caret-position="186">
+          <caret line="107" column="43" selection-start-line="107" selection-start-column="43" selection-end-line="107" selection-end-column="43" />
           <folding>
             <element signature="e#10#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-324">
+          <caret line="49" column="57" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
+          <folding>
+            <element signature="e#10#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/1a_Preprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="72" column="39" lean-forward="true" selection-start-line="72" selection-start-column="39" selection-end-line="72" selection-end-column="39" />
+          <folding>
+            <element signature="e#10#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

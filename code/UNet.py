@@ -104,12 +104,12 @@ def decoder_block(input, skip_features, num_filters):
     return x
 
 
-def EfficientNetB4_unet(input_shape=(512, 512, 3)):
+def EfficientNetB4_unet(input_shape=(512, 512, 3), weight="imagenet"):
     # Input
     inputs = layers.Input(input_shape)
 
     # Loading pre trained model
-    EffNetB4 = EfficientNetB4(include_top=False, weights="imagenet", input_tensor=inputs)
+    EffNetB4 = EfficientNetB4(include_top=False, weights=weight, input_tensor=inputs)
 
     # Encoder
     s1 = EffNetB4.get_layer('rescaling_1').output  # 512 x 512
