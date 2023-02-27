@@ -195,7 +195,7 @@ else:
             label = 'val'
 
         img_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/rgbLiDAR/' + label)
-        mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/rgbLiDAR/' + label)
+        mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask/' + label)
         with os.scandir(img_path) as entries:
             for n, entry in enumerate(entries):
                 filename = entry.name.split(".")[0]
