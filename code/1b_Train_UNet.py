@@ -20,6 +20,19 @@ config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 session = tf.compat.v1.Session(config = config)
 
+# Select which type of set to train on. 1: RGB, 2: RGBLiDAR
+print('Select train set')
+print('1: RGB')
+print('2: RGBLiDAR')
+train_selector = input('Which set do you want to use?: ')
+train_set = None
+input_shape = None
+if train_selector == '1':
+    train_set = 'image'
+    input_shape = (512, 512, 3)
+elif train_selector == '2':
+    train_set = 'rgbLiDAR'
+    input_shape = (512, 512, 4)
 
 # Compile model
 print('Pick type of model to train')
@@ -30,21 +43,20 @@ model_selector = input('Which model do you want to train?: ')
 
 model = None
 if model_selector == '1':
-    model = UNet.unet()
+    model = UNet.unet(input_shape)
 elif model_selector == '2':
-    model = UNet.EfficientNetB4_unet()
+    model = UNet.EfficientNetB4_unet(input_shape)
 elif model_selector == '3':
-    model = CTUNet.EfficientNetB4_CTUnet()
+    model = CTUNet.EfficientNetB4_CTUnet(input_shape)
 elif model_selector == '4':
-    model = CTUNet.EfficientNetV2S_CTUnet()
+    model = CTUNet.EfficientNetV2S_CTUnet(input_shape)
 elif model_selector == '5':
-    model = CTUNet.ResNet50V2_CTUnet()
+    model = CTUNet.ResNet50V2_CTUnet(input_shape)
 elif model_selector == '6':
-    model = CTUNet.DenseNet201_CTUnet()
+    model = CTUNet.DenseNet201_CTUnet(input_shape)
 
 model.summary()
 model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
-
 
 # Creating data generators for training data
 # Selecting mask set
@@ -85,12 +97,11 @@ mask_data_gen_args = dict(rotation_range=90,
 
 
 image_data_generator = ImageDataGenerator(**img_data_gen_args)
-image_generator = image_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/image'),
+image_generator = image_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/' + train_set),
                                                            target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                            seed=seed,
                                                            batch_size=batch_size,
-                                                           class_mode=None)  #Very important to set this otherwise it returns multiple numpy arrays
-                                                                            #thinking class mode is binary.
+                                                           class_mode=None)
 
 mask_data_generator = ImageDataGenerator(**mask_data_gen_args)
 mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/' + mask),
@@ -101,7 +112,7 @@ mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../da
                                                          class_mode=None)
 
 val_data_generator = ImageDataGenerator()
-valid_img_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/image'),
+valid_img_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/' + train_set),
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                                seed=seed,
                                                                batch_size=batch_size,
@@ -117,8 +128,8 @@ valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('
 train_generator = zip(image_generator, mask_generator)
 val_generator = zip(valid_img_generator, valid_mask_generator)
 
-num_train_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_train/image/train')))
-num_val_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_validation/image/val')))
+num_train_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_train/' + train_set + '/train')))
+num_val_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_validation/' + train_set + '/val')))
 train_steps_per_epoch = num_train_imgs // batch_size
 val_steps_per_epoch = num_val_imgs // batch_size
 
