@@ -15,7 +15,8 @@ import numpy as np
 
 
 # Defining sets that has to be rescaled
-datasets = ['train', 'validation', 'task1_test', 'task2_test']
+#datasets = ['train', 'validation', 'task1_test', 'task2_test']
+datasets = ['validation', 'task1_test', 'task2_test']
 
 # Define image size
 original_size = 500
