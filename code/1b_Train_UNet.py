@@ -198,6 +198,8 @@ else:
         mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask/' + label)
         with os.scandir(img_path) as entries:
             for n, entry in enumerate(entries):
+                if n == 1000:
+                    break
                 filename = entry.name.split(".")[0]
 
                 img = imread(os.path.normpath(img_path + '/' + filename + '.tif'))
@@ -209,8 +211,7 @@ else:
                 elif dataset == 'validation':
                     X_val[n] = img
                     Y_val[n] = mask
-                if n == 1000:
-                    break
+
 
     # Print the size of the different sets
     print('X_train size: ' + str(len(X_train)))
