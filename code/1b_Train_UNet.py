@@ -209,6 +209,8 @@ else:
                 elif dataset == 'validation':
                     X_val[n] = img
                     Y_val[n] = mask
+                if n == 1000:
+                    break
 
     # Print the size of the different sets
     print('X_train size: ' + str(len(X_train)))
