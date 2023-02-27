@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca19b946-72c6-4527-af5a-6cb4e330ad3b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/2a_Preprocessing_Dataset.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/2a_Preprocessing_Dataset.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/1b_Train_UNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/1b_Train_UNet.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,8 +48,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2705">
-              <caret line="241" column="5" selection-start-line="241" selection-end-line="241" selection-end-column="5" />
+            <state relative-caret-position="240">
+              <caret line="171" column="88" selection-start-line="171" selection-start-column="88" selection-end-line="171" selection-end-column="88" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -317,8 +316,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2705">
-          <caret line="241" column="5" selection-start-line="241" selection-end-line="241" selection-end-column="5" />
+        <state relative-caret-position="240">
+          <caret line="171" column="88" selection-start-line="171" selection-start-column="88" selection-end-line="171" selection-end-column="88" />
           <folding>
             <element signature="e#10#19#0" expanded="true" />
           </folding>

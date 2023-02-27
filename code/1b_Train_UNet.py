@@ -169,7 +169,7 @@ else:
     train_path = os.path.normpath('../dataset/MapAI/512x512_train/rgbLiDAR/train')
     no_train_images = len([name for name in os.listdir(train_path) if os.path.isfile(os.path.join(train_path, name))])
 
-    validation_path = os.path.normpath('../dataset/MapAI/512x512_validation/rgbLiDAR/train')
+    validation_path = os.path.normpath('../dataset/MapAI/512x512_validation/rgbLiDAR/val')
     no_val_images = len([name for name in os.listdir(validation_path) if os.path.isfile(os.path.join(validation_path, name))])
 
     # Defining size of images
