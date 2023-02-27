@@ -24,7 +24,7 @@ new_size = 512
 
 for dataset in tqdm(datasets):
     # Make directory for preprocessed dataset
-    dataset_path = os.path.normpath('dataset/MapAI/512x512_' + dataset)
+    dataset_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset)
     if not os.path.exists(dataset_path):
         os.makedirs(dataset_path)
 
