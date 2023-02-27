@@ -177,11 +177,11 @@ else:
     IMG_WIDTH = 512
 
     # Creating NumPy arrays for the different subsets
-    X_train = np.zeros((no_train_images, IMG_HEIGHT, IMG_WIDTH, 4), dtype=np.float32)
-    Y_train = np.zeros((no_train_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
+    X_train = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH, 4), dtype=np.float32)
+    Y_train = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
 
-    X_val = np.zeros((no_val_images, IMG_HEIGHT, IMG_WIDTH, 4), dtype=np.float32)
-    Y_val = np.zeros((no_val_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
+    X_val = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH, 4), dtype=np.float32)
+    Y_val = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
 
     # Defining sets
     datasets = ['train', 'validation']
