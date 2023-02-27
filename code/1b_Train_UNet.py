@@ -201,7 +201,6 @@ else:
                 filename = entry.name.split(".")[0]
 
                 img = imread(os.path.normpath(img_path + '/' + filename + '.tif'))
-                img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
                 mask = cv.imread(os.path.normpath(mask_path + '/' + filename + '.PNG'))
                 mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
                 if dataset == 'train':
