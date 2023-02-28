@@ -81,164 +81,88 @@ elif mask_selector == '2':
 IMG_HEIGHT = 512
 IMG_WIDTH = 512
 
-datagen = False
-if datagen:
-    seed = 24
-    batch_size = 6
+seed = 24
+batch_size = 6
 
-    img_data_gen_args = dict(rotation_range=90,
-                          width_shift_range=0.3,
-                          height_shift_range=0.3,
-                          shear_range=0.5,
-                          zoom_range=0.3,
-                          horizontal_flip=True,
-                          vertical_flip=True,
-                          fill_mode='reflect')
+img_data_gen_args = dict(rotation_range=90,
+                      width_shift_range=0.3,
+                      height_shift_range=0.3,
+                      shear_range=0.5,
+                      zoom_range=0.3,
+                      horizontal_flip=True,
+                      vertical_flip=True,
+                      fill_mode='reflect')
 
-    mask_data_gen_args = dict(rotation_range=90,
-                          width_shift_range=0.3,
-                          height_shift_range=0.3,
-                          shear_range=0.5,
-                          zoom_range=0.3,
-                          horizontal_flip=True,
-                          vertical_flip=True,
-                          fill_mode='reflect',
-                          preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype)) #Binarize the output again.
+mask_data_gen_args = dict(rotation_range=90,
+                      width_shift_range=0.3,
+                      height_shift_range=0.3,
+                      shear_range=0.5,
+                      zoom_range=0.3,
+                      horizontal_flip=True,
+                      vertical_flip=True,
+                      fill_mode='reflect',
+                      preprocessing_function = lambda x: np.where(x>0, 1, 0).astype(x.dtype)) #Binarize the output again.
 
 
-    image_data_generator = ImageDataGenerator(**img_data_gen_args)
-    image_generator = image_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/' + train_set),
+image_data_generator = ImageDataGenerator(**img_data_gen_args)
+image_generator = image_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/' + train_set),
+                                                           target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                           seed=seed,
+                                                           batch_size=batch_size,
+                                                           class_mode=None)
+
+mask_data_generator = ImageDataGenerator(**mask_data_gen_args)
+mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/' + mask),
+                                                         target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                         seed=seed,
+                                                         batch_size=batch_size,
+                                                         color_mode = 'grayscale',   #Read masks in grayscale
+                                                         class_mode=None)
+
+val_data_generator = ImageDataGenerator()
+valid_img_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/' + train_set),
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                                seed=seed,
                                                                batch_size=batch_size,
                                                                class_mode=None)
 
-    mask_data_generator = ImageDataGenerator(**mask_data_gen_args)
-    mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_train/' + mask),
-                                                             target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                             seed=seed,
-                                                             batch_size=batch_size,
-                                                             color_mode = 'grayscale',   #Read masks in grayscale
-                                                             class_mode=None)
+valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/' + mask),
+                                                               target_size=(IMG_HEIGHT, IMG_WIDTH),
+                                                               seed=seed,
+                                                               batch_size=batch_size,
+                                                               color_mode = 'grayscale',   #Read masks in grayscale
+                                                               class_mode=None)
 
-    val_data_generator = ImageDataGenerator()
-    valid_img_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/' + train_set),
-                                                                   target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                                   seed=seed,
-                                                                   batch_size=batch_size,
-                                                                   class_mode=None)
+train_generator = zip(image_generator, mask_generator)
+val_generator = zip(valid_img_generator, valid_mask_generator)
 
-    valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/' + mask),
-                                                                   target_size=(IMG_HEIGHT, IMG_WIDTH),
-                                                                   seed=seed,
-                                                                   batch_size=batch_size,
-                                                                   color_mode = 'grayscale',   #Read masks in grayscale
-                                                                   class_mode=None)
+num_train_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_train/' + train_set + '/train')))
+num_val_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_validation/' + train_set + '/val')))
+train_steps_per_epoch = num_train_imgs // batch_size
+val_steps_per_epoch = num_val_imgs // batch_size
 
-    train_generator = zip(image_generator, mask_generator)
-    val_generator = zip(valid_img_generator, valid_mask_generator)
+print("Number of train images: " + str(num_train_imgs))
+print("Number of validation images: " + str(num_val_imgs))
 
-    num_train_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_train/' + train_set + '/train')))
-    num_val_imgs = len(os.listdir(os.path.normpath('../dataset/MapAI/512x512_validation/' + train_set + '/val')))
-    train_steps_per_epoch = num_train_imgs // batch_size
-    val_steps_per_epoch = num_val_imgs // batch_size
+# Train Model
+# Create models directory if it doesnt exist
+print("Training model")
+dataset_path = os.path.normpath("../models")
+if not os.path.exists(dataset_path):
+    os.makedirs(dataset_path)
 
-    print("Number of train images: " + str(num_train_imgs))
-    print("Number of validation images: " + str(num_val_imgs))
+# Create callback for model.
+# ModelCheckpoint -> Creates checkpoints after each epoch
+# EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
+callback_list = [
+    callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose=1, save_best_only=True),
+    callbacks.EarlyStopping(monitor='val_loss', patience=6),
+    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=3, verbose=1)
+]
 
-    # Train Model
-    # Create models directory if it doesnt exist
-    print("Training model")
-    dataset_path = os.path.normpath("../models")
-    if not os.path.exists(dataset_path):
-        os.makedirs(dataset_path)
+# Train the model
+results = model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose = 2)
 
-    # Create callback for model.
-    # ModelCheckpoint -> Creates checkpoints after each epoch
-    # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
-    callback_list = [
-        callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose=1, save_best_only=True),
-        callbacks.EarlyStopping(monitor='val_loss', patience=6),
-        callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=3, verbose=1)
-    ]
-
-    # Train the model
-    results = model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose = 2)
-else:
-    # Finding the number of images in each dataset
-    train_path = os.path.normpath('../dataset/MapAI/512x512_train/rgbLiDAR/train')
-    no_train_images = len([name for name in os.listdir(train_path) if os.path.isfile(os.path.join(train_path, name))])
-
-    validation_path = os.path.normpath('../dataset/MapAI/512x512_validation/rgbLiDAR/val')
-    no_val_images = len([name for name in os.listdir(validation_path) if os.path.isfile(os.path.join(validation_path, name))])
-
-    # Defining size of images
-    IMG_HEIGHT = 512
-    IMG_WIDTH = 512
-
-    # Creating NumPy arrays for the different subsets
-    X_train = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH, 4), dtype=np.float32)
-    Y_train = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
-
-    X_val = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH, 4), dtype=np.float32)
-    Y_val = np.zeros((1000, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
-
-    # Defining sets
-    datasets = ['train', 'validation']
-
-    # Adding images to NumPy arrays
-    for dataset in tqdm(datasets):
-        label = None
-        if dataset == 'train':
-            label = 'train'
-        elif dataset == 'validation':
-            label = 'val'
-
-        img_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/rgbLiDAR/' + label)
-        mask_path = os.path.normpath('../dataset/MapAI/512x512_' + dataset + '/mask/' + label)
-        with os.scandir(img_path) as entries:
-            for n, entry in enumerate(entries):
-                if n == 1000:
-                    break
-                filename = entry.name.split(".")[0]
-
-                img = imread(os.path.normpath(img_path + '/' + filename + '.tif'))
-                mask = cv.imread(os.path.normpath(mask_path + '/' + filename + '.PNG'))
-                mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
-                if dataset == 'train':
-                    X_train[n] = img
-                    Y_train[n] = mask
-                elif dataset == 'validation':
-                    X_val[n] = img
-                    Y_val[n] = mask
-
-
-    # Print the size of the different sets
-    print('X_train size: ' + str(len(X_train)))
-    print('Y_train size: ' + str(len(Y_train)))
-    print('X_validation size: ' + str(len(X_val)))
-    print('Y_validation size: ' + str(len(Y_val)))
-
-    # Train Model
-    # Create models directory if it doesnt exist
-    print("Training model")
-    dataset_path = os.path.normpath("../models")
-    if not os.path.exists(dataset_path):
-        os.makedirs(dataset_path)
-
-    # Create callback for model.
-    # ModelCheckpoint -> Creates checkpoints after each epoch
-    # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
-    callback_list = [
-        callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose=1, save_best_only=True),
-        callbacks.EarlyStopping(monitor='val_loss', patience=6),
-        callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=3, verbose=1)
-    ]
-
-    # Train the model
-    results = model.fit(X_train, Y_train, batch_size=6, epochs=100, callbacks=callback_list, validation_data =(X_val, Y_val), verbose = 2)
-
-    # Save model
 print("Saving model")
 model_name = input("Save model as: ")
 model.save(os.path.normpath('../models/' + model_name))
