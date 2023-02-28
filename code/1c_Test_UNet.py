@@ -72,10 +72,11 @@ elif mask_selector == '2':
 mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + mask)
 with os.scandir(img_path) as entries:
     for n, entry in enumerate(entries):
+        filename = entry.name.split(".")[0]
         img = imread(os.path.normpath(img_path + '/' + entry.name))
         #img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         X_test[n] = img
-        mask = cv.imread(os.path.normpath(mask_path + '/' + entry.name))
+        mask = cv.imread(os.path.normpath(mask_path + '/' + filename + '.png'))
         mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
         Y_test[n] = mask
 
