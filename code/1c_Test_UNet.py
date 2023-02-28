@@ -76,7 +76,7 @@ with os.scandir(img_path) as entries:
         img = imread(os.path.normpath(img_path + '/' + entry.name))
         #img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         X_test[n] = img
-        mask = cv.imread(os.path.normpath(mask_path + '/' + filename + '.png'))
+        mask = cv.imread(os.path.normpath(mask_path + '/' + filename + '.PNG'))
         mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
         Y_test[n] = mask
 
