@@ -21,16 +21,37 @@ config.gpu_options.allow_growth = True
 session = tf.compat.v1.Session(config = config)
 
 # Preparing test data
+print('Select test set')
+print('1: RGB')
+print('2: RGBLiDAR')
+train_selector = input('Which set do you want to use?: ')
+
+train_set = None
+input_shape = None
+folder_name = None
+NUM_CHAN = None
+
+if train_selector == '1':
+    folder_name = '512x512_task1_test'
+    train_set = 'image'
+    input_shape = (512, 512, 3)
+    NUM_CHAN = 3
+elif train_selector == '2':
+    folder_name = '512x512_task2_test'
+    train_set = 'rgbLiDAR'
+    input_shape = (512, 512, 4)
+    NUM_CHAN = 4
+
 # Finding the number of images in each dataset
-test_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/image')
-no_test_images = len([name for name in os.listdir(test_path) if os.path.isfile(os.path.join(test_path, name))])
+img_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + train_set)
+no_test_images = len([name for name in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, name))])
 
 # Defining size of images
 IMG_HEIGHT = 512
 IMG_WIDTH = 512
 
 # Creating NumPy arrays for the different subsets
-X_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
+X_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH, NUM_CHAN), dtype=np.uint8)
 Y_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
 
 # Let user choose to test edge mask or building mask
@@ -46,8 +67,7 @@ elif mask_selector == '2':
 
 
 # Adding images to NumPy arrays
-img_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/image')
-mask_path = os.path.normpath('../dataset/MapAI/512x512_task1_test/' + mask)
+mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + mask)
 with os.scandir(img_path) as entries:
     for n, entry in enumerate(entries):
         img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
