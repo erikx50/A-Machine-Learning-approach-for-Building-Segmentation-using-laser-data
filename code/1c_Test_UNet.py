@@ -10,6 +10,8 @@ import numpy as np
 from eval_functions import calculate_score
 from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss, binary_cross_iou
 
+from tifffile import imwrite, imread
+
 
 # Change GPU setting
 # Limit number of GPUs
@@ -70,8 +72,8 @@ elif mask_selector == '2':
 mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + mask)
 with os.scandir(img_path) as entries:
     for n, entry in enumerate(entries):
-        img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
-        img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+        img = imread(os.path.normpath(img_path + '/' + entry.name))
+        #img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         X_test[n] = img
         mask = cv.imread(os.path.normpath(mask_path + '/' + entry.name))
         mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
