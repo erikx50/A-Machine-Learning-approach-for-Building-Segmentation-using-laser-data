@@ -86,5 +86,5 @@ for dataset in tqdm(datasets):
                 resize_lidar = cv.resize(lidar_data, (new_size, new_size), interpolation = cv.INTER_AREA)
                 resize_lidar = np.expand_dims(resize_lidar, axis=-1)
                 rgb_lidar = np.concatenate((resize_img, resize_lidar), axis=-1)
-                imwrite(rgblidar_path + '/' + filename + '.tif', rgb_lidar)
+                imwrite(rgblidar_path + '/' + filename + '.tif', rgb_lidar.astype(np.uint8))
 
