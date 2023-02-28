@@ -16,8 +16,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="107" column="43" selection-start-line="107" selection-start-column="43" selection-end-line="107" selection-end-column="43" />
+            <state relative-caret-position="-69">
+              <caret line="239" column="31" selection-start-line="239" selection-start-column="31" selection-end-line="239" selection-end-column="31" />
               <folding>
                 <element signature="e#10#73#0" expanded="true" />
               </folding>
@@ -61,8 +61,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="150" column="36" lean-forward="true" selection-start-line="150" selection-start-column="36" selection-end-line="150" selection-end-column="36" />
+            <state relative-caret-position="220">
+              <caret line="116" column="37" lean-forward="true" selection-start-line="116" selection-start-column="37" selection-end-line="116" selection-end-column="37" />
               <folding>
                 <element signature="e#10#19#0" expanded="true" />
               </folding>
@@ -293,30 +293,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="107" column="43" selection-start-line="107" selection-start-column="43" selection-end-line="107" selection-end-column="43" />
-          <folding>
-            <element signature="e#10#73#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/UNet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="114" column="38" selection-start-line="114" selection-start-column="38" selection-end-line="114" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/0a_MapAI_Dataset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="747">
-          <caret line="57" selection-start-line="57" selection-end-line="57" />
-          <folding>
-            <element signature="e#10#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -330,10 +310,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/CTUNet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-69">
+          <caret line="239" column="31" selection-start-line="239" selection-start-column="31" selection-end-line="239" selection-end-column="31" />
+          <folding>
+            <element signature="e#10#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/0a_MapAI_Dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="747">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+          <folding>
+            <element signature="e#10#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/1b_Train_UNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="150" column="36" lean-forward="true" selection-start-line="150" selection-start-column="36" selection-end-line="150" selection-end-column="36" />
+        <state relative-caret-position="220">
+          <caret line="116" column="37" lean-forward="true" selection-start-line="116" selection-start-column="37" selection-end-line="116" selection-end-column="37" />
           <folding>
             <element signature="e#10#19#0" expanded="true" />
           </folding>

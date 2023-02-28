@@ -34,13 +34,16 @@ train_selector = input('Which set do you want to use?: ')
 train_set = None
 input_shape = None
 weight = None
+color_mode = None
 if train_selector == '1':
     train_set = 'image'
     input_shape = (512, 512, 3)
     weight = 'imagenet'
+    color_mode = 'rgb'
 elif train_selector == '2':
     train_set = 'rgbLiDAR'
     input_shape = (512, 512, 4)
+    color_mode = 'rgba'
 
 # Compile model
 print('Pick type of model to train')
@@ -109,6 +112,7 @@ image_generator = image_data_generator.flow_from_directory(os.path.normpath('../
                                                            target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                            seed=seed,
                                                            batch_size=batch_size,
+                                                           color_mode=color_mode,
                                                            class_mode=None)
 
 mask_data_generator = ImageDataGenerator(**mask_data_gen_args)
@@ -124,6 +128,7 @@ valid_img_generator = val_data_generator.flow_from_directory(os.path.normpath('.
                                                                target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                                seed=seed,
                                                                batch_size=batch_size,
+                                                               color_mode=color_mode,
                                                                class_mode=None)
 
 valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/512x512_validation/' + mask),
