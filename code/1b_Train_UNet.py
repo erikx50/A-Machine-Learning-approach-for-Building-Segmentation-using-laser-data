@@ -236,7 +236,7 @@ else:
     ]
 
     # Train the model
-    results = model.fit(X_train, Y_train, batch_size=2, epochs=100, callbacks=callback_list, validation_data =(X_val, Y_val), verbose = 2)
+    results = model.fit(X_train, Y_train, batch_size=6, epochs=100, callbacks=callback_list, validation_data =(X_val, Y_val), verbose = 2)
 
     # Save model
 print("Saving model")
