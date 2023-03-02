@@ -35,15 +35,18 @@ train_set = None
 input_shape = None
 weight = None
 color_mode = None
+patience = 0
 if train_selector == '1':
     train_set = 'image'
     input_shape = (512, 512, 3)
     weight = 'imagenet'
     color_mode = 'rgb'
+    patience = 3
 elif train_selector == '2':
     train_set = 'rgbLiDAR'
     input_shape = (512, 512, 4)
     color_mode = 'rgba'
+    patience = 5
 
 # Compile model
 print('Pick type of model to train')
@@ -161,8 +164,8 @@ if not os.path.exists(dataset_path):
 # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
 callback_list = [
     callbacks.ModelCheckpoint(os.path.normpath('../models/MapAI_UNet_Task1_Checkpoint.h5'), verbose=1, save_best_only=True),
-    callbacks.EarlyStopping(monitor='val_loss', patience=10),
-    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=5, verbose=1)
+    callbacks.EarlyStopping(monitor='val_loss', patience=patience*2),
+    callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=patience, verbose=1)
 ]
 
 # Train the model
