@@ -1,10 +1,12 @@
 # Master Thesis: A Machine Learning approach for Building Segmentation using laser data
 
 ## Results:
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+|   Team   | IoU Task 1 | BIoU Task 1 | Total Task 1 | IoU Task 2 | BIoU Task 2 | Total Task 2 |    Score   | 
+|:--------:|:------------:|:-------------:|:--------------:|:------------:|:-------------:|:--------------:|:----------:|
+| Me |    0.7958    |     0.6226    |     0.7092     |    0.8918    |     0.7929    |     0.8423     | **0.7758** |
+| 1st MapAI competition |    0.7794    |     0.6115    |     0.6955     |    0.8775    |     0.7857    |     0.8316     | **0.7635** |
+
+
 
 ## Description:
 Buildings are essential to information regarding population, policy-making, and city management. Using computer vision technologies such as classification, object detection, and segmentation has proved helpful in several scenarios, such as urban planning and disaster recovery. Segmentation is the most precise method and can give detailed insights into the data as it highlights the area of interest.
