@@ -1,116 +1,174 @@
-# Imports
 from tensorflow.keras import layers, optimizers, backend, Model
 from tensorflow.keras.applications import EfficientNetB4, EfficientNetV2S, ResNet50V2, DenseNet201
 
 
 # Functions for block types of CT-Unet
 def DB_block(input1, num_filters):
+    """
+    Creates a Dense Block.
+    Args:
+        input1: The output of the first encoder or SCAB block.
+        num_filters: Number of filters to be used in the convolution.
+    Returns:
+        The input for the next calculation.
+    """
     x = layers.BatchNormalization()(input1)
-    x = layers.Activation("relu")(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
+    x = layers.Activation('relu')(x)
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
 
     x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
-    c1 = layers.Conv2D(num_filters, (3, 3), padding="same")(x)
+    x = layers.Activation('relu')(x)
+    c1 = layers.Conv2D(num_filters, (3, 3), padding='same')(x)
 
-    x = layers.concatenate([input1,c1])
-
-    x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
+    x = layers.concatenate([input1, c1])
 
     x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
-    x = layers.Conv2D(num_filters, (3, 3), padding="same")(x)
+    x = layers.Activation('relu')(x)
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
 
-    x = layers.concatenate([input1,x,c1])
+    x = layers.BatchNormalization()(x)
+    x = layers.Activation('relu')(x)
+    x = layers.Conv2D(num_filters, (3, 3), padding='same')(x)
+
+    x = layers.concatenate([input1, x, c1])
     return x
 
 
 def DBB_block(input1, input2, num_filters):
+    """
+    Creates a Dense Boundary Block.
+    Args:
+        input1: The output of encoder block.
+        input2: The output of the previous stage Boundary Block.
+        num_filters: Number of filters to be used in the convolution.
+    Returns:
+        The input for the next calculation.
+    """
     x = DB_block(input1, num_filters)
 
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
-    x = layers.Activation("relu")(x)
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Activation('relu')(x)
 
-    x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(x)
-    x = layers.Activation("relu")(x)
+    x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding='same')(x)
+    x = layers.Activation('relu')(x)
     x = layers.BatchNormalization()(x)
 
-    # Rescale input2 to have the same filter dimension as x #
-    input2 = layers.Conv2D(num_filters, (1, 1), padding="same")(input2)
-    ###################################################
+    # Rescale input2 to have the same filter dimension as x
+    input2 = layers.Conv2D(num_filters, (1, 1), padding='same')(input2)
     x = layers.Add()([x, input2])
 
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
-    # Reduce size of x to match its original size before Conv2DTranspose#
-    x = layers.MaxPooling2D((2,2))(x)
-    ###################################################
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.MaxPooling2D((2, 2))(x)
     return x
 
 
 def SCAB_block(input1, input2, num_filters, final=False):
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(input1)
-    x = layers.Activation("relu")(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
-
-    x = layers.Activation("sigmoid")(x)
+    """
+    Creates a Spatial Channel Attention Block.
+    Args:
+        input1: The output of the DB/DBB in the skip connection at the same level.
+        input2: The output of the previous layer.
+        num_filters: Number of filters to be used in the convolution.
+        final: Indicator if this is the final SCAB block in the network.
+    Returns:
+        The input for the next calculation.
+    """
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(input1)
+    x = layers.Activation('relu')(x)
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Activation('sigmoid')(x)
 
     if final:
-        input2 = layers.Conv2D(num_filters, (1, 1), padding="same")(input2)
+        input2 = layers.Conv2D(num_filters, (1, 1), padding='same')(input2)
 
     x = layers.Multiply()([x, input2])
-
     x = layers.concatenate([input1,x])
-
-    c1 = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
+    c1 = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
 
     x = layers.GlobalAveragePooling2D(keepdims=True)(c1)
 
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
-    x = layers.Activation("relu")(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding="same")(x)
-
-    x = layers.Activation("sigmoid")(x)
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Activation('relu')(x)
+    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Activation('sigmoid')(x)
 
     x = layers.Multiply()([x, c1])
-
     x = layers.Add()([x, c1])
     return x
 
 
 def conv_block(input, num_filters):
-    x = layers.Conv2D(num_filters, 3, padding="same")(input)
+    """
+    Creates a block consisting of a convolutional layer.
+    Args:
+        input: The output of the previous calculation.
+        num_filters: Number of filters to be used in the convolution.
+    Returns:
+        The input for the next calculation.
+    """
+    x = layers.Conv2D(num_filters, 3, padding='same')(input)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
+    x = layers.Activation('relu')(x)
     return x
 
 
 def deconv_block(input, num_filters):
-    x = layers.Conv2DTranspose(num_filters, 1, padding="same")(input)
+    """
+    Creates a block consisting of a de-convolution layer.
+    Args:
+        input: The output of the previous calculation.
+        num_filters: Number of filters to be used in the convolution.
+    Returns:
+        The input for the next calculation.
+    """
+    x = layers.Conv2DTranspose(num_filters, 1, padding='same')(input)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
+    x = layers.Activation('relu')(x)
     return x
 
 
 def decoder_block(input, skip_output, num_filters, final=False):
+    """
+    Creates a block for the decoder par of the network.
+    Args:
+        input: The output of the previous calculation.
+        skip_output: The output of the skip connection(DB/DBB block) of the same size.
+        num_filters: Number of filters to be used in the convolution.
+        final: Indicator if this is the final decoder layer.
+    Returns:
+        The input for the decoder block. If final=True -> Input for the output layer.
+    """
     x = conv_block(input, num_filters)
-    x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(x)
+    x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding='same')(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation("relu")(x)
+    x = layers.Activation('relu')(x)
     x = SCAB_block(x, skip_output, num_filters, final)
     x = DB_block(x, num_filters)
     return x
 
 
 def bottleneck(input):
-    x = layers.MaxPooling2D((2,2))(input)
-    #x = layers.GlobalAveragePooling2D()(x)
+    """
+    Creates the bottleneck layer for the CT-UNet architecture.
+    Args:
+        input: The output of the last encoder layer.
+    Returns:
+        The input of the first decoder layer.
+    """
+    x = layers.MaxPooling2D((2, 2))(input)
     return x
 
 
 # EfficientNetB4 CT-UNet
 def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
+    """
+    Creates a neural network using the CT-UNet architecture and EfficientNetB4 as backbone.
+    Args:
+        input_shape: The size of the input image.
+        weight: Pre-trained weights.
+    Returns:
+        A CT-UNet model using EfficientNetB4 as backbone.
+    """
     # Input
     inputs = layers.Input(input_shape)
 
@@ -145,14 +203,22 @@ def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     outputs = conv_block(d5, 16)
     outputs = deconv_block(outputs, 16)
     outputs = conv_block(outputs, 16)
-    outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
 
-    model = Model(inputs, outputs, name="EfficientNetB4_CTU-Net")
+    model = Model(inputs, outputs, name='EfficientNetB4_CTU-Net')
     return model
 
 
 # EfficientNetV2S CT-UNet
 def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
+    """
+    Creates a neural network using the CT-UNet architecture and EfficientNetV2S as backbone.
+    Args:
+        input_shape: The size of the input image.
+        weight: Pre-trained weights.
+    Returns:
+        A CT-UNet model using EfficientNetV2S as backbone.
+    """
     # Input
     inputs = layers.Input(input_shape)
 
@@ -187,15 +253,23 @@ def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     outputs = conv_block(d5, 16)
     outputs = deconv_block(outputs, 16)
     outputs = conv_block(outputs, 16)
-    outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
 
-    model = Model(inputs, outputs, name="EfficientNetV2S_CTU-Net")
+    model = Model(inputs, outputs, name='EfficientNetV2S_CTU-Net')
 
     return model
 
 
 # ResNet50V2 CT-UNet
 def ResNet50V2_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
+    """
+    Creates a neural network using the CT-UNet architecture and ResNet50V2 as backbone.
+    Args:
+        input_shape: The size of the input image.
+        weight: Pre-trained weights.
+    Returns:
+        A CT-UNet model using ResNet50V2 as backbone.
+    """
     # Input
     inputs = layers.Input(input_shape)
 
@@ -230,14 +304,22 @@ def ResNet50V2_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     outputs = conv_block(d5, 16)
     outputs = deconv_block(outputs, 16)
     outputs = conv_block(outputs, 16)
-    outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
 
-    model = Model(inputs, outputs, name="ResNet50V2_CTU-Net")
+    model = Model(inputs, outputs, name='ResNet50V2_CTU-Net')
     return model
 
 
 # DenseNet201 CT-UNet
 def DenseNet201_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
+    """
+    Creates a neural network using the CT-UNet architecture and DenseNet201 as backbone.
+    Args:
+        input_shape: The size of the input image.
+        weight: Pre-trained weights.
+    Returns:
+        A CT-UNet model using DenseNet201 as backbone.
+    """
     # Input
     inputs = layers.Input(input_shape)
 
@@ -272,7 +354,7 @@ def DenseNet201_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     outputs = conv_block(d5, 16)
     outputs = deconv_block(outputs, 16)
     outputs = conv_block(outputs, 16)
-    outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
 
-    model = Model(inputs, outputs, name="DenseNet201_CTU-Net")
+    model = Model(inputs, outputs, name='DenseNet201_CTU-Net')
     return model

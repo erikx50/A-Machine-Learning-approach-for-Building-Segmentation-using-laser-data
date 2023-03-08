@@ -1,15 +1,8 @@
-# Imports
 import os
 import tensorflow as tf
 from tensorflow.keras import callbacks, preprocessing, optimizers
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
-
-####
-import cv2 as cv
-from tqdm import tqdm
-from tifffile import imwrite, imread
-####
 
 import UNet
 import CTUNet
