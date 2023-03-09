@@ -12,6 +12,8 @@ Results were achieved by using model ensembles on CT-Unet EfficientNetB4(Buildin
 **Task 2**
 Results were achieved by using model ensembles on CT-Unet EfficientNetB4(Building masks), CT-Unet DenseNet201(Building masks) and CT-Unet ResNet50V2(Building masks) with the weight of 0.5, 0.2, 0.3.
 
+Test time augmentation were used for both tasks.
+
 ## Task Description:
 Buildings are essential to information regarding population, policy-making, and city management. Using computer vision technologies such as classification, object detection, and segmentation has proved helpful in several scenarios, such as urban planning and disaster recovery. Segmentation is the most precise method and can give detailed insights into the data as it highlights the area of interest.
 
@@ -29,17 +31,16 @@ The laser data segmentation task aims to solve the segmentation of buildings usi
 The code in this repository is split up between Jupyter Notebook files and Python files. The Jupyter Notebook files are mainly used for testing different concepts and visualizing the results before exporting the code to Python files. 
 
 When running the code the python scripts in the code folder should be run in numerical order.
-**0_Load_Dataset.py: **
-Load
-**1_Preprocess_Dataset.py: **
-**2_Train_Model.py: **
-**3_Test_Model.py: **
-**4_Model_Ensemble.py: **
-**CTUNet.py: **
-**Loss_Metrics.py: **
-**UNet.py: **
-**eval_functions.py: **
-**utils.py: **
+**0_Load_Dataset.py:** Downloads the MapAI dataset and creates a dataset folder where the dataset is stored. 
+**1_Preprocess_Dataset.py:** Preprocesses the MapAI dataset and creates subfolders containing the preprocessed data in the dataset folder.
+**2_Train_Model.py:** Train a selected model. User will be asked in the CLI of what model they would like to train. A model folder will be created, here all saved models will be stored.
+**3_Test_Model.py:** Tests and prints the IoU, BIoU and Score of a model. User will be asked to enter the name of the model they would like to test. This model has to be in the model folder.
+**4_Model_Ensemble.py:** Tests and prints the IoU, BIoU and Score of an ensemble from a set of 3 models. All possible weights will be tried and the best combination of weights will be printed. User will be asked to enter the 3 models they would like to perform the ensemble on.
+**CTUNet.py:** Contains the code for the CT-Unet architecture.
+**Loss_Metrics.py:** Cotains the code for IoU and Dice coefficient metric and loss function.
+**UNet.py:** Contains the code for the UNet architecture.
+**eval_functions.py:** Contains the code of the evaluation functions used for the MapAI competition. This code is taken from https://github.com/Sjyhne/MapAI-Competition/blob/master/competition_toolkit/competition_toolkit/eval_functions.py
+**utils.py:** Contains the code for loading test dataset and test time augmentation.
 
 
 
