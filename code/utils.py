@@ -15,11 +15,11 @@ def prepare_test_dataset(task_input, mask_input):
     """
     # Picks the dataset that should be used for testing
     if task_input == '1':
-        folder_name = '512x512_task1_test'
+        folder_name = 'preprocessed_task1_test'
         test_set = 'image'
         NUM_CHAN = 3
     elif task_input == '2':
-        folder_name = '512x512_task2_test'
+        folder_name = 'preprocessed_task2_test'
         test_set = 'rgbLiDAR'
         NUM_CHAN = 4
     else:
