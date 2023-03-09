@@ -5,7 +5,7 @@ from tqdm import tqdm
 import numpy as np
 
 from eval_functions import calculate_score
-from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss, binary_cross_iou
+from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 from utils import prepare_test_dataset, tta
 
 

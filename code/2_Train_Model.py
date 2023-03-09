@@ -6,7 +6,7 @@ import numpy as np
 
 import UNet
 import CTUNet
-from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss, binary_cross_iou
+from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 
 
 def prepare_model(train_input, model_input):
