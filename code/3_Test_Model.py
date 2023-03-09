@@ -28,6 +28,7 @@ def test_model(model_name, X_test, Y_test, tta_input):
         for image in tqdm(X_test):
             predicition = tta(model, image)
             Y_pred.append(predicition)
+        Y_pred = np.array(Y_pred)
     else:
         threshold = 0.5
         Y_pred = model.predict(X_test)
