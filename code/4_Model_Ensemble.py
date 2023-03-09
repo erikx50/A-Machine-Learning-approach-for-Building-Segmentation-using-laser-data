@@ -1,143 +1,116 @@
 import os
-import cv2 as cv
 import tensorflow as tf
 from tensorflow.keras import models
 from tqdm import tqdm
 import numpy as np
-from tifffile import imread
 
 from eval_functions import calculate_score
 from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
-
-# Change GPU setting
-# Limit number of GPUs
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
-
-# Limit GPU memory
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True
-session = tf.compat.v1.Session(config = config)
-
-# Preparing test data
-print('Select test set')
-print('1: RGB')
-print('2: RGBLiDAR')
-train_selector = input('Which set do you want to use?: ')
-
-train_set = None
-input_shape = None
-folder_name = None
-NUM_CHAN = None
-
-if train_selector == '1':
-    folder_name = '512x512_task1_test'
-    train_set = 'image'
-    input_shape = (512, 512, 3)
-    NUM_CHAN = 3
-elif train_selector == '2':
-    folder_name = '512x512_task2_test'
-    train_set = 'rgbLiDAR'
-    input_shape = (512, 512, 4)
-    NUM_CHAN = 4
-
-# Finding the number of images in each dataset
-img_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + train_set)
-no_test_images = len([name for name in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, name))])
-
-# Defining size of images
-IMG_HEIGHT = 512
-IMG_WIDTH = 512
-
-# Creating NumPy arrays for the different subsets
-X_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH, NUM_CHAN), dtype=np.uint8)
-Y_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
+from utils import prepare_test_dataset, tta
 
 
-# Adding images to NumPy arrays
-mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/mask')
-with os.scandir(img_path) as entries:
-    for n, entry in enumerate(entries):
-        filename = entry.name.split(".")[0]
-        if train_set == 'image':
-            img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
-            img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-        else:
-            img = imread(os.path.normpath(img_path + '/' + entry.name))
-        X_test[n] = img
-        mask = cv.imread(os.path.normpath(mask_path + '/' + filename + '.PNG'))
-        mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
-        Y_test[n] = mask
+def test_models(model_names, X_test, tta_input):
+    """
+    Predicts on a set of 3 models.
+    Args:
+        model_names: List of names of the 3 models that should be tested.
+        X_test: Images to predict.
+        tta_input: 1 if test time augmentation should be performed. Else the images are predicted without tta.
+    Returns:
+        The prediction of the models and the threshold that should be used for evaluating.
+    """
+    # Loading models
+    model1 = models.load_model(os.path.normpath('../models/' + model_names[0]), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+    model2 = models.load_model(os.path.normpath('../models/' + model_names[1]), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+    model3 = models.load_model(os.path.normpath('../models/' + model_names[2]), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+    model = [model1, model2, model3]
 
-# Print the size of the different sets
-print('X_train size: ' + str(len(X_test)))
-print('Y_train size: ' + str(len(Y_test)))
-
-
-# Testing models
-# Load model
-print('Test model')
-model1_name = input("Name of model 1: ")
-model1 = models.load_model(os.path.normpath('../models/' + model1_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
-
-model2_name = input("Name of model 2: ")
-model2 = models.load_model(os.path.normpath('../models/' + model2_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
-
-model3_name = input("Name of model 3: ")
-model3 = models.load_model(os.path.normpath('../models/' + model3_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
-
-model = [model1, model2, model3]
-
-# Predict
-print("Enable TTA? ")
-print("1: Yes ")
-print("Otherwise: No ")
-tta_input = input("TTA: ")
-
-if tta_input == '1':
-    threshold = 0.3
-    preds = []
-    for m in model:
-        Y_pred = []
-        for image in tqdm(X_test):
-            prediction_original = m.predict(np.expand_dims(image, axis=0), verbose=0)[0]
-
-            prediction_lr = m.predict(np.expand_dims(np.fliplr(image), axis=0), verbose=0)[0]
-            prediction_lr = np.fliplr(prediction_lr)
-
-            prediction_ud = m.predict(np.expand_dims(np.flipud(image), axis=0), verbose=0)[0]
-            prediction_ud = np.flipud(prediction_ud)
-
-            prediction_lr_ud = m.predict(np.expand_dims(np.fliplr(np.flipud(image)), axis=0), verbose=0)[0]
-            prediction_lr_ud = np.fliplr(np.flipud(prediction_lr_ud))
-
-            predicition = (prediction_original + prediction_lr + prediction_ud + prediction_lr_ud) / 4
-            Y_pred.append(predicition)
-        preds.append(Y_pred)
-    preds = np.array(preds)
-else:
-    threshold = 0.5
-    pred1 = model1.predict(X_test)
-    pred2 = model2.predict(X_test)
-    pred3 = model3.predict(X_test)
-    preds = np.array([pred1, pred2, pred3])
+    # Predicting models
+    if tta_input == '1':
+        threshold = 0.3
+        preds = []
+        for m in model:
+            Y_pred = []
+            for image in tqdm(X_test):
+                predicition = tta(m, image)
+                Y_pred.append(predicition)
+            preds.append(Y_pred)
+        preds = np.array(preds)
+    else:
+        threshold = 0.5
+        pred1 = model1.predict(X_test)
+        pred2 = model2.predict(X_test)
+        pred3 = model3.predict(X_test)
+        preds = np.array([pred1, pred2, pred3])
+    return preds, threshold
 
 
-iter_range = list(np.linspace(0, 1, 11))
-max_score = {'score': 0, 'iou': 0, 'biou': 0}
-best_w = []
+def ensemble_models(preds, Y_test, threshold):
+    """
+    Tries every possible combination of weights for a set of 3 predictions. Prints the best weight combination, IoU,
+    BIoU and score.
+    Args:
+        preds: List of predictions from a set of 3 models.
+        Y_test: Ground truth.
+        threshold: Pixel value threshold that should be used when determining if a pixel is a building or background.
+    """
+    iter_range = list(np.linspace(0, 1, 11))
+    max_score = {'score': 0, 'iou': 0, 'biou': 0}
+    best_w = []
 
-for w1 in iter_range:
-    for w2 in iter_range:
-        for w3 in iter_range:
-            if w1 + w2 + w3 != 1:
-                continue
-            weights = [w1, w2, w3]
-            weighted_preds = np.tensordot(preds, weights, axes=((0),(0)))
-            score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
-            print("Now predciting for weights :", w1, w2, w3, " : Score = ", score)
-            if score['score'] > max_score['score']:
-                max_score = score
-                best_w = weights
-            break
+    for w1 in iter_range:
+        for w2 in iter_range:
+            for w3 in iter_range:
+                if w1 + w2 + w3 != 1:
+                    continue
+                weights = [w1, w2, w3]
+                weighted_preds = np.tensordot(preds, weights, axes=(0, 0))
+                score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
+                print("Now predciting for weights :", w1, w2, w3, " : Score = ", score)
+                if score['score'] > max_score['score']:
+                    max_score = score
+                    best_w = weights
+                break
 
-print('Best score achieved with weights: ', best_w, ' Score: ', max_score)
+    print('Best score achieved with weights: ', best_w, ' Score: ', max_score)
+
+
+if __name__ == "__main__":
+    # Limit number of GPUs
+    os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+
+    # Limit GPU memory
+    config = tf.compat.v1.ConfigProto()
+    config.gpu_options.allow_growth = True
+    session = tf.compat.v1.Session(config=config)
+
+    # Select which type of set to test on. 1: RGB, 2: RGBLiDAR
+    print('Select train set')
+    print('1: RGB')
+    print('2: RGBLiDAR')
+    task_selector = input('Which set do you want to use?: ')
+
+    # Selecting mask set
+    print('Select mask set')
+    print('1: Building Masks')
+    print('2: Edge Masks')
+    mask_selector = input('Which mask set do you want to use?: ')
+
+    # Select if test time augmentation should be used
+    print('Enable TTA? ')
+    print('1: Yes ')
+    print('Otherwise: No ')
+    tta_selector = input('TTA: ')
+
+    # Select model that should be tested
+    print('Enter the name of the model you want to test')
+    model1_name = input("Name of model 1: ")
+    model2_name = input("Name of model 2: ")
+    model3_name = input("Name of model 3: ")
+    model_names = [model1_name, model2_name, model3_name]
+
+    # Model ensemble
+    X_test, Y_test = prepare_test_dataset(task_selector, mask_selector)
+    preds, thresh = test_models(model_names, X_test, tta_selector)
+    ensemble_models(preds, Y_test, thresh)
+    print('Ensemble finished')

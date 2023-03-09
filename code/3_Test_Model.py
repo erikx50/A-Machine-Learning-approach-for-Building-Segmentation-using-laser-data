@@ -1,123 +1,74 @@
 import os
-import cv2 as cv
 import tensorflow as tf
 from tensorflow.keras import models
 from tqdm import tqdm
 import numpy as np
-from tifffile import imread
 
 from eval_functions import calculate_score
 from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss, binary_cross_iou
+from utils import prepare_test_dataset, tta
 
 
-# Change GPU setting
-# Limit number of GPUs
-os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+def test_model(model_name, X_test, Y_test, tta_input):
+    """
+    Tests the model and prints the IoU, BIoU and Score.
+    Args:
+        model_name: Name of the model that should be tested. Must be a valid name in the model folder.
+        X_test: Images to predict.
+        Y_test: Masks corresponding to the images being predicted.
+        tta_input: 1 if test time augmentation should be performed. Else the images are predicted without tta.
+    """
+    # Load model
+    model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
 
-# Limit GPU memory
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True
-session = tf.compat.v1.Session(config = config)
+    # Predicting model
+    if tta_input == '1':
+        threshold = 0.3
+        Y_pred = []
+        for image in tqdm(X_test):
+            predicition = tta(model, image)
+            Y_pred.append(predicition)
+    else:
+        threshold = 0.5
+        Y_pred = model.predict(X_test)
 
-# Preparing test data
-print('Select test set')
-print('1: RGB')
-print('2: RGBLiDAR')
-train_selector = input('Which set do you want to use?: ')
-
-train_set = None
-input_shape = None
-folder_name = None
-NUM_CHAN = None
-
-if train_selector == '1':
-    folder_name = '512x512_task1_test'
-    train_set = 'image'
-    input_shape = (512, 512, 3)
-    NUM_CHAN = 3
-elif train_selector == '2':
-    folder_name = '512x512_task2_test'
-    train_set = 'rgbLiDAR'
-    input_shape = (512, 512, 4)
-    NUM_CHAN = 4
-
-# Finding the number of images in each dataset
-img_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + train_set)
-no_test_images = len([name for name in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, name))])
-
-# Defining size of images
-IMG_HEIGHT = 512
-IMG_WIDTH = 512
-
-# Creating NumPy arrays for the different subsets
-X_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH, NUM_CHAN), dtype=np.uint8)
-Y_test = np.zeros((no_test_images, IMG_HEIGHT, IMG_WIDTH), dtype=np.uint8)
-
-# Let user choose to test edge mask or building mask
-print('Select mask set')
-print('1: Building Masks')
-print('2: Edge Masks')
-mask_selector = input('Which mask set do you want to use?: ')
-mask = None
-if mask_selector == '1':
-    mask = 'mask'
-elif mask_selector == '2':
-    mask = 'edge_mask'
+    # Evaluating model
+    score = calculate_score(np.squeeze((Y_pred > threshold), -1).astype(np.uint8), Y_test)
+    print(score)
 
 
-# Adding images to NumPy arrays
-mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + mask)
-with os.scandir(img_path) as entries:
-    for n, entry in enumerate(entries):
-        filename = entry.name.split(".")[0]
-        if train_set == 'image':
-            img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
-            img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-        else:
-            img = imread(os.path.normpath(img_path + '/' + entry.name))
-        X_test[n] = img
-        mask = cv.imread(os.path.normpath(mask_path + '/' + filename + '.PNG'))
-        mask = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
-        Y_test[n] = mask
+if __name__ == "__main__":
+    # Limit number of GPUs
+    os.environ['CUDA_VISIBLE_DEVICES'] = '7'
 
-# Print the size of the different sets
-print('X_train size: ' + str(len(X_test)))
-print('Y_train size: ' + str(len(Y_test)))
+    # Limit GPU memory
+    config = tf.compat.v1.ConfigProto()
+    config.gpu_options.allow_growth = True
+    session = tf.compat.v1.Session(config=config)
 
+    # Select which type of set to test on. 1: RGB, 2: RGBLiDAR
+    print('Select train set')
+    print('1: RGB')
+    print('2: RGBLiDAR')
+    task_selector = input('Which set do you want to use?: ')
 
+    # Selecting mask set
+    print('Select mask set')
+    print('1: Building Masks')
+    print('2: Edge Masks')
+    mask_selector = input('Which mask set do you want to use?: ')
 
-# Testing model
-# Load model
-print('Test model')
-model_name = input("Name of model: ")
-model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+    # Select if test time augmentation should be used
+    print('Enable TTA? ')
+    print('1: Yes ')
+    print('Otherwise: No ')
+    tta_selector = input('TTA: ')
 
-print("Enable TTA? ")
-print("1: Yes ")
-print("Otherwise: No ")
-tta_input = input("TTA: ")
+    # Select model that should be tested
+    print('Enter the name of the model you want to test')
+    model_name = input('Name of model: ')
 
-if tta_input == '1':     # Test time augmentation
-    threshold = 0.3
-    Y_pred = []
-    for image in tqdm(X_test):
-        prediction_original = model.predict(np.expand_dims(image, axis=0), verbose=0)[0]
-
-        prediction_lr = model.predict(np.expand_dims(np.fliplr(image), axis=0), verbose=0)[0]
-        prediction_lr = np.fliplr(prediction_lr)
-
-        prediction_ud = model.predict(np.expand_dims(np.flipud(image), axis=0), verbose=0)[0]
-        prediction_ud = np.flipud(prediction_ud)
-
-        prediction_lr_ud = model.predict(np.expand_dims(np.fliplr(np.flipud(image)), axis=0), verbose=0)[0]
-        prediction_lr_ud = np.fliplr(np.flipud(prediction_lr_ud))
-
-        predicition = (prediction_original + prediction_lr + prediction_ud + prediction_lr_ud) / 4
-        Y_pred.append(predicition)
-else:
-    threshold = 0.5
-    Y_pred = model.predict(X_test)
-
-# Evaluating model
-score = calculate_score(np.squeeze((Y_pred > threshold), -1).astype(np.uint8), Y_test)
-print(score)
+    # Start testing
+    X_test, Y_test = prepare_test_dataset(task_selector, mask_selector)
+    test_model(model_name, X_test, Y_test, tta_selector)
+    print('Testing finished')
