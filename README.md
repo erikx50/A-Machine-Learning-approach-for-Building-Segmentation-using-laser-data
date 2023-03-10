@@ -6,6 +6,8 @@ The code in this repository contains my solution for the **NORA MapAI: Precision
 |:--------:|:------------:|:-------------:|:--------------:|:------------:|:-------------:|:--------------:|:----------:|
 | Me |    0.7958    |     0.6226    |     0.7092     |    0.8918    |     0.7929    |     0.8423     | **0.7758** |
 | 1st MapAI competition |    0.7794    |     0.6115    |     0.6955     |    0.8775    |     0.7857    |     0.8316     | **0.7635** |
+| 2nd MapAI competition |    0.7879    |     0.6245    |     0.7062     |    0.8711    |     0.7504    |     0.8108     | **0.7585** |
+| 3rd MapAI competition |    0.7902    |     0.6185    |     0.7044     |    0.8506    |     0.7461    |     0.7984     | **0.7514** |
 
 **Task 1**
 Results were achieved by using model ensembles on CT-Unet EfficientNetB4(Building masks), CT-Unet DenseNet201(Building masks) and CT-Unet DenseNet201(Edge masks) with the weight of 0.3, 0.3, 0.4.
