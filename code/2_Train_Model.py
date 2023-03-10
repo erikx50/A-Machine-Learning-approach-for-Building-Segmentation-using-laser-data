@@ -34,12 +34,18 @@ def prepare_model(train_input, model_input):
     elif model_input == '2':
         model = UNet.EfficientNetB4_unet(input_shape, weight)
     elif model_input == '3':
-        model = CTUNet.EfficientNetB4_CTUnet(input_shape, weight)
+        model = UNet.EfficientNetV2S_unet(input_shape, weight)
     elif model_input == '4':
-        model = CTUNet.EfficientNetV2S_CTUnet(input_shape, weight)
+        model = UNet.ResNet50V2_unet(input_shape, weight)
     elif model_input == '5':
-        model = CTUNet.ResNet50V2_CTUnet(input_shape, weight)
+        model = UNet.DenseNet201_unet(input_shape, weight)
     elif model_input == '6':
+        model = CTUNet.EfficientNetB4_CTUnet(input_shape, weight)
+    elif model_input == '7':
+        model = CTUNet.EfficientNetV2S_CTUnet(input_shape, weight)
+    elif model_input == '8':
+        model = CTUNet.ResNet50V2_CTUnet(input_shape, weight)
+    elif model_input == '9':
         model = CTUNet.DenseNet201_CTUnet(input_shape, weight)
     else:
         raise Exception('No model matching the input')
@@ -208,7 +214,8 @@ if __name__ == "__main__":
 
     # Selecting model to train
     print('Pick type of model to train')
-    models = ['U-Net', 'EfficientNetB4 U-Net', 'EfficientNetB4 CT-UNet', 'EfficientNetV2S CT-UNet', 'ResNet50V2 CT-Unet', 'DenseNet201 CT-Unet']
+    models = ['U-Net', 'EfficientNetB4 U-Net', 'EfficientNetV2S U-Net', 'ResNet50V2 U-Net', 'DenseNet201 U-Net',
+              'EfficientNetB4 CT-UNet', 'EfficientNetV2S CT-UNet', 'ResNet50V2 CT-Unet', 'DenseNet201 CT-Unet']
     for i in range(len(models)):
         print(str(i + 1) + ': ' + models[i])
     model_selector = input('Which model do you want to train?: ')

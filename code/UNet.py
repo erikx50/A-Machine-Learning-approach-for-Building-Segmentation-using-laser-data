@@ -1,5 +1,5 @@
 from tensorflow.keras import layers, optimizers, backend, Model
-from tensorflow.keras.applications import EfficientNetB4
+from tensorflow.keras.applications import EfficientNetB4, EfficientNetV2S, ResNet50V2, DenseNet201
 
 
 # U-Net
@@ -89,7 +89,7 @@ def unet(input_shape=(512, 512, 3)):
 
 
 ################################################################
-# U-Net using EfficientNetB4 as backbone
+# U-Net using different backbones
 def conv_block(input, num_filters):
     """
     Creates a block consisting of two convolutional layers.
@@ -125,6 +125,7 @@ def decoder_block(input, skip_features, num_filters):
     return x
 
 
+# EfficientNetB4 UNet
 def EfficientNetB4_unet(input_shape=(512, 512, 3), weight='imagenet'):
     """
     Creates a neural network using the U-Net architecture and EfficientNetB4 as backbone.
@@ -159,4 +160,118 @@ def EfficientNetB4_unet(input_shape=(512, 512, 3), weight='imagenet'):
     outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(d4)
 
     model = Model(inputs, outputs, name='EfficientNetB4_U-Net')
+    return model
+
+
+# EfficientNetV2S UNet
+def EfficientNetV2S_unet(input_shape=(512, 512, 3), weight='imagenet'):
+    """
+    Creates a neural network using the U-Net architecture and EfficientNetV2S as backbone.
+    Args:
+        input_shape: The size of the input image.
+        weight: Pre-trained weights.
+    Returns:
+        A U-Net model using EfficientNetB4 as backbone.
+    """
+    # Input
+    inputs = layers.Input(input_shape)
+
+    # Loading pre trained model
+    EffNetV2S = EfficientNetV2S(include_top=False, weights=weight, input_tensor=inputs)
+
+    # Encoder
+    s1 = EffNetV2S.get_layer('rescaling').output  # 512 x 512
+    s2 = EffNetV2S.get_layer('block1b_add').output  # 256 x 256
+    s3 = EffNetV2S.get_layer('block2d_add').output  # 128 x 128
+    s4 = EffNetV2S.get_layer('block4a_expand_activation').output  # 64 x 64
+
+    # Bottleneck
+    b1 = EffNetV2S.get_layer('block6a_expand_activation').output  # 32 x 32
+
+    # Decoder
+    d1 = decoder_block(b1, s4, 512)  # 64 x 64
+    d2 = decoder_block(d1, s3, 256)    # 128 x 128
+    d3 = decoder_block(d2, s2, 128)   # 256 x 256
+    d4 = decoder_block(d3, s1, 64)   # 512 x 512
+
+    # Output
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(d4)
+
+    model = Model(inputs, outputs, name='EfficientNetV2S_U-Net')
+    return model
+
+
+# ResNet50V2 UNet
+def ResNet50V2_unet(input_shape=(512, 512, 3), weight='imagenet'):
+    """
+    Creates a neural network using the U-Net architecture and ResNet50V2 as backbone.
+    Args:
+        input_shape: The size of the input image.
+        weight: Pre-trained weights.
+    Returns:
+        A U-Net model using EfficientNetB4 as backbone.
+    """
+    # Input
+    inputs = layers.Input(input_shape)
+
+    # Loading pre trained model
+    ResNet50 = ResNet50V2(include_top=False, weights=weight, input_tensor=inputs)
+
+    # Encoder
+    s1 = ResNet50.get_layer('input_1').output  # 512 x 512
+    s2 = ResNet50.get_layer('conv1_conv').output  # 256 x 256
+    s3 = ResNet50.get_layer('conv2_block3_1_relu').output  # 128 x 128
+    s4 = ResNet50.get_layer('conv3_block4_1_relu').output  # 64 x 64
+
+    # Bottleneck
+    b1 = ResNet50.get_layer('conv4_block6_1_relu').output  # 32 x 32
+
+    # Decoder
+    d1 = decoder_block(b1, s4, 512)  # 64 x 64
+    d2 = decoder_block(d1, s3, 256)    # 128 x 128
+    d3 = decoder_block(d2, s2, 128)   # 256 x 256
+    d4 = decoder_block(d3, s1, 64)   # 512 x 512
+
+    # Output
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(d4)
+
+    model = Model(inputs, outputs, name='ResNet50V2_U-Net')
+    return model
+
+
+# DenseNet201 UNet
+def DenseNet201_unet(input_shape=(512, 512, 3), weight='imagenet'):
+    """
+    Creates a neural network using the U-Net architecture and DenseNet201 as backbone.
+    Args:
+        input_shape: The size of the input image.
+        weight: Pre-trained weights.
+    Returns:
+        A U-Net model using EfficientNetB4 as backbone.
+    """
+    # Input
+    inputs = layers.Input(input_shape)
+
+    # Loading pre trained model
+    DenseNet = DenseNet201(include_top=False, weights=weight, input_tensor=inputs)
+
+    # Encoder
+    s1 = DenseNet.get_layer('input_1').output  # 512 x 512
+    s2 = DenseNet.get_layer('conv1/relu').output  # 256 x 256
+    s3 = DenseNet.get_layer('pool2_conv').output  # 128 x 128
+    s4 = DenseNet.get_layer('pool3_conv').output  # 64 x 64
+
+    # Bottleneck
+    b1 = DenseNet.get_layer('pool4_conv').output  # 32 x 32
+
+    # Decoder
+    d1 = decoder_block(b1, s4, 512)  # 64 x 64
+    d2 = decoder_block(d1, s3, 256)    # 128 x 128
+    d3 = decoder_block(d2, s2, 128)   # 256 x 256
+    d4 = decoder_block(d3, s1, 64)   # 512 x 512
+
+    # Output
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(d4)
+
+    model = Model(inputs, outputs, name='DenseNet201_U-Net')
     return model
