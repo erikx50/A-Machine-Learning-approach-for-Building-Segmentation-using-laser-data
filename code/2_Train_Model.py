@@ -185,7 +185,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     # ModelCheckpoint -> Creates checkpoints after each epoch
     # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
     callback_list = [
-        callbacks.ModelCheckpoint(os.path.normpath('../models/' + model_name + '_Checkpoint.h5'), verbose=1, save_best_only=True),
+        callbacks.ModelCheckpoint(os.path.normpath(task_path + '/' + model_name + '_Checkpoint.h5'), verbose=1, save_best_only=True),
         callbacks.EarlyStopping(monitor='val_loss', patience=patience*2),
         callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=patience, verbose=1)
     ]
