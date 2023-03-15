@@ -102,7 +102,7 @@ def prepare_dataset_generator(train_input, mask_input, target_size=(512, 512), s
                               horizontal_flip=True,
                               vertical_flip=True,
                               fill_mode='reflect',
-                              preprocessing_function=lambda x: np.where(x > 0, 1, 0).astype(x.dtype)) # Binarize the output again.
+                              preprocessing_function=lambda x: np.where(x > 0, 1, 0).astype(x.dtype)) # Binarize the output.
 
     # Creating data generator for train and validation images and masks
     image_data_generator = ImageDataGenerator(**img_data_gen_args)
@@ -162,15 +162,22 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     """
     # Create models directory if it doesnt exist
     print('Training model')
-    dataset_path = os.path.normpath('../models')
-    if not os.path.exists(dataset_path):
-        os.makedirs(dataset_path)
+    models_path = os.path.normpath('../models')
+    if not os.path.exists(models_path):
+        os.makedirs(models_path)
 
-    # Setting patience for callbacks depending on the images used for training the model
+    # Setting patience for callbacks depending on the images used for training the model and creating sub-folder for models
+    # depending on the task.
     if train_input == '1':
         patience = 3
+        task_path = os.path.normpath('../models/task1')
+        if not os.path.exists(task_path):
+            os.makedirs(task_path)
     elif train_input == '2':
-        patience = 5
+        patience = 4
+        task_path = os.path.normpath('../models/task2')
+        if not os.path.exists(task_path):
+            os.makedirs(task_path)
     else:
         raise Exception('Pick either RGB or RGBLiDAR')
 
@@ -188,7 +195,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch)
 
     print("Saving model")
-    model.save(os.path.normpath('../models/' + model_name))
+    model.save(os.path.normpath(task_path + '/' + model_name))
 
 
 if __name__ == "__main__":
