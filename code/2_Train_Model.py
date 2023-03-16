@@ -166,6 +166,11 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     if not os.path.exists(models_path):
         os.makedirs(models_path)
 
+    # Create logs directory if it doesnt exist
+    logs_path = os.path.normpath('../logs')
+    if not os.path.exists(models_path):
+        os.makedirs(models_path)
+
     # Setting patience for callbacks depending on the images used for training the model and creating sub-folder for models
     # depending on the task.
     if train_input == '1':
@@ -174,7 +179,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
         if not os.path.exists(task_path):
             os.makedirs(task_path)
     elif train_input == '2':
-        patience = 4
+        patience = 5
         task_path = os.path.normpath('../models/task2')
         if not os.path.exists(task_path):
             os.makedirs(task_path)
@@ -184,10 +189,13 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     # Create callback for model.
     # ModelCheckpoint -> Creates checkpoints after each epoch
     # EarlyStopping -> Stops the training of the model if it doesnt improve after some epochs
+    # ReduceLROnPlateau -> Reduces learning rate after not improving val loss for some time
+    # CSVLogger -> Logs the training in a CSV file
     callback_list = [
         callbacks.ModelCheckpoint(os.path.normpath(task_path + '/' + model_name + '_Checkpoint.h5'), verbose=1, save_best_only=True),
         callbacks.EarlyStopping(monitor='val_loss', patience=patience*2),
-        callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=patience, verbose=1)
+        callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.1, patience=patience, verbose=1),
+        callbacks.CSVLogger(os.path.normpath(logs_path + '/' + model_name + '_log'), separator=',', append=False)
     ]
 
     # Train the model

@@ -146,20 +146,18 @@ def EfficientNetB4_unet(input_shape=(512, 512, 3), weight='imagenet'):
     s2 = EffNetB4.get_layer('block2a_expand_activation').output  # 256 x 256
     s3 = EffNetB4.get_layer('block3a_expand_activation').output  # 128 x 128
     s4 = EffNetB4.get_layer('block4a_expand_activation').output  # 64 x 64
-    s5 = EffNetB4.get_layer('block6a_expand_activation').output  # 32 x 32
 
     # Bottleneck
-    b1 = EffNetB4.get_layer('block7b_add').output  # 16 x 16
+    b1 = EffNetB4.get_layer('block6a_expand_activation').output  # 32 x 32
 
     # Decoder
-    d1 = decoder_block(b1, s5, 512)  # 32 x 32
-    d2 = decoder_block(d1, s4, 256)  # 64 x 64
-    d3 = decoder_block(d2, s3, 128)  # 128 x 128
-    d4 = decoder_block(d3, s2, 64)  # 256 x 256
-    d5 = decoder_block(d4, s1, 32)   # 512 x 512
+    d1 = decoder_block(b1, s4, 1024)  # 64 x 64
+    d2 = decoder_block(d1, s3, 512)    # 128 x 128
+    d3 = decoder_block(d2, s2, 256)   # 256 x 256
+    d4 = decoder_block(d3, s1, 128)   # 512 x 512
 
     # Output
-    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(d5)
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(d4)
 
     model = Model(inputs, outputs, name='EfficientNetB4_U-Net')
     return model
