@@ -168,7 +168,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
 
     # Create logs directory if it doesnt exist
     logs_path = os.path.normpath('../logs')
-    if not os.path.exists(models_path):
+    if not os.path.exists(logs_path):
         os.makedirs(logs_path)
 
     # Setting patience for callbacks depending on the images used for training the model and creating sub-folder for models
