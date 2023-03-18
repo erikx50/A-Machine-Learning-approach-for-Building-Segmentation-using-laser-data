@@ -155,7 +155,9 @@ def EfficientNetB4_unet(input_shape=(512, 512, 3), weight='imagenet'):
     d4 = decoder_block(d3, s1, 128)   # 512 x 512
 
     # Output
-    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(d4)
+    outputs = layers.Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(d4)
+    outputs = layers.BatchNormalization()(outputs)
+    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
 
     model = Model(inputs, outputs, name='EfficientNetB4_U-Net')
     return model
