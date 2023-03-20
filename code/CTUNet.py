@@ -66,8 +66,8 @@ def SCAB_block(input1, input2, num_filters, final=False):
     """
     Creates a Spatial Channel Attention Block.
     Args:
-        input1: The output of the DB/DBB in the skip connection at the same level.
-        input2: The output of the previous layer.
+        input1: The output of the previous decoder layer.
+        input2: The output of the DB/DBB in the skip connection at the same level.
         num_filters: Number of filters to be used in the convolution.
         final: Indicator if this is the final SCAB block in the network.
     Returns:
