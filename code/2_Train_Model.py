@@ -174,7 +174,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     # Setting patience for callbacks depending on the images used for training the model and creating sub-folder for models
     # depending on the task.
     if train_input == '1':
-        patience = 3
+        patience = 5
         task_path = os.path.normpath('../models/task1')
         if not os.path.exists(task_path):
             os.makedirs(task_path)
@@ -199,7 +199,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     ]
 
     # Train the model
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.000015), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.00001), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch)
 
     print("Saving model")
