@@ -99,11 +99,13 @@ def conv_block(input, num_filters):
     Returns:
         The result of the final calculation of the current layer.
     """
-    x = layers.Conv2D(num_filters, 3, activation='relu', kernel_initializer='he_normal',  padding='same')(input)
+    x = layers.Conv2D(num_filters, 3, kernel_initializer='he_normal',  padding='same')(input)
     x = layers.BatchNormalization()(x)
+    x = layers.Activation('relu')(x)
 
-    x = layers.Conv2D(num_filters, 3, activation='relu', kernel_initializer='he_normal', padding='same')(x)
+    x = layers.Conv2D(num_filters, 3, kernel_initializer='he_normal', padding='same')(x)
     x = layers.BatchNormalization()(x)
+    x = layers.Activation('relu')(x)
     return x
 
 
