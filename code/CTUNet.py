@@ -106,9 +106,9 @@ def conv_block(input, num_filters):
     Returns:
         The input for the next calculation.
     """
-    x = layers.Conv2D(num_filters, 3, padding='same')(input)
+    x = layers.Conv2D(num_filters, 3, activation='relu', kernel_initializer='he_normal',  padding='same')(input)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation('relu')(x)
+    # x = layers.Activation('relu')(x)
     return x
 
 
@@ -121,9 +121,9 @@ def deconv_block(input, num_filters):
     Returns:
         The input for the next calculation.
     """
-    x = layers.Conv2DTranspose(num_filters, 1, padding='same')(input)
+    x = layers.Conv2DTranspose(num_filters, 1, activation='relu', kernel_initializer='he_normal', padding='same')(input)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation('relu')(x)
+    # x = layers.Activation('relu')(x)
     return x
 
 
@@ -139,9 +139,9 @@ def decoder_block(input, skip_output, num_filters, final=False):
         The input for the decoder block. If final=True -> Input for the output layer.
     """
     x = conv_block(input, num_filters)
-    x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding='same')(x)
+    x = layers.Conv2DTranspose(num_filters, (2, 2), activation='relu', kernel_initializer='he_normal', strides=2, padding='same')(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation('relu')(x)
+    # x = layers.Activation('relu')(x)
     x = SCAB_block(x, skip_output, num_filters, final)
     x = DB_block(x, num_filters)
     return x
