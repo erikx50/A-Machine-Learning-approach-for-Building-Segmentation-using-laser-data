@@ -199,8 +199,8 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     ]
 
     # Train the model
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.00001), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
-    model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=2)
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.001), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=1)
 
     print("Saving model")
     model.save(os.path.normpath(task_path + '/' + model_name))
