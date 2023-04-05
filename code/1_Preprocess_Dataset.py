@@ -59,7 +59,7 @@ def preprocess():
 
                 # Resize images
                 # Mask
-                resize_mask_img = cv.resize(mask_img, (new_size, new_size), interpolation = cv.INTER_AREA)
+                resize_mask_img = cv.resize(mask_img, (new_size, new_size), interpolation=cv.INTER_AREA)
                 cv.imwrite(os.path.normpath(mask_path + '/' + entry.name), resize_mask_img)
 
                 # Edge mask
@@ -70,14 +70,14 @@ def preprocess():
                 # Image
                 img = cv.imread(os.path.normpath(original_image_path + '/' + entry.name), cv.IMREAD_COLOR)
                 img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-                resize_img = cv.resize(img, (new_size, new_size), interpolation = cv.INTER_AREA)
+                resize_img = cv.resize(img, (new_size, new_size), interpolation=cv.INTER_AREA)
                 resize_img = cv.cvtColor(resize_img, cv.COLOR_BGR2RGB)
                 cv.imwrite(os.path.normpath(image_path + '/' + entry.name), resize_img)
 
                 # LiDAR RGB -> Concat aerial image and lidar data
                 if dataset != 'task1_test':
                     lidar_data = np.load(os.path.normpath(original_lidar_path + '/' + filename + '.npy'))
-                    resize_lidar = cv.resize(lidar_data, (new_size, new_size), interpolation = cv.INTER_AREA)
+                    resize_lidar = cv.resize(lidar_data, (new_size, new_size), interpolation=cv.INTER_AREA)
                     resize_lidar = np.expand_dims(resize_lidar, axis=-1)
                     rgb_lidar = np.concatenate((resize_img, resize_lidar), axis=-1)
                     imwrite(rgblidar_path + '/' + filename + '.tif', rgb_lidar.astype(np.uint8))
