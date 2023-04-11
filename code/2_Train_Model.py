@@ -241,6 +241,6 @@ if __name__ == "__main__":
 
     # Start training
     model = prepare_model(train_selector, model_selector)
-    train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch = prepare_dataset_generator(train_selector, mask_selector, batch_size=2)
+    train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch = prepare_dataset_generator(train_selector, mask_selector, batch_size=12)
     train_model(model, name_selector, train_selector, train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch)
     print('Training finished')
