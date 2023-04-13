@@ -16,7 +16,7 @@ def prepare_model(train_input, model_input):
         train_input: Either 1 or 2. 1: Task 1, 2: Task 2.
         model_input: The model that should be trained.
     Returns:
-        A U-Net model
+        A model
     """
     # Prepare model to train on RGB or RGBLiDAR images
     if train_input == '1':
