@@ -50,7 +50,8 @@ def unet(input_shape=(512, 512, 3)):
 
     # Decoder Part
     # Layer 6
-    u6 = layers.Conv2DTranspose(512, (3, 3), strides=(2, 2), padding='same')(c5)
+    u6 = layers.Conv2DTranspose(512, (3, 3), strides=(2, 2), activation='relu', kernel_initializer='he_normal', padding='same')(c5)
+    u6 = layers.BatchNormalization()(u6)
     u6 = layers.concatenate([u6, c4])
     c6 = layers.Conv2D(512, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(u6)
     c6 = layers.BatchNormalization()(c6)
@@ -58,7 +59,8 @@ def unet(input_shape=(512, 512, 3)):
     c6 = layers.BatchNormalization()(c6)
 
     # Layer 7
-    u7 = layers.Conv2DTranspose(256, (3, 3), strides=(2, 2), padding='same')(c6)
+    u7 = layers.Conv2DTranspose(256, (3, 3), strides=(2, 2), activation='relu', kernel_initializer='he_normal', padding='same')(c6)
+    u7 = layers.BatchNormalization()(u7)
     u7 = layers.concatenate([u7, c3])
     c7 = layers.Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(u7)
     c7 = layers.BatchNormalization()(c7)
@@ -66,7 +68,8 @@ def unet(input_shape=(512, 512, 3)):
     c7 = layers.BatchNormalization()(c7)
 
     # Layer 8
-    u8 = layers.Conv2DTranspose(128, (3, 3), strides=(2, 2), padding='same')(c7)
+    u8 = layers.Conv2DTranspose(128, (3, 3), strides=(2, 2), activation='relu', kernel_initializer='he_normal', padding='same')(c7)
+    u8 = layers.BatchNormalization()(u8)
     u8 = layers.concatenate([u8, c2])
     c8 = layers.Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(u8)
     c8 = layers.BatchNormalization()(c8)
@@ -74,7 +77,8 @@ def unet(input_shape=(512, 512, 3)):
     c8 = layers.BatchNormalization()(c8)
 
     # Layer 9
-    u9 = layers.Conv2DTranspose(64, (3, 3), strides=(2, 2), padding='same')(c8)
+    u9 = layers.Conv2DTranspose(64, (3, 3), strides=(2, 2), activation='relu', kernel_initializer='he_normal', padding='same')(c8)
+    u9 = layers.BatchNormalization()(u9)
     u9 = layers.concatenate([u9, c1], axis=3)
     c9 = layers.Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(u9)
     c9 = layers.BatchNormalization()(c9)
@@ -99,13 +103,11 @@ def conv_block(input, num_filters):
     Returns:
         The result of the final calculation of the current layer.
     """
-    x = layers.Conv2D(num_filters, 3, kernel_initializer='he_normal',  padding='same')(input)
+    x = layers.Conv2D(num_filters, 3, activation='relu', kernel_initializer='he_normal',  padding='same')(input)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation('relu')(x)
 
-    x = layers.Conv2D(num_filters, 3, kernel_initializer='he_normal', padding='same')(x)
+    x = layers.Conv2D(num_filters, 3, activation='relu', kernel_initializer='he_normal', padding='same')(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Activation('relu')(x)
     return x
 
 
