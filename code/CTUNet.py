@@ -54,11 +54,18 @@ def DBB_block(input1, input2, num_filters):
     x = layers.BatchNormalization()(x)
 
     # Rescale input2 to have the same filter dimension as x
-    input2 = layers.Conv2D(num_filters, (1, 1), padding='same')(input2)
+    input2 = layers.Conv2D(num_filters, (1, 1), padding="same")(input2)
+    input2 = layers.Activation("relu")(input2)
+    input2 = layers.BatchNormalization()(input2)
+    ####################################################
+
     x = layers.Add()([x, input2])
 
     x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+
+    # Reduce size of x to match its original size before Conv2DTranspose#
     x = layers.MaxPooling2D((2, 2))(x)
+    ####################################################
     return x
 
 
@@ -108,7 +115,6 @@ def conv_block(input, num_filters):
     """
     x = layers.Conv2D(num_filters, 3, activation='relu', kernel_initializer='he_normal',  padding='same')(input)
     x = layers.BatchNormalization()(x)
-    # x = layers.Activation('relu')(x)
     return x
 
 

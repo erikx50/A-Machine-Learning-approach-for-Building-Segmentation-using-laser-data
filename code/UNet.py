@@ -121,7 +121,8 @@ def decoder_block(input, skip_features, num_filters):
     Returns:
         The result of the final calculation of the current layer.
     """
-    x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding='same')(input)
+    x = layers.Conv2DTranspose(num_filters, (3, 3), strides=2, activation='relu', kernel_initializer='he_normal', padding='same')(input)
+    x = layers.BatchNormalization()(x)
     x = layers.concatenate([x, skip_features])
     x = conv_block(x, num_filters)
     return x
