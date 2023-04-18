@@ -205,7 +205,7 @@ def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
 
     # Output
     outputs = conv_block(d5, 16)
-    outputs = deconv_block(outputs, 16)
+    # outputs = deconv_block(outputs, 16)
     outputs = conv_block(outputs, 16)
     outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
 
