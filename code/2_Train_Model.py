@@ -199,7 +199,8 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     ]
 
     # Train the model
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.0001), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    # model.compile(optimizer=optimizers.Adam(learning_rate=0.0001), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=0.0001), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=2)
 
     print("Saving model")
@@ -207,8 +208,11 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
 
 
 if __name__ == "__main__":
+    # Select GPU
+    gpu_selector = input('Which GPU do you want to use?: ')
+
     # Limit number of GPUs
-    os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+    os.environ['CUDA_VISIBLE_DEVICES'] = gpu_selector
 
     # Limit GPU memory
     config = tf.compat.v1.ConfigProto()
