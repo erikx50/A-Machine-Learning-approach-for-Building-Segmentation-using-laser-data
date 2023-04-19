@@ -89,7 +89,7 @@ def SCAB_block(input1, input2, num_filters, final=False):
         input2 = layers.Conv2D(num_filters, (1, 1), padding='same')(input2)
 
     x = layers.Multiply()([x, input2])
-    x = layers.concatenate([input1,x])
+    x = layers.concatenate([input1, x])
     c1 = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
 
     x = layers.GlobalAveragePooling2D(keepdims=True)(c1)

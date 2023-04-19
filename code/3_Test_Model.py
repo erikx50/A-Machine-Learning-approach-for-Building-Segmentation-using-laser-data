@@ -19,7 +19,7 @@ def test_model(model_name, X_test, Y_test, tta_input):
         tta_input: 1 if test time augmentation should be performed. Else the images are predicted without tta.
     """
     # Load model
-    model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'jaccard_coef_loss': jaccard_coef_loss, 'jaccard_coef': jaccard_coef})
+    model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
 
     # Predicting model
     if tta_input == '1':
@@ -39,8 +39,11 @@ def test_model(model_name, X_test, Y_test, tta_input):
 
 
 if __name__ == "__main__":
+    # Select GPU
+    gpu_selector = input('Which GPU do you want to use?: ')
+
     # Limit number of GPUs
-    os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+    os.environ['CUDA_VISIBLE_DEVICES'] = gpu_selector
 
     # Limit GPU memory
     config = tf.compat.v1.ConfigProto()
