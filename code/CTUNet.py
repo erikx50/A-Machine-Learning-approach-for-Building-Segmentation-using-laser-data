@@ -14,21 +14,21 @@ def DB_block(input1, num_filters):
     """
     x = layers.BatchNormalization()(input1)
     x = layers.Activation('relu')(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
 
     x = layers.BatchNormalization()(x)
     x = layers.Activation('relu')(x)
-    c1 = layers.Conv2D(num_filters, (3, 3), padding='same')(x)
+    c1 = layers.Conv2D(num_filters, (3, 3), kernel_initializer='he_normal', padding='same')(x)
 
     x = layers.concatenate([input1, c1])
 
     x = layers.BatchNormalization()(x)
     x = layers.Activation('relu')(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
 
     x = layers.BatchNormalization()(x)
     x = layers.Activation('relu')(x)
-    x = layers.Conv2D(num_filters, (3, 3), padding='same')(x)
+    x = layers.Conv2D(num_filters, (3, 3), kernel_initializer='he_normal', padding='same')(x)
 
     x = layers.concatenate([input1, x, c1])
     return x
@@ -46,22 +46,22 @@ def DBB_block(input1, input2, num_filters):
     """
     x = DB_block(input1, num_filters)
 
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
     x = layers.Activation('relu')(x)
 
-    x = layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding='same')(x)
+    x = layers.Conv2DTranspose(num_filters, (2, 2), kernel_initializer='he_normal', strides=2, padding='same')(x)
     x = layers.Activation('relu')(x)
     x = layers.BatchNormalization()(x)
 
     # Rescale input2 to have the same filter dimension as x
-    input2 = layers.Conv2D(num_filters, (1, 1), padding="same")(input2)
+    input2 = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding="same")(input2)
     input2 = layers.Activation("relu")(input2)
     input2 = layers.BatchNormalization()(input2)
     ####################################################
 
     x = layers.Add()([x, input2])
 
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
 
     # Reduce size of x to match its original size before Conv2DTranspose#
     x = layers.MaxPooling2D((2, 2))(x)
@@ -80,23 +80,23 @@ def SCAB_block(input1, input2, num_filters, final=False):
     Returns:
         The input for the next calculation.
     """
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(input1)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(input1)
     x = layers.Activation('relu')(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
     x = layers.Activation('sigmoid')(x)
 
     if final:
-        input2 = layers.Conv2D(num_filters, (1, 1), padding='same')(input2)
+        input2 = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(input2)
 
     x = layers.Multiply()([x, input2])
     x = layers.concatenate([input1, x])
-    c1 = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    c1 = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
 
     x = layers.GlobalAveragePooling2D(keepdims=True)(c1)
 
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
     x = layers.Activation('relu')(x)
-    x = layers.Conv2D(num_filters, (1, 1), padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
     x = layers.Activation('sigmoid')(x)
 
     x = layers.Multiply()([x, c1])
