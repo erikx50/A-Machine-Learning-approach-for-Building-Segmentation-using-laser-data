@@ -96,7 +96,7 @@ def SCAB_block(input1, input2, num_filters, final=False):
 
     x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
     x = layers.Activation('relu')(x)
-    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='glorot_normal', padding='same')(x)
     x = layers.Activation('sigmoid')(x)
 
     x = layers.Multiply()([x, c1])
