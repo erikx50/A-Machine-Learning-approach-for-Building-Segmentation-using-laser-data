@@ -160,6 +160,13 @@ def bottleneck(input, num_filters):
         The input of the first decoder layer.
     """
     x = layers.MaxPooling2D((2, 2))(input)
+    ###
+    x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
+    s = layers.GlobalAveragePooling2D(keepdims=True)(x)
+    s = layers.Conv2D(num_filters, (1, 1), activation='relu', kernel_initializer='he_normal', padding='same')(s)
+    s = layers.Conv2D(num_filters, (1, 1), activation='sigmoid', kernel_initializer='he_normal', padding='same')(s)
+    x = layers.Multiply()([x, s])
+    ###
     x = conv_block(x, num_filters)
     return x
 
