@@ -205,7 +205,7 @@ def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
 
     # Output
     outputs = conv_block(d5, 32)
-    outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
+    outputs = layers.Conv2D(1, 1, kernel_initializer='glorot_normal', padding="same", activation="sigmoid")(outputs)
 
     model = Model(inputs, outputs, name="EfficientNetB4_CTU-Net")
     return model
