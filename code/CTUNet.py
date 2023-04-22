@@ -160,13 +160,6 @@ def bottleneck(input, num_filters):
         The input of the first decoder layer.
     """
     x = layers.MaxPooling2D((2, 2))(input)
-    ###
-    #x = layers.Conv2D(num_filters, (1, 1), kernel_initializer='he_normal', padding='same')(x)
-    #s = layers.GlobalAveragePooling2D(keepdims=True)(x)
-    #s = layers.Conv2D(num_filters, (1, 1), activation='relu', kernel_initializer='he_normal', padding='same')(s)
-    #s = layers.Conv2D(num_filters, (1, 1), activation='sigmoid', kernel_initializer='glorot_normal', padding='same')(s)
-    #x = layers.Multiply()([x, s])
-    ###
     x = conv_block(x, num_filters)
     return x
 
@@ -242,7 +235,7 @@ def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     skip4 = DBB_block(res4, skip3, 512)
 
     # Bottleneck
-    b1 = bottleneck(res4)  # 16 x 16
+    b1 = bottleneck(res4, 512)  # 16 x 16
 
     # Decoder
     d1 = decoder_block(b1, skip4, 512)  # 32 x 32
@@ -252,10 +245,8 @@ def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     d5 = decoder_block(d4, skip0, 32, True)   # 512 x 512
 
     # Output
-    outputs = conv_block(d5, 16)
-    outputs = deconv_block(outputs, 16)
-    outputs = conv_block(outputs, 16)
-    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
+    outputs = conv_block(d5, 32)
+    outputs = layers.Conv2D(1, 1, kernel_initializer='glorot_normal', padding="same", activation="sigmoid")(outputs)
 
     model = Model(inputs, outputs, name='EfficientNetV2S_CTU-Net')
 
@@ -293,7 +284,7 @@ def ResNet50V2_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     skip4 = DBB_block(res4, skip3, 512)
 
     # Bottleneck
-    b1 = bottleneck(res4)  # 16 x 16
+    b1 = bottleneck(res4, 512)  # 16 x 16
 
     # Decoder
     d1 = decoder_block(b1, skip4, 512)  # 32 x 32
@@ -303,10 +294,8 @@ def ResNet50V2_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     d5 = decoder_block(d4, skip0, 32, True)   # 512 x 512
 
     # Output
-    outputs = conv_block(d5, 16)
-    outputs = deconv_block(outputs, 16)
-    outputs = conv_block(outputs, 16)
-    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
+    outputs = conv_block(d5, 32)
+    outputs = layers.Conv2D(1, 1, kernel_initializer='glorot_normal', padding="same", activation="sigmoid")(outputs)
 
     model = Model(inputs, outputs, name='ResNet50V2_CTU-Net')
     return model
@@ -343,7 +332,7 @@ def DenseNet201_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     skip4 = DBB_block(res4, skip3, 512)
 
     # Bottleneck
-    b1 = bottleneck(res4)  # 16 x 16
+    b1 = bottleneck(res4, 512)  # 16 x 16
 
     # Decoder
     d1 = decoder_block(b1, skip4, 512)  # 32 x 32
@@ -353,10 +342,8 @@ def DenseNet201_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     d5 = decoder_block(d4, skip0, 32, True)   # 512 x 512
 
     # Output
-    outputs = conv_block(d5, 16)
-    outputs = deconv_block(outputs, 16)
-    outputs = conv_block(outputs, 16)
-    outputs = layers.Conv2D(1, 1, padding='same', activation='sigmoid')(outputs)
+    outputs = conv_block(d5, 32)
+    outputs = layers.Conv2D(1, 1, kernel_initializer='glorot_normal', padding="same", activation="sigmoid")(outputs)
 
     model = Model(inputs, outputs, name='DenseNet201_CTU-Net')
     return model
