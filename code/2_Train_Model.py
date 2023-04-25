@@ -29,8 +29,6 @@ def prepare_model(train_input, model_input):
         raise Exception('Pick either RGB or RGBLiDAR')
 
     # Select model to train
-    initial_lr = None
-    batch_size = None
     if model_input == '1':
         model = UNet.unet(input_shape)
         initial_lr = 0.0001
@@ -41,25 +39,31 @@ def prepare_model(train_input, model_input):
         batch_size = 12
     elif model_input == '3':
         model = UNet.EfficientNetV2S_unet(input_shape, weight)
+        initial_lr = 0.0001
+        batch_size = 12
     elif model_input == '4':
         model = UNet.ResNet50V2_unet(input_shape, weight)
+        initial_lr = 0.0001
+        batch_size = 12
     elif model_input == '5':
         model = UNet.DenseNet201_unet(input_shape, weight)
+        initial_lr = 0.0001
+        batch_size = 12
     elif model_input == '6':
         model = CTUNet.EfficientNetB4_CTUnet(input_shape, weight)
-        initial_lr = 0.00001
+        initial_lr = 0.00005
         batch_size = 6
     elif model_input == '7':
         model = CTUNet.EfficientNetV2S_CTUnet(input_shape, weight)
-        initial_lr = 0.00001
+        initial_lr = 0.00005
         batch_size = 6
     elif model_input == '8':
         model = CTUNet.ResNet50V2_CTUnet(input_shape, weight)
-        initial_lr = 0.00001
+        initial_lr = 0.00005
         batch_size = 6
     elif model_input == '9':
         model = CTUNet.DenseNet201_CTUnet(input_shape, weight)
-        initial_lr = 0.00001
+        initial_lr = 0.00005
         batch_size = 6
     else:
         raise Exception('No model matching the input')
