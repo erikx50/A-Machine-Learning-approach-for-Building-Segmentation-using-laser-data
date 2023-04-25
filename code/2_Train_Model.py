@@ -37,6 +37,8 @@ def prepare_model(train_input, model_input):
         batch_size = 6
     elif model_input == '2':
         model = UNet.EfficientNetB4_unet(input_shape, weight)
+        initial_lr = 0.0001
+        batch_size = 12
     elif model_input == '3':
         model = UNet.EfficientNetV2S_unet(input_shape, weight)
     elif model_input == '4':
