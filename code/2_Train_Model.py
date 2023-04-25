@@ -16,7 +16,7 @@ def prepare_model(train_input, model_input):
         train_input: Either 1 or 2. 1: Task 1, 2: Task 2.
         model_input: The model that should be trained.
     Returns:
-        A model
+        A model, initial learning rate for the model and batch size
     """
     # Prepare model to train on RGB or RGBLiDAR images
     if train_input == '1':
@@ -29,8 +29,12 @@ def prepare_model(train_input, model_input):
         raise Exception('Pick either RGB or RGBLiDAR')
 
     # Select model to train
+    initial_lr = None
+    batch_size = None
     if model_input == '1':
         model = UNet.unet(input_shape)
+        initial_lr = 0.0001
+        batch_size = 6
     elif model_input == '2':
         model = UNet.EfficientNetB4_unet(input_shape, weight)
     elif model_input == '3':
@@ -41,17 +45,25 @@ def prepare_model(train_input, model_input):
         model = UNet.DenseNet201_unet(input_shape, weight)
     elif model_input == '6':
         model = CTUNet.EfficientNetB4_CTUnet(input_shape, weight)
+        initial_lr = 0.00001
+        batch_size = 6
     elif model_input == '7':
         model = CTUNet.EfficientNetV2S_CTUnet(input_shape, weight)
+        initial_lr = 0.00001
+        batch_size = 6
     elif model_input == '8':
         model = CTUNet.ResNet50V2_CTUnet(input_shape, weight)
+        initial_lr = 0.00001
+        batch_size = 6
     elif model_input == '9':
         model = CTUNet.DenseNet201_CTUnet(input_shape, weight)
+        initial_lr = 0.00001
+        batch_size = 6
     else:
         raise Exception('No model matching the input')
 
     model.summary()
-    return model
+    return model, initial_lr, batch_size
 
 
 def prepare_dataset_generator(train_input, mask_input, target_size=(512, 512), seed=24, batch_size=6):
@@ -148,7 +160,7 @@ def prepare_dataset_generator(train_input, mask_input, target_size=(512, 512), s
     return train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch
 
 
-def train_model(model, model_name, train_input, train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch):
+def train_model(model, model_name, train_input, train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch, learning_rate):
     """
     Trains a model, saves the model in the model folder.
     Args:
@@ -159,6 +171,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
         val_generator: Image generator containing validation images.
         train_steps_per_epoch: Number of training steps per epoch.
         val_steps_per_epoch: Number of validation steps per epoch.
+        learning_rate: Initial learning rate.
     """
     # Create models directory if it doesnt exist
     print('Training model')
@@ -199,8 +212,7 @@ def train_model(model, model_name, train_input, train_generator, val_generator, 
     ]
 
     # Train the model
-    # model.compile(optimizer=optimizers.Adam(learning_rate=0.0001), loss=[jaccard_coef_loss], metrics=[jaccard_coef, 'accuracy'])
-    model.compile(optimizer=optimizers.Adam(learning_rate=0.00001), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
+    model.compile(optimizer=optimizers.Adam(learning_rate=learning_rate), loss=[dice_coef_loss], metrics=[jaccard_coef, 'accuracy'])
     model.fit(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=100, callbacks=callback_list, validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=2)
 
     print("Saving model")
@@ -244,7 +256,7 @@ if __name__ == "__main__":
     name_selector = input('What is the name the model should be saved as?: ')
 
     # Start training
-    model = prepare_model(train_selector, model_selector)
-    train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch = prepare_dataset_generator(train_selector, mask_selector, batch_size=6)
-    train_model(model, name_selector, train_selector, train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch)
+    model, lr, bs = prepare_model(train_selector, model_selector)
+    train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch = prepare_dataset_generator(train_selector, mask_selector, batch_size=bs)
+    train_model(model, name_selector, train_selector, train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch, lr)
     print('Training finished')
