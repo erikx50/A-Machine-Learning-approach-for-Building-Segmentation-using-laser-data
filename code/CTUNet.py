@@ -143,7 +143,7 @@ def decoder_block(input, skip_output, num_filters, final=False):
     Returns:
         The input for the decoder block. If final=True -> Input for the output layer.
     """
-    x = layers.Conv2DTranspose(num_filters, (3, 3), activation='relu', kernel_initializer='he_normal', strides=2, padding='same')(input)
+    x = layers.Conv2DTranspose(num_filters, (2, 2), activation='relu', kernel_initializer='he_normal', strides=2, padding='same')(input)
     x = layers.BatchNormalization()(x)
     x = SCAB_block(x, skip_output, num_filters, final)
     x = DB_block(x, num_filters)
