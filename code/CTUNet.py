@@ -143,7 +143,7 @@ def decoder_block(input, skip_output, num_filters, final=False):
     Returns:
         The input for the decoder block. If final=True -> Input for the output layer.
     """
-    x = layers.Conv2DTranspose(num_filters, (2, 2), activation='relu', kernel_initializer='he_normal', strides=2, padding='same')(input)
+    x = layers.Conv2DTranspose(num_filters, (3, 3), activation='relu', kernel_initializer='he_normal', strides=2, padding='same')(input)
     x = layers.BatchNormalization()(x)
     x = SCAB_block(x, skip_output, num_filters, final)
     x = DB_block(x, num_filters)
@@ -165,6 +165,44 @@ def bottleneck(input, num_filters):
 
 
 # EfficientNetB4 CT-UNet
+def EfficientNetB4_CTUnet(input_shape=(512, 512, 3)):
+    # Input
+    inputs = layers.Input(input_shape)
+
+    # Loading pre trained model
+    EffNetB4 = EfficientNetB4(include_top=False, weights="imagenet", input_tensor=inputs)
+
+    # Encoder
+    res0 = EffNetB4.get_layer('rescaling_1').output  # 512 x 512
+    res1 = EffNetB4.get_layer('block2a_expand_activation').output  # 256 x 256
+    res2 = EffNetB4.get_layer('block3a_expand_activation').output  # 128 x 128
+    res3 = EffNetB4.get_layer('block4a_expand_activation').output  # 64 x 64
+    res4 = EffNetB4.get_layer('block6a_expand_activation').output  # 32 x 32
+
+    # Skip connection blocks
+    skip0 = DB_block(res0, 16)
+    skip1 = DBB_block(res1, skip0, 32)
+    skip2 = DBB_block(res2, skip1, 64)
+    skip3 = DBB_block(res3, skip2, 128)
+    skip4 = DBB_block(res4, skip3, 256)
+
+    # Bottleneck
+    b1 = bottleneck(res4, 512)  # 16 x 16
+
+    # Decoder
+    d1 = decoder_block(b1, skip4, 256)  # 32 x 32
+    d2 = decoder_block(d1, skip3, 128)    # 64 x 64
+    d3 = decoder_block(d2, skip2, 64)   # 128 x 128
+    d4 = decoder_block(d3, skip1, 32)   # 256 x 256
+    d5 = decoder_block(d4, skip0, 16, True)   # 512 x 512
+
+    # Output
+    outputs = conv_block(d5, 16)
+    outputs = layers.Conv2D(1, 1, padding="same", activation="sigmoid")(outputs)
+
+    model = Model(inputs, outputs, name="EfficientNetB4_CTU-Net")
+    return model
+'''
 def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     # Input
     inputs = layers.Input(input_shape)
@@ -202,7 +240,7 @@ def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
 
     model = Model(inputs, outputs, name="EfficientNetB4_CTU-Net")
     return model
-
+'''
 
 # EfficientNetV2S CT-UNet
 def EfficientNetV2S_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):

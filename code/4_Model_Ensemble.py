@@ -9,40 +9,40 @@ from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 from utils import prepare_test_dataset, tta
 
 
-def test_models(model_names, X_test, tta_input):
+def test_models(model_names, X_test, tta_input, task_input):
     """
-    Predicts on a set of 3 models.
+    Predicts on a set of models.
     Args:
-        model_names: List of names of the 3 models that should be tested.
+        model_names: List of names of the models that should be tested.
         X_test: Images to predict.
         tta_input: 1 if test time augmentation should be performed. Else the images are predicted without tta.
+        task_input: Either 1 or 2. 1: Task 1, 2: Task 2.
     Returns:
-        The prediction of the models and the threshold that should be used for evaluating.
+        The prediction of the models.
     """
-    # Loading models
-    model1 = models.load_model(os.path.normpath('../models/' + model_names[0]), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
-    model2 = models.load_model(os.path.normpath('../models/' + model_names[1]), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
-    model3 = models.load_model(os.path.normpath('../models/' + model_names[2]), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
-    model = [model1, model2, model3]
+    # Pick subfolder
+    if task_input == '1':
+        subfolder = 'task1'
+    elif task_input == '2':
+        subfolder = 'task2'
+    else:
+        raise Exception("Pick valid task")
 
-    # Predicting models
-    if tta_input == '1':
-        threshold = 0.3
-        preds = []
-        for m in model:
+    preds = {}
+    for model_name in model_names:
+        model = models.load_model(os.path.normpath('../models/' + subfolder + '/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+        # Predicting model
+        if tta_input == '1':
             Y_pred = []
             for image in tqdm(X_test):
-                predicition = tta(m, image)
+                predicition = tta(model, image)
                 Y_pred.append(predicition)
-            preds.append(Y_pred)
-        preds = np.array(preds)
-    else:
-        threshold = 0.5
-        pred1 = model1.predict(X_test)
-        pred2 = model2.predict(X_test)
-        pred3 = model3.predict(X_test)
-        preds = np.array([pred1, pred2, pred3])
-    return preds, threshold
+        else:
+            Y_pred = model.predict(X_test)
+
+        preds[model_name] = np.array(Y_pred)
+
+    return preds
 
 
 def ensemble_models(preds, Y_test, threshold):
@@ -58,7 +58,7 @@ def ensemble_models(preds, Y_test, threshold):
     max_score = {'score': 0, 'iou': 0, 'biou': 0}
     best_w = []
 
-    for w1 in iter_range:
+    for w1 in tqdm(iter_range):
         for w2 in iter_range:
             for w3 in iter_range:
                 if w1 + w2 + w3 != 1:
@@ -76,8 +76,11 @@ def ensemble_models(preds, Y_test, threshold):
 
 
 if __name__ == "__main__":
+    # Select GPU
+    gpu_selector = input('Which GPU do you want to use?: ')
+
     # Limit number of GPUs
-    os.environ['CUDA_VISIBLE_DEVICES'] = '7'
+    os.environ['CUDA_VISIBLE_DEVICES'] = gpu_selector
 
     # Limit GPU memory
     config = tf.compat.v1.ConfigProto()
@@ -96,21 +99,40 @@ if __name__ == "__main__":
     print('2: Edge Masks')
     mask_selector = input('Which mask set do you want to use?: ')
 
+    X_test, Y_test = prepare_test_dataset(task_selector, mask_selector)
+
     # Select if test time augmentation should be used
     print('Enable TTA? ')
     print('1: Yes ')
     print('Otherwise: No ')
     tta_selector = input('TTA: ')
 
+    if tta_selector == '1':
+        thresh = 0.3
+    else:
+        thresh = 0.5
+
     # Select model that should be tested
-    print('Enter the name of the model you want to test')
-    model1_name = input("Name of model 1: ")
-    model2_name = input("Name of model 2: ")
-    model3_name = input("Name of model 3: ")
-    model_names = [model1_name, model2_name, model3_name]
+    print('What type of ensemble do you want to do?')
+    print('1: Ensemble with set weights')
+    print('2: Find best weights from a set of 3 models')
+    print('3: Find best 3 model ensemble using multiple model')
+    ensemble_selector = input('Ensemble type: ')
+
+    if ensemble_selector == '1' or ensemble_selector == '3':
+        print('Enter the name of the model you want to test')
+        model1_name = input("Name of model 1: ")
+        model2_name = input("Name of model 2: ")
+        model3_name = input("Name of model 3: ")
+        model_names = [model1_name, model2_name, model3_name]
+    elif ensemble_selector == '2':
+        print('Enter the name of the model you want to test seperated with a comma(,)')
+        model_names = input("Name of models: ").split(',')
+    else:
+        raise Exception("Pick valid ensemble type")
+
 
     # Model ensemble
-    X_test, Y_test = prepare_test_dataset(task_selector, mask_selector)
-    preds, thresh = test_models(model_names, X_test, tta_selector)
+    preds = test_models(model_names, X_test, tta_selector, task_selector)
     ensemble_models(preds, Y_test, thresh)
     print('Ensemble finished')
