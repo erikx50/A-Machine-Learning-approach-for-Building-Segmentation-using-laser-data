@@ -56,7 +56,7 @@ def prepare_model(train_input, model_input):
     elif model_input == '7':
         model = CTUNet.EfficientNetV2S_CTUnet(input_shape, weight)
         initial_lr = 0.00005
-        batch_size = 10
+        batch_size = 12
     elif model_input == '8':
         model = CTUNet.ResNet50V2_CTUnet(input_shape, weight)
         initial_lr = 0.00005
