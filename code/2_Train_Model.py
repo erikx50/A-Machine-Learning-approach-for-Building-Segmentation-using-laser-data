@@ -56,15 +56,15 @@ def prepare_model(train_input, model_input):
     elif model_input == '7':
         model = CTUNet.EfficientNetV2S_CTUnet(input_shape, weight)
         initial_lr = 0.00005
-        batch_size = 6
+        batch_size = 12
     elif model_input == '8':
         model = CTUNet.ResNet50V2_CTUnet(input_shape, weight)
         initial_lr = 0.00005
-        batch_size = 6
+        batch_size = 12
     elif model_input == '9':
         model = CTUNet.DenseNet201_CTUnet(input_shape, weight)
         initial_lr = 0.00005
-        batch_size = 6
+        batch_size = 12
     else:
         raise Exception('No model matching the input')
 
