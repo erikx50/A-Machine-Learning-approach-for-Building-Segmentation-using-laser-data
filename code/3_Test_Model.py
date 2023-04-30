@@ -9,7 +9,7 @@ from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
 from utils import prepare_test_dataset, tta
 
 
-def test_model(model_name, X_test, Y_test, tta_input):
+def test_model(model_name, X_test, Y_test, tta_input, task_input):
     """
     Tests the model and prints the IoU, BIoU and Score.
     Args:
@@ -17,9 +17,18 @@ def test_model(model_name, X_test, Y_test, tta_input):
         X_test: Images to predict.
         Y_test: Masks corresponding to the images being predicted.
         tta_input: 1 if test time augmentation should be performed. Else the images are predicted without tta.
+        task_input: Either 1 or 2. 1: Task 1, 2: Task 2.
     """
     # Load model
-    model = models.load_model(os.path.normpath('../models/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+    if task_input == '1':
+        subfolder = 'task1'
+    elif task_input == '2':
+        subfolder = 'task2'
+    else:
+        raise Exception("Pick valid task")
+
+    model = models.load_model(os.path.normpath('../models/' + subfolder + '/' + model_name), custom_objects={'dice_coef_loss': dice_coef_loss, 'jaccard_coef': jaccard_coef})
+
 
     # Predicting model
     if tta_input == '1':

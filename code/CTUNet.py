@@ -173,7 +173,10 @@ def EfficientNetB4_CTUnet(input_shape=(512, 512, 3), weight='imagenet'):
     EffNetB4 = EfficientNetB4(include_top=False, weights=weight, input_tensor=inputs)
 
     # Encoder
-    res0 = EffNetB4.get_layer('rescaling_1').output  # 512 x 512
+    if weight == 'imagenet':
+        res0 = EffNetB4.get_layer('rescaling_1').output  # 512 x 512
+    else:
+        res0 = EffNetB4.get_layer('rescaling').output  # 512 x 512
     res1 = EffNetB4.get_layer('block2a_expand_activation').output  # 256 x 256
     res2 = EffNetB4.get_layer('block3a_expand_activation').output  # 128 x 128
     res3 = EffNetB4.get_layer('block4a_expand_activation').output  # 64 x 64
