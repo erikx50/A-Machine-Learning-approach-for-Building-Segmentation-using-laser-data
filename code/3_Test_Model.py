@@ -83,5 +83,5 @@ if __name__ == "__main__":
 
     # Start testing
     X_test, Y_test = prepare_test_dataset(task_selector, mask_selector)
-    test_model(model_name, X_test, Y_test, tta_selector)
+    test_model(model_name, X_test, Y_test, tta_selector, task_selector)
     print('Testing finished')
