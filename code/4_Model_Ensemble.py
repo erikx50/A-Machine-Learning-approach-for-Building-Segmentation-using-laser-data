@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.keras import models
 from tqdm import tqdm
 import numpy as np
+from itertools import combinations
 
 from eval_functions import calculate_score
 from Loss_Metrics import jaccard_coef, jaccard_coef_loss, dice_coef_loss
@@ -18,7 +19,7 @@ def test_models(model_names, X_test, tta_input, task_input):
         tta_input: 1 if test time augmentation should be performed. Else the images are predicted without tta.
         task_input: Either 1 or 2. 1: Task 1, 2: Task 2.
     Returns:
-        The prediction of the models.
+        A dictionary of predictions from the models.
     """
     # Pick subfolder
     if task_input == '1':
@@ -53,6 +54,8 @@ def ensemble_models(preds, Y_test, threshold):
         preds: List of predictions from a set of 3 models.
         Y_test: Ground truth.
         threshold: Pixel value threshold that should be used when determining if a pixel is a building or background.
+    Returns:
+        Best weight combination and resulting metrics.
     """
     iter_range = list(np.linspace(0, 1, 11))
     max_score = {'score': 0, 'iou': 0, 'biou': 0}
@@ -66,13 +69,39 @@ def ensemble_models(preds, Y_test, threshold):
                 weights = [w1, w2, w3]
                 weighted_preds = np.tensordot(preds, weights, axes=(0, 0))
                 score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
-                print("Now predciting for weights :", w1, w2, w3, " : Score = ", score)
                 if score['score'] > max_score['score']:
                     max_score = score
                     best_w = weights
                 break
 
     print('Best score achieved with weights: ', best_w, ' Score: ', max_score)
+    return max_score, best_w
+
+
+def mass_ensemble(model_names, preds, Y_test, threshold):
+    """
+    Tries every possible 3 model combination of multiple models. Print the top 10 ensemble and their weights based on
+    the score metric.
+    Args:
+        model_names: List of model names
+        preds: Dictionary of predictions.
+        Y_test: Ground truth.
+        threshold: Pixel value threshold that should be used when determining if a pixel is a building or background.
+    """
+    results = {}
+    for ensemble in set(combinations(model_names, 3)):
+        print('Now testing ensemble for models: ', ensemble)
+        current_pred = np.array([preds[ensemble[0]], preds[ensemble[1]], preds[ensemble[2]]])
+        max_score, best_w = ensemble_models(current_pred, Y_test, threshold)
+        results[max_score['score']] = {'models': ensemble, 'weights': best_w, 'score': max_score}
+
+    print('Finished mass ensemble. Printing out top 10 ensembles')
+    des_keys = sorted(results.keys(),  reverse=True)
+    for i in range(len(des_keys)):
+        res = results[des_keys[i]]
+        print(i+1, ' - Models: ', res['models'], ' Weights:', res['models'], ' Score: ', res['score'])
+        if i == 9:
+            break
 
 
 if __name__ == "__main__":
@@ -131,8 +160,15 @@ if __name__ == "__main__":
     else:
         raise Exception("Pick valid ensemble type")
 
-
-    # Model ensemble
+    # Predict all models
     preds = test_models(model_names, X_test, tta_selector, task_selector)
-    ensemble_models(preds, Y_test, thresh)
+
+    # Ensemble
+    if ensemble_selector == '1':
+        pass
+    elif ensemble_selector == '2':
+        pass
+    elif ensemble_selector == '3':
+        mass_ensemble(model_names, preds, Y_test, thresh)
+
     print('Ensemble finished')
