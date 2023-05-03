@@ -96,10 +96,10 @@ def mass_ensemble(model_names, preds, Y_test, threshold):
         results[max_score['score']] = {'models': ensemble, 'weights': best_w, 'score': max_score}
 
     print('Finished mass ensemble. Printing out top 10 ensembles')
-    des_keys = sorted(results.keys(),  reverse=True)
-    for i in range(len(des_keys)):
-        res = results[des_keys[i]]
-        print(i+1, ' - Models: ', res['models'], ' Weights:', res['models'], ' Score: ', res['score'])
+    descending_score = sorted(results.keys(),  reverse=True)
+    for i in range(len(descending_score)):
+        res = results[descending_score[i]]
+        print(i+1, ' - Models: ', res['models'], ' Weights:', res['weights'], ' Score: ', res['score'])
         if i == 9:
             break
 
@@ -150,13 +150,13 @@ if __name__ == "__main__":
     ensemble_selector = input('Ensemble type: ')
 
     if ensemble_selector == '1' or ensemble_selector == '2':
-        print('Enter the name of the model you want to test')
+        print('Enter the name of the models you want to ensemble')
         model1_name = input("Name of model 1: ")
         model2_name = input("Name of model 2: ")
         model3_name = input("Name of model 3: ")
         model_names = [model1_name, model2_name, model3_name]
     elif ensemble_selector == '3':
-        print('Enter the name of the model you want to test seperated with a comma(,)')
+        print('Enter the name of the models you to ensemble seperated with a comma(,)')
         model_names = input("Name of models: ").split(',')
     else:
         raise Exception("Pick valid ensemble type")
