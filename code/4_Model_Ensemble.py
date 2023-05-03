@@ -128,6 +128,7 @@ if __name__ == "__main__":
     print('2: Edge Masks')
     mask_selector = input('Which mask set do you want to use?: ')
 
+    print('Preparing test set')
     X_test, Y_test = prepare_test_dataset(task_selector, mask_selector)
 
     # Select if test time augmentation should be used
@@ -148,13 +149,13 @@ if __name__ == "__main__":
     print('3: Find best 3 model ensemble using multiple model')
     ensemble_selector = input('Ensemble type: ')
 
-    if ensemble_selector == '1' or ensemble_selector == '3':
+    if ensemble_selector == '1' or ensemble_selector == '2':
         print('Enter the name of the model you want to test')
         model1_name = input("Name of model 1: ")
         model2_name = input("Name of model 2: ")
         model3_name = input("Name of model 3: ")
         model_names = [model1_name, model2_name, model3_name]
-    elif ensemble_selector == '2':
+    elif ensemble_selector == '3':
         print('Enter the name of the model you want to test seperated with a comma(,)')
         model_names = input("Name of models: ").split(',')
     else:
