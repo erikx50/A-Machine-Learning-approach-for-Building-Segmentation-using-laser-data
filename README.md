@@ -10,10 +10,10 @@ The code in this repository contains my solution for the **NORA MapAI: Precision
 | 3rd MapAI competition |    0.7902    |     0.6185    |     0.7044     |    0.8506    |     0.7461    |     0.7984     | **0.7514** |
 
 **Task 1**
-Results were achieved by using model ensembles on U-Net DenseNet201, CT-UNet EfficientNetB4 and CT-UNet EfficienNetV2S with the weight of 0.4, 0.3, 0.3.
+Results were achieved by using an ensembles of U-Net DenseNet201, CT-UNet EfficientNetB4 and CT-UNet EfficienNetV2S with a weight of 0.4, 0.3, 0.3.
 
 **Task 2**
-Results were achieved by using model ensembles on U-Net with no backbone, U-Net DenseNet201 and CT-Unet EfficienNetV2S with the weight of 0.5, 0.3, 0.2.
+Results were achieved by using an ensembles of U-Net with no backbone, U-Net DenseNet201 and CT-Unet EfficienNetV2S with a weight of 0.5, 0.3, 0.2.
 
 Test time augmentation were used for both tasks.
 
