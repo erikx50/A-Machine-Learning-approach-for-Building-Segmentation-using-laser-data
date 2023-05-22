@@ -26,7 +26,8 @@ def prepare_test_dataset(task_input, mask_input):
         raise Exception('Pick either RGB or RGBLiDAR')
 
     # Finding the number of images in each dataset
-    img_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + test_set)
+    #img_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + test_set)
+    img_path = os.path.normpath('dataset/MapAI/' + folder_name + '/' + test_set)
     no_test_images = len([name for name in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, name))])
 
     # Creating NumPy arrays for the different subsets
@@ -42,7 +43,8 @@ def prepare_test_dataset(task_input, mask_input):
         raise Exception('Pick either Building or Edge mask')
 
     # Adding images to NumPy arrays
-    mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + mask)
+    mask_path = os.path.normpath('dataset/MapAI/' + folder_name + '/' + mask)
+    #mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + mask)
     with os.scandir(img_path) as entries:
         for n, entry in enumerate(entries):
             filename = entry.name.split(".")[0]

@@ -55,8 +55,6 @@ def single_ensemble(preds, Y_test, weights, threshold):
         weights List of weights
         threshold: Pixel value threshold that should be used when determining if a pixel is a building or background.
     """
-    print(len(preds))
-    print(weights)
     weighted_preds = np.tensordot(preds, weights, axes=(0, 0))
     score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
     print(score)
@@ -185,7 +183,8 @@ if __name__ == "__main__":
         print('Enter the weights of the models seperated with a comma(,)')
         model_weights_input = input("Weight of models: ").split(',')
         model_weights = [float(w) for w in model_weights_input]
-        single_ensemble(preds, Y_test, model_weights, thresh)
+        model_preds = np.array([preds[model_names[0]], preds[model_names[1]], preds[model_names[2]]])
+        single_ensemble(model_preds, Y_test, model_weights, thresh)
     elif ensemble_selector == '2':
         ensemble_models(preds, Y_test, thresh)
     elif ensemble_selector == '3':
