@@ -46,6 +46,21 @@ def test_models(model_names, X_test, tta_input, task_input):
     return preds
 
 
+def single_ensemble(preds, Y_test, weights, threshold):
+    """
+    Ensembles a set of three models with user defined weights
+    Args:
+        preds: List of predictions from a set of 3 models.
+        Y_test: Ground truth.
+        weights List of weights
+        threshold: Pixel value threshold that should be used when determining if a pixel is a building or background.
+    """
+
+    weighted_preds = np.tensordot(preds, weights, axes=(0, 0))
+    score = calculate_score(np.squeeze((weighted_preds > threshold), -1).astype(np.uint8), Y_test)
+    print(score)
+
+
 def ensemble_models(preds, Y_test, threshold):
     """
     Tries every possible combination of weights for a set of 3 predictions. Prints the best weight combination, IoU,
@@ -166,9 +181,12 @@ if __name__ == "__main__":
 
     # Ensemble
     if ensemble_selector == '1':
-        pass
+        print('Enter the weights of the models seperated with a comma(,)')
+        model_weights = input("Name of models: ").split(',')
+        model_weights = [float(w) for w in model_weights]
+        single_ensemble(preds, Y_test, model_weights, thresh)
     elif ensemble_selector == '2':
-        pass
+        ensemble_models(preds, Y_test, thresh)
     elif ensemble_selector == '3':
         mass_ensemble(model_names, preds, Y_test, thresh)
 
