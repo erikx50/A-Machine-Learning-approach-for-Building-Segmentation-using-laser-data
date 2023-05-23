@@ -186,7 +186,8 @@ if __name__ == "__main__":
         model_preds = np.array([preds[model_names[0]], preds[model_names[1]], preds[model_names[2]]])
         single_ensemble(model_preds, Y_test, model_weights, thresh)
     elif ensemble_selector == '2':
-        ensemble_models(preds, Y_test, thresh)
+        model_preds = np.array([preds[model_names[0]], preds[model_names[1]], preds[model_names[2]]])
+        ensemble_models(model_preds, Y_test, thresh)
     elif ensemble_selector == '3':
         mass_ensemble(model_names, preds, Y_test, thresh)
 

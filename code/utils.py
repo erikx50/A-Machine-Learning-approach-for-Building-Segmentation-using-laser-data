@@ -15,13 +15,19 @@ def prepare_test_dataset(task_input, mask_input):
     """
     # Picks the dataset that should be used for testing
     if task_input == '1':
-        folder_name = 'preprocessed_task1_test'
-        test_set = 'image'
+        # folder_name = 'preprocessed_task1_test'
+        # test_set = 'image'
         NUM_CHAN = 3
+
+        folder_name = 'preprocessed_validation'
+        test_set = 'image/val'
     elif task_input == '2':
-        folder_name = 'preprocessed_task2_test'
-        test_set = 'rgbLiDAR'
+        # folder_name = 'preprocessed_task2_test'
+        # test_set = 'rgbLiDAR'
         NUM_CHAN = 4
+
+        folder_name = 'preprocessed_validation'
+        test_set = 'rgbLiDAR/val'
     else:
         raise Exception('Pick either RGB or RGBLiDAR')
 
@@ -36,7 +42,9 @@ def prepare_test_dataset(task_input, mask_input):
 
     # Select mask set
     if mask_input == '1':
-        mask = 'mask'
+        #mask = 'mask'
+
+        mask = 'mask/val'
     elif mask_input == '2':
         mask = 'edge_mask'
     else:
