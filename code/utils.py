@@ -56,7 +56,7 @@ def prepare_test_dataset(task_input, mask_input):
     with os.scandir(img_path) as entries:
         for n, entry in enumerate(entries):
             filename = entry.name.split(".")[0]
-            if test_set == 'image':
+            if task_input == '1':
                 img = cv.imread(os.path.normpath(img_path + '/' + entry.name))
                 img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
             else:
