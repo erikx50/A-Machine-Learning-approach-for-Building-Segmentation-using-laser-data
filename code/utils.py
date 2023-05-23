@@ -4,55 +4,55 @@ import numpy as np
 from tifffile import imread
 
 
-def prepare_test_dataset(task_input, mask_input):
+def prepare_test_dataset(task_input, set_input):
     """
     Loads the test dataset into NumPY arrays.
     Args:
         task_input: Either 1 or 2. 1: Task 1, 2: Task 2.
-        mask_input: Either 1 or 2. 1: Building masks, 2: Edge masks.
+        set_input: Either 1 or 2. 1: Test set, 2: Validation set.
     Returns:
         Test images and their corresponding masks.
     """
     # Picks the dataset that should be used for testing
     if task_input == '1':
-        # folder_name = 'preprocessed_task1_test'
-        # test_set = 'image'
         NUM_CHAN = 3
-
-        folder_name = 'preprocessed_validation'
-        test_set = 'image/val'
+        if set_input == '1':
+            folder_name = 'preprocessed_task1_test'
+            test_set = 'image'
+            mask = 'mask'
+        elif set_input == '2':
+            folder_name = 'preprocessed_validation'
+            test_set = 'image/val'
+            mask = 'mask/val'
+        else:
+            raise Exception('Pick either test or validation set')
     elif task_input == '2':
-        # folder_name = 'preprocessed_task2_test'
-        # test_set = 'rgbLiDAR'
         NUM_CHAN = 4
-
-        folder_name = 'preprocessed_validation'
-        test_set = 'rgbLiDAR/val'
+        if set_input == '1':
+            folder_name = 'preprocessed_task2_test'
+            test_set = 'rgbLiDAR'
+            mask = 'mask'
+        elif set_input == '2':
+            folder_name = 'preprocessed_validation'
+            test_set = 'rgbLiDAR/val'
+            mask = 'mask/val'
+        else:
+            raise Exception('Pick either test or validation set')
     else:
         raise Exception('Pick either RGB or RGBLiDAR')
 
     # Finding the number of images in each dataset
     img_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + test_set)
-    #img_path = os.path.normpath('dataset/MapAI/' + folder_name + '/' + test_set)
+    # img_path = os.path.normpath('dataset/MapAI/' + folder_name + '/' + test_set)
     no_test_images = len([name for name in os.listdir(img_path) if os.path.isfile(os.path.join(img_path, name))])
 
     # Creating NumPy arrays for the different subsets
     X_test = np.zeros((no_test_images, 512, 512, NUM_CHAN), dtype=np.uint8)
     Y_test = np.zeros((no_test_images, 512, 512), dtype=np.uint8)
 
-    # Select mask set
-    if mask_input == '1':
-        #mask = 'mask'
-
-        mask = 'mask/val'
-    elif mask_input == '2':
-        mask = 'edge_mask'
-    else:
-        raise Exception('Pick either Building or Edge mask')
-
     # Adding images to NumPy arrays
-    #mask_path = os.path.normpath('dataset/MapAI/' + folder_name + '/' + mask)
     mask_path = os.path.normpath('../dataset/MapAI/' + folder_name + '/' + mask)
+    # mask_path = os.path.normpath('dataset/MapAI/' + folder_name + '/' + mask)
     with os.scandir(img_path) as entries:
         for n, entry in enumerate(entries):
             filename = entry.name.split(".")[0]

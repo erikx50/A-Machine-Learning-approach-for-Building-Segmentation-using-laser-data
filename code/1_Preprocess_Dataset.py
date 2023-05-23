@@ -35,7 +35,6 @@ def preprocess():
         mask_path = os.path.normpath('../dataset/MapAI/preprocessed_' + dataset + '/mask/' + label)
         image_path = os.path.normpath('../dataset/MapAI/preprocessed_' + dataset + '/image/' + label)
         rgblidar_path = os.path.normpath('../dataset/MapAI/preprocessed_' + dataset + '/rgbLiDAR/' + label)
-        edge_mask_path = os.path.normpath('../dataset/MapAI/preprocessed_' + dataset + '/edge_mask/' + label)
         original_mask_path = os.path.normpath('../dataset/MapAI/' + dataset + '/mask')
         original_image_path = os.path.normpath('../dataset/MapAI/' + dataset + '/image')
         original_lidar_path = os.path.normpath('../dataset/MapAI/' + dataset + '/lidar')
@@ -46,8 +45,6 @@ def preprocess():
             os.makedirs(image_path)
         if not os.path.exists(rgblidar_path):
             os.makedirs(rgblidar_path)
-        if not os.path.exists(edge_mask_path):
-            os.makedirs(edge_mask_path)
 
         # Upscale images to 512x512 and save them in new folder
         with os.scandir(original_mask_path) as entries:
@@ -61,11 +58,6 @@ def preprocess():
                 # Mask
                 resize_mask_img = cv.resize(mask_img, (new_size, new_size), interpolation=cv.INTER_AREA)
                 cv.imwrite(os.path.normpath(mask_path + '/' + entry.name), resize_mask_img)
-
-                # Edge mask
-                edge_mask = _mask_to_boundary(resize_mask_img)
-                edge_mask[edge_mask == 255] = 1
-                cv.imwrite(os.path.normpath(edge_mask_path + '/' + entry.name), edge_mask)
 
                 # Image
                 img = cv.imread(os.path.normpath(original_image_path + '/' + entry.name), cv.IMREAD_COLOR)

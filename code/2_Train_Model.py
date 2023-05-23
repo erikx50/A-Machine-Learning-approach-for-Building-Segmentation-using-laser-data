@@ -72,12 +72,11 @@ def prepare_model(train_input, model_input):
     return model, initial_lr, batch_size
 
 
-def prepare_dataset_generator(train_input, mask_input, target_size=(512, 512), seed=24, batch_size=6):
+def prepare_dataset_generator(train_input, target_size=(512, 512), seed=24, batch_size=6):
     """
     Creates data generators for training and validation images and masks.
     Args:
         train_input: Either 1 or 2. 1: Task 1, 2: Task 2.
-        mask_input: Either 1 or 2. 1: Building masks, 2: Edge masks.
         target_size: The pixel size of the images used to train the model.
         seed: The seed for the data generators.
         batch_size: The batch size for the generators.
@@ -94,14 +93,6 @@ def prepare_dataset_generator(train_input, mask_input, target_size=(512, 512), s
         color_mode = 'rgba'
     else:
         raise Exception('Pick either RGB or RGBLiDAR')
-
-    # Prepare model to use building or edge masks
-    if mask_input == '1':
-        mask = 'mask'
-    elif mask_input == '2':
-        mask = 'edge_mask'
-    else:
-        raise Exception('Pick either Building or Edge mask')
 
     # Setting augmentation args
     img_data_gen_args = dict(rotation_range=90,
@@ -132,7 +123,7 @@ def prepare_dataset_generator(train_input, mask_input, target_size=(512, 512), s
                                                                class_mode=None)
 
     mask_data_generator = ImageDataGenerator(**mask_data_gen_args)
-    mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/preprocessed_train/' + mask),
+    mask_generator = mask_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/preprocessed_train/mask'),
                                                              target_size=target_size,
                                                              seed=seed,
                                                              batch_size=batch_size,
@@ -147,7 +138,7 @@ def prepare_dataset_generator(train_input, mask_input, target_size=(512, 512), s
                                                                  color_mode=color_mode,
                                                                  class_mode=None)
 
-    valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/preprocessed_validation/' + mask),
+    valid_mask_generator = val_data_generator.flow_from_directory(os.path.normpath('../dataset/MapAI/preprocessed_validation/mask'),
                                                                   target_size=target_size,
                                                                   seed=seed,
                                                                   batch_size=batch_size,
@@ -243,12 +234,6 @@ if __name__ == "__main__":
     print('2: RGBLiDAR')
     train_selector = input('Which set do you want to use?: ')
 
-    # Selecting mask set
-    print('Select mask set')
-    print('1: Building Masks')
-    print('2: Edge Masks')
-    mask_selector = input('Which mask set do you want to use?: ')
-
     # Selecting model to train
     print('Pick type of model to train')
     models = ['U-Net', 'EfficientNetB4 U-Net', 'EfficientNetV2S U-Net', 'ResNet50V2 U-Net', 'DenseNet201 U-Net',
@@ -263,6 +248,6 @@ if __name__ == "__main__":
 
     # Start training
     model, lr, bs = prepare_model(train_selector, model_selector)
-    train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch = prepare_dataset_generator(train_selector, mask_selector, batch_size=bs)
+    train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch = prepare_dataset_generator(train_selector, batch_size=bs)
     train_model(model, name_selector, train_selector, train_generator, val_generator, train_steps_per_epoch, val_steps_per_epoch, lr)
     print('Training finished')

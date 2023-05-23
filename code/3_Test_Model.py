@@ -65,11 +65,11 @@ if __name__ == "__main__":
     print('2: RGBLiDAR')
     task_selector = input('Which set do you want to use?: ')
 
-    # Selecting mask set
-    print('Select mask set')
-    print('1: Building Masks')
-    print('2: Edge Masks')
-    mask_selector = input('Which mask set do you want to use?: ')
+    # Selecting test set
+    print('Select set to test on')
+    print('1: Test set')
+    print('2: Validation set')
+    set_selector = input('Which set do you want to use?: ')
 
     # Select if test time augmentation should be used
     print('Enable TTA? ')
@@ -82,6 +82,6 @@ if __name__ == "__main__":
     model_name = input('Name of model: ')
 
     # Start testing
-    X_test, Y_test = prepare_test_dataset(task_selector, mask_selector)
+    X_test, Y_test = prepare_test_dataset(task_selector, set_selector)
     test_model(model_name, X_test, Y_test, tta_selector, task_selector)
     print('Testing finished')
