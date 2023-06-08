@@ -17,7 +17,7 @@ Results were achieved using an ensemble of U-Net with no backbone, U-Net DenseNe
 
 Test time augmentation was used for both tasks.
 
-Models can be found here: https://drive.google.com/drive/folders/1FsF-B6xUvm2ZP7gcQ5ke7vl7XHlGSCsj?usp=sharing
+These models can be found here: https://drive.google.com/drive/folders/1FsF-B6xUvm2ZP7gcQ5ke7vl7XHlGSCsj?usp=sharing
 
 ## Task Description:
 Buildings are essential to information regarding population, policy-making, and city management. Using computer vision technologies such as classification, object detection, and segmentation has proved helpful in several scenarios, such as urban planning and disaster recovery. Segmentation is the most precise method and can give detailed insights into the data as it highlights the area of interest.
