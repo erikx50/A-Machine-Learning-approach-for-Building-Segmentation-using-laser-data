@@ -56,7 +56,7 @@ The scripts for this repository are in the code folder.
 
 **Loss_Metrics.py:** Contains the code for IoU and Dice coefficient metric and loss function.
 
-**eval_functions.py:** Contains the code of the evaluation functions used for the MapAI competition. This code is taken from https://github.com/Sjyhne/MapAI-Competition/blob/master/competition_toolkit/competition_toolkit/eval_functions.py
+**eval_functions.py:** Contains the code of the evaluation functions used for the MapAI competition. This code is taken from the official MapAI competition GitHub: https://github.com/Sjyhne/MapAI-Competition/blob/master/competition_toolkit/competition_toolkit/eval_functions.py
 
 **utils.py:** Contains the code for loading the dataset for testing and test time augmentation.
 
