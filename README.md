@@ -1,4 +1,4 @@
-# Master Thesis: A Machine Learning approach for Building Segmentation using laser data
+# Master Thesis: A Machine Learning Approach for Building Segmentation using laser data
 The code in this repository contains my solution for the **NORA MapAI: Precision in Building Segmentation** competition. More can be seen here: https://github.com/Sjyhne/MapAI-Competition
 
 ## Results:
@@ -10,17 +10,19 @@ The code in this repository contains my solution for the **NORA MapAI: Precision
 | 3rd MapAI competition |    0.7902    |     0.6185    |     0.7044     |    0.8506    |     0.7461    |     0.7984     | **0.7514** |
 
 **Task 1**
-Results were achieved by using an ensembles of U-Net DenseNet201, CT-UNet EfficientNetB4 and CT-UNet EfficienNetV2S with a weight of 0.4, 0.3, 0.3.
+Results were achieved using an ensemble of U-Net DenseNet201, CT-UNet EfficientNetB4, and CT-UNet EfficienNetV2S with a weight of 0.4, 0.3, and 0.3.
 
 **Task 2**
-Results were achieved by using an ensembles of U-Net with no backbone, U-Net DenseNet201 and CT-Unet EfficienNetV2S with a weight of 0.5, 0.3, 0.2.
+Results were achieved using an ensemble of U-Net with no backbone, U-Net DenseNet201, and CT-Unet EfficienNetV2S with a weight of 0.5, 0.3, and 0.2.
 
-Test time augmentation were used for both tasks.
+Test time augmentation was used for both tasks.
+
+These models can be found here: https://drive.google.com/drive/folders/1FsF-B6xUvm2ZP7gcQ5ke7vl7XHlGSCsj?usp=sharing
 
 ## Task Description:
 Buildings are essential to information regarding population, policy-making, and city management. Using computer vision technologies such as classification, object detection, and segmentation has proved helpful in several scenarios, such as urban planning and disaster recovery. Segmentation is the most precise method and can give detailed insights into the data as it highlights the area of interest.
 
-Acquiring accurate segmentation masks of buildings is challenging since the training data derives from real-world photographs. As a result, the data often have varying quality, large class imbalance, and contains noise in different forms. The segmentation masks are affected by optical issues such as shadows, reflections, and perspectives. Additionally, trees, powerlines, or even other buildings may obstruct visibility. Furthermore, small buildings have proved to be more difficult to segment than larger ones as they are harder to detect, more prone to being obstructed, and often confused with other classes. Lastly, different buildings are found in several diverse areas, ranging from rural to urban locations. The diversity poses a vital requirement for the model to generalize to the various combinations.
+Acquiring accurate segmentation masks of buildings is challenging since the training data derives from real-world photographs. As a result, the data often have varying quality, large class imbalance, and contain noise in different forms. The segmentation masks are affected by optical issues such as shadows, reflections, and perspectives. Additionally, trees, powerlines, or even other buildings may obstruct visibility. Furthermore, small buildings have proved to be more challenging to segment than larger ones as they are harder to detect, more prone to being obstructed, and often confused with other classes. Lastly, different buildings are found in several diverse areas, ranging from rural to urban locations. The diversity poses a vital requirement for the model to generalize to the various combinations.
 
 **Task 1: Aerial Image Segmentation Task**
 
@@ -31,29 +33,32 @@ The aerial image segmentation task aims to solve the segmentation of buildings o
 The laser data segmentation task aims to solve the segmentation of buildings using laser data. Segmentation using laser data is helpful for urban planning or change detection scenarios, where precision is essential. We ask the participants to develop machine learning models for generating accurate segmentation masks of buildings using laser data with or without aerial images.
 
 ## Code Description:
-The code in this repository is split up between Jupyter Notebook files and Python files. The Jupyter Notebook files are mainly used for testing different concepts and visualizing the results before exporting the code to Python files. 
+This repository's code is split between Jupyter Notebook files and Python files. The Jupyter Notebook files are mainly used for testing different concepts and visualizing. 
 
-When running the code the python scripts in the code folder should be run in numerical order.
+The scripts for this repository are in the code folder.
 
-**0_Load_Dataset.py:** Downloads the MapAI dataset and creates a dataset folder where the dataset is stored.
+**Load_Dataset.py:** Downloads the MapAI dataset and creates a dataset folder where the dataset is stored.
 
-**1_Preprocess_Dataset.py:** Preprocesses the MapAI dataset and creates subfolders containing the preprocessed data in the dataset folder.
+**Preprocess_Dataset.py:** Preprocesses the MapAI dataset and creates subfolders containing the preprocessed data in the dataset folder.
 
-**2_Train_Model.py:** Train a selected model. User will be asked in the CLI of what model they would like to train. A model folder will be created, here all saved models will be stored.
+**Train_Model.py:** Train a selected model on a chosen task. 
 
-**3_Test_Model.py:** Tests and prints the IoU, BIoU and Score of a model. User will be asked to enter the name of the model they would like to test. This model has to be in the model folder.
+**Test_Model.py:** Tests and prints a model's IoU, BIoU, and Score. Users can choose between the validation and test sets. Users can also choose to enable TTA predictions.
 
-**4_Model_Ensemble.py:** Tests and prints the IoU, BIoU and Score of an ensemble from a set of 3 models. All possible weights will be tried and the best combination of weights will be printed. User will be asked to enter the 3 models they would like to perform the ensemble on.
+**Model_Ensemble.py:** Tests and prints the IoU, BIoU, and Score of an ensemble of models. Users can choose between the validation and test sets. Users can also choose to enable TTA predictions. This script can run three types of ensemble methods.
+1. 3 model ensemble with set weights.
+2. Find the best weights for the ensemble on that specific set using three models. 
+3. Find the best ensemble and weights on that specific set using a list of models.
+
+**UNet.py:** Contains the code for the U-Net architecture.
 
 **CTUNet.py:** Contains the code for the CT-Unet architecture.
 
-**Loss_Metrics.py:** Cotains the code for IoU and Dice coefficient metric and loss function.
+**Loss_Metrics.py:** Contains the code for IoU and Dice coefficient metric and loss function.
 
-**UNet.py:** Contains the code for the UNet architecture.
+**eval_functions.py:** Contains the code of the evaluation functions used for the MapAI competition. This code is taken from the official MapAI competition GitHub: https://github.com/Sjyhne/MapAI-Competition/blob/master/competition_toolkit/competition_toolkit/eval_functions.py
 
-**eval_functions.py:** Contains the code of the evaluation functions used for the MapAI competition. This code is taken from https://github.com/Sjyhne/MapAI-Competition/blob/master/competition_toolkit/competition_toolkit/eval_functions.py
-
-**utils.py:** Contains the code for loading test dataset and test time augmentation.
+**utils.py:** Contains the code for loading the dataset for testing and test time augmentation.
 
 
 
