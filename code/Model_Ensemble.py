@@ -160,7 +160,7 @@ if __name__ == "__main__":
     print('What type of ensemble do you want to do?')
     print('1: Ensemble with set weights')
     print('2: Find best weights from a set of 3 models')
-    print('3: Find best 3 model ensemble using multiple model')
+    print('3: Find best 3 model ensemble using multiple models')
     ensemble_selector = input('Ensemble type: ')
 
     if ensemble_selector == '1' or ensemble_selector == '2':
